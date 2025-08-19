@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 
+import '../../../../../app/route/app_routes.dart';
 import '../../../../../core/constants/app_sizes.dart';
 import '../../../../../core/constants/app_text_styles.dart';
 
@@ -52,7 +53,12 @@ class _TeacherHeaderWidgetState extends State<TeacherHeaderWidget> {
                 maxLines: 2,
               ),
 
-              Icon(HugeIcons.strokeRoundedPencilEdit02),
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.teacherProfilePage);
+                },
+                child: Icon(HugeIcons.strokeRoundedPencilEdit02),
+              ),
             ],
           ),
         ],

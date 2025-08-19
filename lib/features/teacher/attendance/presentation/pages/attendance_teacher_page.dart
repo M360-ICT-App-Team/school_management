@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
-import 'package:flutter_linear_datepicker/flutter_datepicker.dart';
 import 'package:school_management/core/constants/app_colors.dart';
 import 'package:school_management/core/constants/app_sizes.dart';
 import 'package:school_management/core/constants/app_text_styles.dart';
@@ -21,10 +20,6 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
     {"name": "মোঃ নাফিজ ইসলাম", "id": "১২৪৫৬৮৪৮০০০১৩", "status": "উপস্থিত"},
     {"name": "মোঃ নাফিজ ইসলাম", "id": "১২৪৫৬৮৪৮০০০১৪", "status": "অনুপস্থিত"},
   ];
-
-  /*************  ✨ Windsurf Command ⭐  *************/
-
-  /// *****  270a5692-e4c5-4665-a667-203c34533ce4  ******
   Color getStatusColor(String status) {
     switch (status) {
       case "উপস্থিত":
@@ -38,137 +33,6 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
       default:
         return Colors.grey;
     }
-  }
-
-  String selectedDate = "১০-০৭-২০২৪";
-  final List<String> banglaMonths = [
-    "জানুয়ারি",
-    "ফেব্রুয়ারি",
-    "মার্চ",
-    "এপ্রিল",
-    "মে",
-    "জুন",
-    "জুলাই",
-    "আগস্ট",
-    "সেপ্টেম্বর",
-    "অক্টোবর",
-    "নভেম্বর",
-    "ডিসেম্বর",
-  ];
-
-  void _openDatePicker() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: LinearDatePicker(
-              isJalali: false,
-              startDate: DateTime(2022),
-              endDate: DateTime.now().add(Duration(days: 365)),
-              initialDate: DateTime.now(),
-              showDay: true,
-              showMonthName: true,
-              dateChangeListener: (DateTime selectedDate) {
-                print(selectedDate);
-              },
-              labelStyle: TextStyle(
-                fontFamily: 'bans',
-                fontSize: 14.0,
-                color: Colors.black,
-              ),
-              selectedRowStyle: TextStyle(
-                fontFamily: 'sans',
-                fontSize: 18.0,
-                color: Colors.deepOrange,
-              ),
-              unselectedRowStyle: TextStyle(
-                fontFamily: 'sans',
-                fontSize: 16.0,
-                color: Colors.blueGrey,
-              ),
-              yearLabel: 'বছর',
-              monthLabel: 'মাস',
-              dayLabel: 'দিন',
-              showLabels:
-                  true, // to show column captions, eg. year, month, etc.
-              columnWidth: 100,
-              debounceDuration: Duration(
-                milliseconds: 300,
-              ), // delay duration to emit the selected date
-              monthsNames: [
-                '১',
-                '২',
-                '৩',
-                '৪',
-                '৫',
-                '৬',
-                '৭',
-                '৮',
-                '৯',
-                '১০',
-                '১১',
-                '১২',
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  void showDateDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text('Choose Date'),
-        content: LinearDatePicker(
-          dateChangeListener: (DateTime selectedDate) {
-            print(selectedDate);
-          },
-          showDay: true, //false -> only select year & month
-          labelStyle: TextStyle(
-            fontFamily: 'sans',
-            fontSize: 14.0,
-            color: Colors.black,
-          ),
-          selectedRowStyle: TextStyle(
-            fontFamily: 'sans',
-            fontSize: 18.0,
-            color: Colors.blue,
-          ),
-          unselectedRowStyle: TextStyle(
-            fontFamily: 'sans',
-            fontSize: 16.0,
-            color: Colors.blueGrey,
-          ),
-          showMonthName: true,
-          isJalali: false,
-          monthsNames: [
-            '১',
-            '২',
-            '৩',
-            '৪',
-            '৫',
-            '৬',
-            '৭',
-            '৮',
-            '৯',
-            '১০',
-            '১১',
-            '১২',
-          ],
-
-          yearLabel: 'বছর',
-          monthLabel: 'মাস',
-          dayLabel: 'দিন',
-        ),
-      ),
-    );
   }
 
   @override
@@ -320,7 +184,7 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 18,
-                        vertical: 10,
+                        vertical: 6,
                       ),
                       decoration: BoxDecoration(
                         color: AppColors.blue,

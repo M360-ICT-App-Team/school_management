@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:school_management/core/constants/app_colors.dart';
 import 'package:school_management/core/constants/app_sizes.dart';
-import 'package:school_management/core/constants/app_text_styles.dart';
 import 'package:school_management/core/widgets/app_bar.dart';
 
 import '../widgets/teacher_header_widget.dart';

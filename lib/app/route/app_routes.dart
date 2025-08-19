@@ -12,5 +12,7 @@ class AppRoutes {
   static const String teacherDashboardPage = 'TeacherDashboardPage';
   static const String attendanceTeacherPage = 'AttendanceTeacherPage';
   static const String newAttendanceCreatePage = 'NewAttendanceCreatePage';
+  static const String teacherProfilePage = 'TeacherProfilePage';
+  static const String teacherProfileUpdatePage = 'TeacherProfileUpdatePage';
 
 }

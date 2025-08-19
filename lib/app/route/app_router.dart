@@ -6,6 +6,8 @@ import '../../features/teacher/attendance/presentation/pages/attendance_teacher_
 import '../../features/teacher/attendance/presentation/pages/new_attendance_create_page.dart';
 import '../../features/teacher/auth/presentation/pages/teacher_login_page.dart';
 import '../../features/teacher/dashboard/presentation/pages/teacher_dashboard_page.dart';
+import '../../features/teacher/profile/presentation/pages/teacher_profile_page.dart';
+import '../../features/teacher/profile/presentation/pages/teacher_profile_update_page.dart';
 import '../../features/teacher/root_page/presentation/pages/teacher_root_page.dart';
 import 'app_routes.dart';
 
@@ -33,6 +35,10 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const AttendanceTeacherPage());
          case AppRoutes.newAttendanceCreatePage:
         return MaterialPageRoute(builder: (_) => const NewAttendanceCreatePage());
+          case AppRoutes.teacherProfilePage:
+        return MaterialPageRoute(builder: (_) => const TeacherProfilePage());
+          case AppRoutes.teacherProfileUpdatePage:
+        return MaterialPageRoute(builder: (_) => const TeacherProfileUpdatePage());
 
       default:
         return MaterialPageRoute(
