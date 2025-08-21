@@ -74,10 +74,10 @@ class _NewAttendanceCreatePageState extends State<NewAttendanceCreatePage> {
                         minTime: DateTime(2018, 3, 5),
                         maxTime: DateTime(2019, 6, 7),
                         onChanged: (date) {
-                          print('change $date');
+                          debugPrint('change $date');
                         },
                         onConfirm: (date) {
-                          print('confirm $date');
+                          debugPrint('confirm $date');
                         },
                         currentTime: DateTime.now(),
                         locale: LocaleType.bn,

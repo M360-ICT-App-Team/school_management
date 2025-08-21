@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:school_management/core/constants/app_colors.dart';
 
+import '../constants/app_images.dart';
+
 class CustomBottomNavBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
@@ -23,7 +25,7 @@ class CustomBottomNavBar extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 6,
             offset: const Offset(0, -3),
           ),
@@ -32,9 +34,9 @@ class CustomBottomNavBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _navItem("assets/images/home_icon.png", 0),
-          _navItem("assets/images/notification button.png", 1),
-          _navItem("assets/images/setting.png", 2),
+          _navItem(AppImages.homeIcon, 0),
+          _navItem(AppImages.notificationButton, 1),
+          _navItem(AppImages.setting, 2),
         ],
       ),
     );

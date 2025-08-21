@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:school_management/core/constants/app_colors.dart';
 
+import '../constants/app_images.dart';
+
 class CustomFooter extends StatelessWidget {
   const CustomFooter({super.key});
 
@@ -26,8 +28,7 @@ class CustomFooter extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
-          Image.asset(
-            "assets/images/logo (2).png", // এখানে তোমার লোগো ইমেজ দাও
+          Image.asset(AppImages.logo,
             height: 24,
             width: 24,
           ),
