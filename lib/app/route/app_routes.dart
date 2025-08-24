@@ -1,8 +1,5 @@
 class AppRoutes {
-  static const String splashPage = 'SplashPage';
-  static const String rootPage = 'RootPage';
 
-  static const String signInPage = 'SignInPage';
 
   static const String roleSelectionPage = 'RoleSelectionPage';
 

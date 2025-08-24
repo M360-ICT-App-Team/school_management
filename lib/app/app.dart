@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../features/teacher/auth/presentation/bloc/teacher_auth_bloc.dart';
 import 'route/app_router.dart';
 import 'route/app_routes.dart';
 import 'theme/light_theme.dart';
@@ -10,13 +12,21 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'School Management',
-      theme: lightTheme,
-      //  initialRoute: AppRoutes.splashPage,
-      initialRoute: AppRoutes.roleSelectionPage,
-      onGenerateRoute: AppRouter.generateRoute,
+    return MultiBlocProvider(
+
+      providers: [ 
+        BlocProvider<TeacherAuthBloc>(create: (context) => TeacherAuthBloc()),
+
+
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'School Management',
+        theme: lightTheme,
+        //  initialRoute: AppRoutes.splashPage,
+        initialRoute: AppRoutes.roleSelectionPage,
+        onGenerateRoute: AppRouter.generateRoute,
+      ),
     );
   }
 }

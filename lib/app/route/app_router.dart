@@ -14,7 +14,7 @@ import 'app_routes.dart';
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case AppRoutes.splashPage:
+      // case AppRoutes.splashPage:
       // return MaterialPageRoute(builder: (_) => const SplashPage());
       case '/':
         return MaterialPageRoute(builder: (_) => const Placeholder());

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 Future<void> appAdaptiveDialog({
   required BuildContext context,
-  required String title,
+   String ? title,
   required String message,
   List<AdaptiveDialogAction>? actions,
 }) {
@@ -22,7 +22,7 @@ Future<void> appAdaptiveDialog({
     return showCupertinoDialog(
       context: context,
       builder: (context) => CupertinoAlertDialog(
-        title: Text(title),
+        title: Text(title ?? 'Oops!'),
         content: Text(message),
         actions: combinedActions.map((action) {
           return CupertinoDialogAction(
@@ -38,7 +38,7 @@ Future<void> appAdaptiveDialog({
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(title),
+        title: Text(title ?? 'Oops!'),
         content: Text(message),
         actions: combinedActions.map((action) {
           return TextButton(
