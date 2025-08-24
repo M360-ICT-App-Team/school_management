@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../app/route/app_routes.dart';
 import '../../../../core/constants/app_images.dart';
+import '../../../teacher/profile/presentation/bloc/teacher_profile_bloc.dart';
 import '../bloc/splash_bloc.dart';
 
 class SplashPage extends StatefulWidget {
@@ -28,7 +29,7 @@ class _SplashPageState extends State<SplashPage> {
           context,
         ).pushNamedAndRemoveUntil(AppRoutes.teacherLoginPage, (p) => false);
       } else if (state is RouteTeacherRootState) {
-        // context.read<ProfileJobSeekerBloc>().add(GetProfileJobSeekerEvent());
+        context.read<TeacherProfileBloc>().add(GetTeacherProfileEvent());
         Navigator.of(
           context,
         ).pushNamedAndRemoveUntil(AppRoutes.teacherRootPage, (p) => false);
@@ -50,12 +51,9 @@ class _SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     return BlocListener<SplashBloc, SplashState>(
       listener: (context, state) {
-                _navigateToNextPage(state);
-
+        _navigateToNextPage(state);
       },
-      child: Scaffold(
-        body: Center(child: Image.asset(AppImages.logo)),
-      ),
+      child: Scaffold(body: Center(child: Image.asset(AppImages.logo))),
     );
   }
 }

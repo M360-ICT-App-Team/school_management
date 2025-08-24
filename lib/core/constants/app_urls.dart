@@ -10,7 +10,10 @@ class AppUrls {
       ? dotenv.env['BASE_URL']!
       : "http://10.10.220.45:9501/api/v1";
 
+
+//!for teacher
   static String teacherLogin = '$baseUrl/auth/teacher/login';
+  static String teacherProfile = '$baseUrl/teacher/profile';
 
 
 }

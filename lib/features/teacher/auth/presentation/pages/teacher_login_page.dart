@@ -5,6 +5,7 @@ import 'package:school_management/core/constants/app_colors.dart';
 import 'package:school_management/core/constants/app_sizes.dart';
 import 'package:school_management/core/widgets/app_bar.dart';
 import 'package:school_management/core/widgets/app_input_widgets.dart';
+import 'package:school_management/features/teacher/profile/presentation/bloc/teacher_profile_bloc.dart';
 
 import '../../../../../app/route/app_routes.dart';
 import '../../../../../core/constants/app_icons.dart';
@@ -42,24 +43,22 @@ class _TeacherLoginPageState extends State<TeacherLoginPage> {
         appBar: CustomAppBar(),
         body: BlocListener<TeacherAuthBloc, TeacherAuthState>(
           listener: (context, state) {
-            if(state is TeacherLoginLoading){ 
-                          AppBottomSheets.showLoading(context, message: "Logging in...");
+            if (state is TeacherLoginLoading) {
+              AppBottomSheets.showLoading(context, message: "Logging in...");
+            } else if (state is TeacherLoginSuccess) {
+              AppBottomSheets.hide(context);
+              context.read<TeacherProfileBloc>().add(GetTeacherProfileEvent());
 
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                AppRoutes.teacherRootPage,
+                (route) => false,
+              );
+            } else if (state is TeacherLoginError) {
+              AppBottomSheets.hide(context);
+              appAdaptiveDialog(context: context, message: state.message);
             }
-            else if(state is TeacherLoginSuccess){
-                          AppBottomSheets.hide(context);
-                       Navigator.pushNamedAndRemoveUntil(
-              context,
-              AppRoutes.teacherRootPage,
-              (route) => false,
-            );     
-
-            }
-            else if (state is TeacherLoginError) {
-             AppBottomSheets.hide(context);
-            appAdaptiveDialog(context: context, message: state.message);
-            }
-            },
+          },
           child: Padding(
             padding: const EdgeInsets.symmetric(
               vertical: AppSizes.bodyPadding * 8,

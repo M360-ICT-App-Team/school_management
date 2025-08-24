@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:school_management/features/teacher/profile/presentation/bloc/teacher_profile_bloc.dart';
 
 import '../features/splash/presentation/bloc/splash_bloc.dart';
 import '../features/teacher/auth/presentation/bloc/teacher_auth_bloc.dart';
@@ -17,6 +18,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<TeacherAuthBloc>(create: (context) => TeacherAuthBloc()),
         BlocProvider<SplashBloc>(create: (context) => SplashBloc()),
+        BlocProvider<TeacherProfileBloc>(
+          create: (context) => TeacherProfileBloc(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
