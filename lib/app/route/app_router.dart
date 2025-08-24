@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../features/role_selection/presentation/pages/role_selection_page.dart';
+import '../../features/splash/presentation/page/splash_page.dart';
 import '../../features/teacher/attendance/presentation/pages/attendance_teacher_page.dart';
 import '../../features/teacher/attendance/presentation/pages/new_attendance_create_page.dart';
 import '../../features/teacher/auth/presentation/pages/teacher_login_page.dart';
@@ -13,8 +14,8 @@ import 'app_routes.dart';
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      // case AppRoutes.splashPage:
-      // return MaterialPageRoute(builder: (_) => const SplashPage());
+          case AppRoutes.splashPage:
+        return MaterialPageRoute(builder: (_) => const SplashPage());
       case '/':
         return MaterialPageRoute(builder: (_) => const Placeholder());
       //! Root

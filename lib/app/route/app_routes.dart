@@ -1,5 +1,6 @@
 class AppRoutes {
 
+  static const splashPage = '/SplashPage';
 
   static const String roleSelectionPage = 'RoleSelectionPage';
 

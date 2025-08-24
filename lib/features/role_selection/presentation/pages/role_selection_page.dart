@@ -3,6 +3,7 @@ import 'package:school_management/app/route/app_routes.dart';
 import 'package:school_management/core/constants/app_colors.dart';
 import 'package:school_management/core/constants/app_sizes.dart';
 import 'package:school_management/core/constants/app_text_styles.dart';
+import 'package:school_management/core/local_database/auth_db.dart';
 
 import '../../../../core/constants/app_images.dart';
 import '../../../../core/widgets/app_bar.dart';
@@ -33,26 +34,17 @@ class _RoleSelectionPageState extends State<RoleSelectionPage> {
             crossAxisSpacing: 20,
             childAspectRatio: 0.9,
             children: [
-              _buildRoleCard(
-                context,
-                AppImages.principal,
-                "বিভাগীয় প্রধান",
-              ),
+              _buildRoleCard(context, AppImages.principal, "বিভাগীয় প্রধান"),
               InkWell(
-                onTap: () =>
-                    Navigator.pushNamed(context, AppRoutes.teacherLoginPage),
-                child: _buildRoleCard(
-                  context,
-                  AppImages.teacher,
-                  "শিক্ষক",
-                ),
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, AppRoutes.teacherLoginPage);
+                   AuthLocalDB.setRole(AuthLocalDB.teacher);
+
+                },
+                child: _buildRoleCard(context, AppImages.teacher, "শিক্ষক"),
               ),
               _buildRoleCard(context, AppImages.parent, "অভিভাবক"),
-              _buildRoleCard(
-                context,
-                AppImages.student,
-                "শিক্ষার্থী",
-              ),
+              _buildRoleCard(context, AppImages.student, "শিক্ষার্থী"),
             ],
           ),
         ),

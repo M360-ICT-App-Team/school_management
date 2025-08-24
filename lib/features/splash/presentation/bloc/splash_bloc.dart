@@ -30,7 +30,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
         if (accountStatus?.toLowerCase() == "active") {
           emit(RouteTeacherRootState());
         } else {
-          emit(RouteTeacherLoginState());
+          emit(RouteTeacherRootState());
         }
       }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../app/route/app_routes.dart';
+import '../../../../core/constants/app_images.dart';
 import '../bloc/splash_bloc.dart';
 
 class SplashPage extends StatefulWidget {
@@ -53,7 +54,7 @@ class _SplashPageState extends State<SplashPage> {
 
       },
       child: Scaffold(
-        body: Center(child: Image.asset("assets/images/logo (2).png")),
+        body: Center(child: Image.asset(AppImages.logo)),
       ),
     );
   }
