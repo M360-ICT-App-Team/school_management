@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../../core/constants/app_exception_messages.dart';
+import '../../../../../core/local_database/auth_db.dart';
 import '../../data/data_sources/teacher_auth_remote_data_source.dart';
 import '../../data/model/teacher_login_request_model.dart';
 
@@ -23,6 +24,8 @@ class TeacherAuthBloc extends Bloc<TeacherAuthEvent, TeacherAuthState> {
         (ifLeft) => emit(TeacherLoginError( ifLeft.message)),
         (ifRight) {
           emit(TeacherLoginSuccess());
+                    AuthLocalDB().setAccountStatus(ifRight.status ?? '');
+
         },
       );
     } catch (e, stackTrace) {
