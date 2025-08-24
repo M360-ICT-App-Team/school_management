@@ -16,20 +16,16 @@ class TeacherProfileResponseModel {
     final int? instituteId;
     final int? departmentId;
     final String? departmentName;
-    final dynamic dobDate;
-    final dynamic dobNo;
+    final DateTime? dobDate;
+    final String? dobNo;
     final dynamic religion;
-    final dynamic gender;
-    final dynamic bloodGroup;
-    final dynamic permanentAddress;
-    final dynamic permanentThana;
-    final dynamic permanentDivision;
-    final dynamic permanentPostalCode;
-    final dynamic presentAddress;
-    final dynamic presentThana;
-    final dynamic presentDivision;
-    final dynamic presentPostalCode;
-    final dynamic emergencyPhoneNo;
+    final String? gender;
+    final String? bloodGroup;
+    final String? permanentAddress;
+    final String? presentAddress;
+    final String? fatherName;
+    final String? motherName;
+    final String? emergencyPhoneNo;
     final DateTime? createdAt;
     final int? createdBy;
     final String? createdByName;
@@ -51,13 +47,9 @@ class TeacherProfileResponseModel {
         this.gender,
         this.bloodGroup,
         this.permanentAddress,
-        this.permanentThana,
-        this.permanentDivision,
-        this.permanentPostalCode,
         this.presentAddress,
-        this.presentThana,
-        this.presentDivision,
-        this.presentPostalCode,
+        this.fatherName,
+        this.motherName,
         this.emergencyPhoneNo,
         this.createdAt,
         this.createdBy,
@@ -75,19 +67,15 @@ class TeacherProfileResponseModel {
         instituteId: json["institute_id"],
         departmentId: json["department_id"],
         departmentName: json["department_name"],
-        dobDate: json["dob_date"],
+        dobDate: json["dob_date"] == null ? null : DateTime.parse(json["dob_date"]),
         dobNo: json["dob_no"],
         religion: json["religion"],
         gender: json["gender"],
         bloodGroup: json["blood_group"],
         permanentAddress: json["permanent_address"],
-        permanentThana: json["permanent_thana"],
-        permanentDivision: json["permanent_division"],
-        permanentPostalCode: json["permanent_postal_code"],
         presentAddress: json["present_address"],
-        presentThana: json["present_thana"],
-        presentDivision: json["present_division"],
-        presentPostalCode: json["present_postal_code"],
+        fatherName: json["father_name"],
+        motherName: json["mother_name"],
         emergencyPhoneNo: json["emergency_phone_no"],
         createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
         createdBy: json["created_by"],
@@ -105,19 +93,15 @@ class TeacherProfileResponseModel {
         "institute_id": instituteId,
         "department_id": departmentId,
         "department_name": departmentName,
-        "dob_date": dobDate,
+        "dob_date": dobDate?.toIso8601String(),
         "dob_no": dobNo,
         "religion": religion,
         "gender": gender,
         "blood_group": bloodGroup,
         "permanent_address": permanentAddress,
-        "permanent_thana": permanentThana,
-        "permanent_division": permanentDivision,
-        "permanent_postal_code": permanentPostalCode,
         "present_address": presentAddress,
-        "present_thana": presentThana,
-        "present_division": presentDivision,
-        "present_postal_code": presentPostalCode,
+        "father_name": fatherName,
+        "mother_name": motherName,
         "emergency_phone_no": emergencyPhoneNo,
         "created_at": createdAt?.toIso8601String(),
         "created_by": createdBy,

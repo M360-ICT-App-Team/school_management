@@ -58,7 +58,7 @@ class _TeacherHeaderWidgetState extends State<TeacherHeaderWidget> {
 
               InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.teacherProfilePage);
+                  Navigator.pushNamed(context, AppRoutes.teacherProfileUpdatePage);
                 },
                 child: Icon(HugeIcons.strokeRoundedPencilEdit02),
               ),
