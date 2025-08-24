@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:school_management/core/constants/app_colors.dart';
+import 'package:school_management/core/constants/app_images.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double height;
@@ -21,7 +22,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset("assets/images/logo (2).png", height: 30, width: 30),
+          Image.asset(AppImages.logo, height: 30, width: 30),
           const SizedBox(width: 4),
           Text(
             "BPI",

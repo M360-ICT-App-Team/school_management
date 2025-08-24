@@ -432,8 +432,8 @@ class ChatFilePickCard extends StatelessWidget {
     required this.icon,
   });
 
-  bool _isPdf(String? path) =>
-      path?.toLowerCase().trim().endsWith('.pdf') ?? false;
+  // bool _isPdf(String? path) =>
+  //     path?.toLowerCase().trim().endsWith('.pdf') ?? false;
 
   @override
   Widget build(BuildContext context) {

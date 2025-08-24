@@ -4,6 +4,7 @@ import 'package:school_management/core/constants/app_colors.dart';
 import 'package:school_management/core/constants/app_sizes.dart';
 import 'package:school_management/core/constants/app_text_styles.dart';
 
+import '../../../../core/constants/app_images.dart';
 import '../../../../core/widgets/app_bar.dart';
 import '../../../../core/widgets/app_footer.dart';
 
@@ -34,7 +35,7 @@ class _RoleSelectionPageState extends State<RoleSelectionPage> {
             children: [
               _buildRoleCard(
                 context,
-                "assets/images/principal.png",
+                AppImages.principal,
                 "বিভাগীয় প্রধান",
               ),
               InkWell(
@@ -42,14 +43,14 @@ class _RoleSelectionPageState extends State<RoleSelectionPage> {
                     Navigator.pushNamed(context, AppRoutes.teacherLoginPage),
                 child: _buildRoleCard(
                   context,
-                  "assets/images/teacher.png",
+                  AppImages.teacher,
                   "শিক্ষক",
                 ),
               ),
-              _buildRoleCard(context, "assets/images/parent.png", "অভিভাবক"),
+              _buildRoleCard(context, AppImages.parent, "অভিভাবক"),
               _buildRoleCard(
                 context,
-                "assets/images/student.png",
+                AppImages.student,
                 "শিক্ষার্থী",
               ),
             ],

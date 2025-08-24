@@ -5,6 +5,7 @@ import 'package:school_management/core/widgets/app_bar.dart';
 
 import '../../../../../app/route/app_routes.dart';
 import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/constants/app_images.dart';
 import '../../../../../core/constants/app_text_styles.dart';
 
 class TeacherProfilePage extends StatefulWidget {
@@ -42,8 +43,7 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
                 children: [
                   Row(
                     children: [
-                      Image.asset(
-                        "assets/images/logo (2).png",
+                      Image.asset(AppImages.logo,
                         height: 120,
                         width: 120,
                       ),

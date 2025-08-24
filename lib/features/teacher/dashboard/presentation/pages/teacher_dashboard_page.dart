@@ -3,6 +3,7 @@ import 'package:school_management/core/constants/app_colors.dart';
 import 'package:school_management/core/constants/app_sizes.dart';
 import 'package:school_management/core/widgets/app_bar.dart';
 
+import '../../../../../core/constants/app_images.dart';
 import '../widgets/teacher_header_widget.dart';
 import '../widgets/teacher_menu_widget.dart';
 
@@ -41,8 +42,7 @@ class _TeacherDashboardPageState extends State<TeacherDashboardPage> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Image.asset(
-                    "assets/images/logo (2).png",
+                  Image.asset(AppImages.logo,
                     height: 120,
                     width: 120,
                   ),
@@ -50,7 +50,7 @@ class _TeacherDashboardPageState extends State<TeacherDashboardPage> {
                 ],
               ),
             ),
-            Image.asset("assets/images/cyber_notice.png"),
+            Image.asset(AppImages.cyberNotice),
             Divider(color: AppColors.lightGrey, thickness: 1),
 
             //! Menu without GridView
