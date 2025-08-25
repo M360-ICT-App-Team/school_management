@@ -22,7 +22,7 @@ class _RoleSelectionPageState extends State<RoleSelectionPage> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.backgroundColor,
-        appBar: const CustomAppBar(),
+        appBar: const CustomAppBar(showBack: false),
         body: Padding(
           padding: EdgeInsets.symmetric(
             horizontal: AppSizes.bodyPadding * 2,
@@ -37,14 +37,19 @@ class _RoleSelectionPageState extends State<RoleSelectionPage> {
               _buildRoleCard(context, AppImages.principal, "বিভাগীয় প্রধান"),
               InkWell(
                 onTap: () {
-                  Navigator.pushReplacementNamed(context, AppRoutes.teacherLoginPage);
-                   AuthLocalDB.setRole(AuthLocalDB.teacher);
-
+                  Navigator.pushNamed(context, AppRoutes.teacherLoginPage);
+                  AuthLocalDB.setRole(AuthLocalDB.teacher);
                 },
                 child: _buildRoleCard(context, AppImages.teacher, "শিক্ষক"),
               ),
               _buildRoleCard(context, AppImages.parent, "অভিভাবক"),
-              _buildRoleCard(context, AppImages.student, "শিক্ষার্থী"),
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.studentLoginPage);
+                  AuthLocalDB.setRole(AuthLocalDB.student);
+                },
+                child: _buildRoleCard(context, AppImages.student, "শিক্ষার্থী"),
+              ),
             ],
           ),
         ),

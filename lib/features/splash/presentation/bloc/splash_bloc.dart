@@ -35,5 +35,23 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
 
       return;
     }
+
+      else if (role == AuthLocalDB.student) {
+      if (token == null) {
+        emit(RouteRoleSelectionState());
+      } else {
+       
+        final accountStatus = await AuthLocalDB().getAccountStatus();
+        if (accountStatus?.toLowerCase() == "active") {
+          emit(RouteStudentRootState());
+        } else {
+          emit(RouteStudentLoginState());
+        }
+      }
+
+      return;
+    }
+
+    
   }
 }

@@ -7,6 +7,8 @@ AndroidOptions _getAndroidOptions() =>
 class AuthLocalDB {
   static final String authKey = "authKey_bpi";
 static final String teacher = "teacher";
+static final String student = "student";
+
   static final String roleKey = "roleKey_bpi";
 
   static final storage = FlutterSecureStorage(aOptions: _getAndroidOptions());

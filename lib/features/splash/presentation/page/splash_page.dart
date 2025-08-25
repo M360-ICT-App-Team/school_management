@@ -33,7 +33,20 @@ class _SplashPageState extends State<SplashPage> {
         Navigator.of(
           context,
         ).pushNamedAndRemoveUntil(AppRoutes.teacherRootPage, (p) => false);
-      } else {
+      } 
+      else if(state is RouteStudentLoginState) {
+        Navigator.of(
+          context,
+        ).pushNamedAndRemoveUntil(AppRoutes.studentLoginPage, (p) => false);
+      }
+      else if (state is RouteStudentRootState) {
+        // context.read<TeacherProfileBloc>().add(GetTeacherProfileEvent());
+        Navigator.of(
+          context,
+        ).pushNamedAndRemoveUntil(AppRoutes.studentRootPage, (p) => false);
+      }
+      
+      else {
         Navigator.of(
           context,
         ).pushNamedAndRemoveUntil(AppRoutes.roleSelectionPage, (p) => false);

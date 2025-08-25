@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:school_management/features/teacher/profile/presentation/bloc/teacher_profile_bloc.dart';
 
 import '../features/splash/presentation/bloc/splash_bloc.dart';
+import '../features/student/auth/presentation/bloc/student_auth_bloc.dart';
 import '../features/teacher/auth/presentation/bloc/teacher_auth_bloc.dart';
 import 'route/app_router.dart';
 import 'route/app_routes.dart';
@@ -16,11 +17,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<TeacherAuthBloc>(create: (context) => TeacherAuthBloc()),
-        BlocProvider<SplashBloc>(create: (context) => SplashBloc()),
+         BlocProvider<SplashBloc>(create: (context) => SplashBloc()),
+         //!-------for teacher--------
+        BlocProvider<TeacherAuthBloc>(create: (context) => TeacherAuthBloc()), 
         BlocProvider<TeacherProfileBloc>(
           create: (context) => TeacherProfileBloc(),
         ),
+        //!-------for student--------
+         BlocProvider<StudentAuthBloc>(create: (context) => StudentAuthBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

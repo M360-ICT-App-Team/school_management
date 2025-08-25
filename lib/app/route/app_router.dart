@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 import '../../features/role_selection/presentation/pages/role_selection_page.dart';
 import '../../features/splash/presentation/page/splash_page.dart';
+import '../../features/student/auth/presentation/pages/student_login_page.dart';
+import '../../features/student/root_page/student_root_page.dart';
 import '../../features/teacher/attendance/presentation/pages/attendance_teacher_page.dart';
 import '../../features/teacher/attendance/presentation/pages/new_attendance_create_page.dart';
 import '../../features/teacher/auth/presentation/pages/teacher_login_page.dart';
@@ -21,6 +23,8 @@ class AppRouter {
         return CupertinoPageRoute(builder: (_) => const Placeholder());
       //! Root
 
+
+//!for teacher
       case AppRoutes.teacherRootPage:
         return CupertinoPageRoute(builder: (_) => const TeacherRootPage());
 
@@ -40,7 +44,14 @@ class AppRouter {
         return CupertinoPageRoute(builder: (_) => const TeacherProfilePage());
           case AppRoutes.teacherProfileUpdatePage:
         return CupertinoPageRoute(builder: (_) => const TeacherProfileUpdatePage());
+//!------------------end for teacher------------------
 
+
+//!for student
+case AppRoutes.studentRootPage:
+        return CupertinoPageRoute(builder: (_) => const StudentRootPage());
+   case AppRoutes.studentLoginPage:
+        return CupertinoPageRoute(builder: (_) => const StudentLoginPage());
       default:
         return CupertinoPageRoute(
           builder: (_) =>

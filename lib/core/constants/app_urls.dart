@@ -15,5 +15,7 @@ class AppUrls {
   static String teacherLogin = '$baseUrl/auth/teacher/login';
   static String teacherProfile = '$baseUrl/teacher/profile';
 
-
+//!for student
+  static String studentLogin = '$baseUrl/auth/student/login';
+  static String studentProfile = '$baseUrl/student/profile';
 }

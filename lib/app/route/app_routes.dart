@@ -13,4 +13,10 @@ class AppRoutes {
   static const String teacherProfilePage = 'TeacherProfilePage';
   static const String teacherProfileUpdatePage = 'TeacherProfileUpdatePage';
 
+
+  //!for student
+    static const String studentRootPage = 'StudentRootPage';
+    static const String studentLoginPage = 'StudentLoginPage';
+
+
 }
