@@ -48,14 +48,14 @@ class _TeacherHeaderWidgetState extends State<TeacherHeaderWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                // 👈 this fixes overflow
+                
                 child: Text(
                   profile?.email ?? "Unknown",
                   style: AppTextStyles.normalLight(
                     context,
                   ).copyWith(fontSize: 12),
                   overflow: TextOverflow.ellipsis,
-                  maxLines: 2, // keep only one line for email
+                  maxLines: 2, 
                 ),
               ),
               InkWell(
