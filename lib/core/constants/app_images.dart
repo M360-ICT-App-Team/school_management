@@ -19,4 +19,5 @@ class AppImages {
   static const String student = 'assets/images/student.png';
   static const String summerHolidays = 'assets/images/summer-holidays.png';
   static const String teacher = 'assets/images/teacher.png';
+  static const String noImagePerson = 'assets/images/no_person_image.png';
 }

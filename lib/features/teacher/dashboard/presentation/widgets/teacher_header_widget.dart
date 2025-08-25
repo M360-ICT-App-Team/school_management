@@ -7,7 +7,7 @@ import '../../../../../core/constants/app_text_styles.dart';
 import '../../../profile/data/model/teacher_profile_response_model.dart';
 
 class TeacherHeaderWidget extends StatefulWidget {
-  final TeacherProfileResponseModel  ? teacherProfile;
+  final TeacherProfileResponseModel? teacherProfile;
   const TeacherHeaderWidget({super.key, required this.teacherProfile});
 
   @override
@@ -24,7 +24,7 @@ class _TeacherHeaderWidgetState extends State<TeacherHeaderWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-           profile?.name ?? "Unknown",
+            profile?.name ?? "Unknown",
             style: AppTextStyles.normalLight(context).copyWith(fontSize: 12),
           ),
           Text(
@@ -39,7 +39,7 @@ class _TeacherHeaderWidgetState extends State<TeacherHeaderWidget> {
           ),
 
           Text(
-            "${profile?.phone ?? "Unknown"}",
+            profile?.phone ?? "Unknown",
             style: AppTextStyles.normalLight(context).copyWith(fontSize: 12),
             overflow: TextOverflow.ellipsis,
             maxLines: 2,
@@ -47,20 +47,25 @@ class _TeacherHeaderWidgetState extends State<TeacherHeaderWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                "${profile?.email ?? "Unknown"}",
-                style: AppTextStyles.normalLight(
-                  context,
-                ).copyWith(fontSize: 12),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
+              Expanded(
+                // 👈 this fixes overflow
+                child: Text(
+                  profile?.email ?? "Unknown",
+                  style: AppTextStyles.normalLight(
+                    context,
+                  ).copyWith(fontSize: 12),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2, // keep only one line for email
+                ),
               ),
-
               InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.teacherProfileUpdatePage);
+                  Navigator.pushNamed(
+                    context,
+                    AppRoutes.teacherProfileUpdatePage,
+                  );
                 },
-                child: Icon(HugeIcons.strokeRoundedPencilEdit02),
+                child: const Icon(HugeIcons.strokeRoundedPencilEdit02),
               ),
             ],
           ),

@@ -29,7 +29,7 @@ Future<void> appBottomSheet(
 class AppTextField extends StatelessWidget {
   const AppTextField({
     this.textInputAction,
-    required this.hintText,
+    this.hintText,
     this.keyboardType,
     required this.controller,
     super.key,
@@ -44,6 +44,7 @@ class AppTextField extends StatelessWidget {
     this.maxLine,
     this.enable,
     this.readOnly = false,
+    this.fillColor,
   });
 
   final void Function(String)? onChanged;
@@ -54,13 +55,14 @@ class AppTextField extends StatelessWidget {
   final bool? obscureText;
   final Widget? suffixIcon;
   final Widget? prefixIcon;
-  final String hintText;
+  final String? hintText;
   final bool? autofocus;
   final bool? expanded;
   final bool readOnly;
   final bool? enable;
   final FocusNode? focusNode;
   final int? maxLine;
+  final bool? fillColor;
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +91,7 @@ class AppTextField extends StatelessWidget {
             hintText: hintText,
             hintStyle: TextStyle(fontSize: 14, color: AppColors.subtitle),
             filled: true,
-            fillColor: AppColors.fill,
+            fillColor: fillColor == false ? Colors.transparent : AppColors.fill,
             isDense: true,
 
             // Border with rounded corners
@@ -417,103 +419,4 @@ class _AppSheetContentState<T> extends State<_AppSheetContent<T>> {
   }
 }
 
-//!for booking support chat image file
-class ChatFilePickCard extends StatelessWidget {
-  final String title;
-  final String? existingFileUrl;
-  final ValueNotifier<String?> fileNotifier;
-  final IconData icon;
 
-  const ChatFilePickCard({
-    super.key,
-    required this.title,
-    this.existingFileUrl,
-    required this.fileNotifier,
-    required this.icon,
-  });
-
-  // bool _isPdf(String? path) =>
-  //     path?.toLowerCase().trim().endsWith('.pdf') ?? false;
-
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<String?>(
-      valueListenable: fileNotifier,
-      builder: (context, pickedFile, child) {
-        final showPreview = pickedFile ?? existingFileUrl;
-        final fileName = showPreview?.split('/').last;
-
-        return Column(
-          children: [
-            // if (showPreview != null)
-            //   Column(
-            //     children: [
-            //       Text(fileName ?? '', textAlign: TextAlign.center),
-            //       const SizedBox(height: 8),
-            //       Row(
-            //         mainAxisAlignment: MainAxisAlignment.center,
-            //         children: [
-            //           // View button
-            //           IconButton(
-            //             tooltip: 'View',
-            //             icon: const Icon(Icons.visibility),
-            //             onPressed: () {
-            //               final isPdf = _isPdf(showPreview);
-            //               final isLocal = pickedFile != null;
-
-            //               if (isPdf) {
-            //                 Navigator.push(
-            //                   context,
-            //                   MaterialPageRoute(
-            //                     builder:
-            //                         (_) => PdfViewPage(
-            //                           source: showPreview,
-            //                           isFromUrl: !isLocal,
-            //                         ),
-            //                   ),
-            //                 );
-            //               } else {
-            //                 Navigator.push(
-            //                   context,
-            //                   MaterialPageRoute(
-            //                     builder:
-            //                         (_) => PhotoViewPage(
-            //                           imageUrl: existingFileUrl,
-            //                           imagePath: pickedFile,
-            //                         ),
-            //                   ),
-            //                 );
-            //               }
-            //             },
-            //           ),
-
-            //           const SizedBox(width: 8),
-
-            //           // Delete button (only for picked files)
-            //           if (pickedFile != null)
-            //             IconButton(
-            //               tooltip: 'Remove',
-            //               icon: const Icon(Icons.delete, color: Colors.red),
-            //               onPressed: () {
-            //                 fileNotifier.value = null;
-            //               },
-            //             ),
-            //         ],
-            //       ),
-            //     ],
-            //   )
-
-            // IconButton(
-            //   tooltip: 'Pick file',
-            //   icon: Icon(icon),
-            //   onPressed: () async {
-            //     final file = await FileUtils.pickSingleFile();
-            //     if (file != null) fileNotifier.value = file;
-            //   },
-            // ),
-          ],
-        );
-      },
-    );
-  }
-}

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../features/role_selection/presentation/pages/role_selection_page.dart';
@@ -15,33 +16,33 @@ class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
           case AppRoutes.splashPage:
-        return MaterialPageRoute(builder: (_) => const SplashPage());
+        return CupertinoPageRoute(builder: (_) => const SplashPage());
       case '/':
-        return MaterialPageRoute(builder: (_) => const Placeholder());
+        return CupertinoPageRoute(builder: (_) => const Placeholder());
       //! Root
 
       case AppRoutes.teacherRootPage:
-        return MaterialPageRoute(builder: (_) => const TeacherRootPage());
+        return CupertinoPageRoute(builder: (_) => const TeacherRootPage());
 
       case AppRoutes.teacherLoginPage:
-        return MaterialPageRoute(builder: (_) => const TeacherLoginPage());
+        return CupertinoPageRoute(builder: (_) => const TeacherLoginPage());
 
       case AppRoutes.teacherDashboardPage:
-        return MaterialPageRoute(builder: (_) => const TeacherDashboardPage());
+        return CupertinoPageRoute(builder: (_) => const TeacherDashboardPage());
 
               case AppRoutes.roleSelectionPage:
-        return MaterialPageRoute(builder: (_) => const RoleSelectionPage());
+        return CupertinoPageRoute(builder: (_) => const RoleSelectionPage());
                       case AppRoutes.attendanceTeacherPage:
-        return MaterialPageRoute(builder: (_) => const AttendanceTeacherPage());
+        return CupertinoPageRoute(builder: (_) => const AttendanceTeacherPage());
          case AppRoutes.newAttendanceCreatePage:
-        return MaterialPageRoute(builder: (_) => const NewAttendanceCreatePage());
+        return CupertinoPageRoute(builder: (_) => const NewAttendanceCreatePage());
           case AppRoutes.teacherProfilePage:
-        return MaterialPageRoute(builder: (_) => const TeacherProfilePage());
+        return CupertinoPageRoute(builder: (_) => const TeacherProfilePage());
           case AppRoutes.teacherProfileUpdatePage:
-        return MaterialPageRoute(builder: (_) => const TeacherProfileUpdatePage());
+        return CupertinoPageRoute(builder: (_) => const TeacherProfileUpdatePage());
 
       default:
-        return MaterialPageRoute(
+        return CupertinoPageRoute(
           builder: (_) =>
               const Scaffold(body: Center(child: Text('Route not found'))),
         );

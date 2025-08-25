@@ -4,8 +4,9 @@ import 'package:school_management/core/constants/app_images.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double height;
+  final bool showBack;
 
-  const CustomAppBar({super.key, this.height = 70});
+  const CustomAppBar({super.key, this.height = 70, this.showBack = true});
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +20,20 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       centerTitle: true,
+      leading: showBack
+          ? IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () => Navigator.of(context).pop(),
+            )
+          : null,
       title: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Image.asset(AppImages.logo, height: 30, width: 30),
           const SizedBox(width: 4),
-          Text(
+          const Text(
             "BPI",
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
               color: Colors.white,
@@ -34,6 +41,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ],
       ),
+      actions: [
+        // Add invisible widget with same width as leading to balance
+        if (showBack) const SizedBox(width: kToolbarHeight),
+      ],
     );
   }
 
