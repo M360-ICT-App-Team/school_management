@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:school_management/core/constants/app_enum.dart';
 
 class AppColors {
   static const primary = Color(0xff002147);
@@ -39,26 +40,10 @@ class AppColors {
     offset: const Offset(0, 2),
   );
 
-  static Color flightBookingStatus(String? status) {
-    if (status == null) {
-      return Colors.grey;
-    }
-
-    final trimStatus = status.trim().toLowerCase();
-    if (trimStatus.contains("issued")) {
-      return Colors.green;
-    } else if (trimStatus.contains("ticket-in-process")) {
-      return Colors.blue;
-    } else if (trimStatus.contains("booking-cancelled")) {
-      return Colors.redAccent;
-    } else if (trimStatus.contains("pending")) {
-      return Colors.orange;
-    } else if (trimStatus.contains("voided")) {
-      return Colors.deepPurple;
-    } else if (trimStatus.contains("ticket-hold")) {
-      return Colors.cyan;
-    } else {
-      return Colors.grey;
-    }
-  }
+  static final Map<String, Color> statusColors = {
+    AttendanceStatus.no_action.value.toLowerCase(): Colors.black,
+    AttendanceStatus.present.value.toLowerCase(): Colors.green,
+    AttendanceStatus.leave.value.toLowerCase(): Colors.blue,
+    AttendanceStatus.absent.value.toLowerCase(): Colors.red,
+  };
 }

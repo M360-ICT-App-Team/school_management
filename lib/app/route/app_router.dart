@@ -1,17 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:school_management/features/teacher/attendance/data/model/attendance_model.dart';
 
 import '../../features/role_selection/presentation/pages/role_selection_page.dart';
 import '../../features/splash/presentation/page/splash_page.dart';
 import '../../features/student/auth/presentation/pages/student_login_page.dart';
-import '../../features/student/root_page/student_root_page.dart';
+import '../../features/student/root_page_student/student_root_page.dart';
 import '../../features/teacher/attendance/presentation/pages/attendance_teacher_page.dart';
 import '../../features/teacher/attendance/presentation/pages/new_attendance_create_page.dart';
 import '../../features/teacher/auth/presentation/pages/teacher_login_page.dart';
 import '../../features/teacher/dashboard/presentation/pages/teacher_dashboard_page.dart';
 import '../../features/teacher/profile/presentation/pages/teacher_profile_page.dart';
 import '../../features/teacher/profile/presentation/pages/teacher_profile_update_page.dart';
-import '../../features/teacher/root_page/presentation/pages/teacher_root_page.dart';
+import '../../features/teacher/root_page_teacher/presentation/pages/teacher_root_page.dart';
 import 'app_routes.dart';
 
 class AppRouter {
@@ -37,7 +38,9 @@ class AppRouter {
               case AppRoutes.roleSelectionPage:
         return CupertinoPageRoute(builder: (_) => const RoleSelectionPage());
                       case AppRoutes.attendanceTeacherPage:
-        return CupertinoPageRoute(builder: (_) => const AttendanceTeacherPage());
+        return CupertinoPageRoute(builder: (_) =>  AttendanceTeacherPage( 
+          attendanceModel: settings.arguments as AttendanceModel,
+        ));
          case AppRoutes.newAttendanceCreatePage:
         return CupertinoPageRoute(builder: (_) => const NewAttendanceCreatePage());
           case AppRoutes.teacherProfilePage:

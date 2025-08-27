@@ -1,23 +1,22 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:school_management/core/constants/app_images.dart';
+import 'package:school_management/features/teacher/attendance/presentation/pages/attendance_teacher_page.dart';
 
 import '../../../../../core/constants/app_text_styles.dart';
-import '../../../attendance/presentation/pages/select_batch_teacher_page.dart';
 
-class TeacherMenuWidget extends StatefulWidget {
-  const TeacherMenuWidget({super.key});
+class StudentMenuWidget extends StatefulWidget {
+  const StudentMenuWidget({super.key});
 
   @override
-  State<TeacherMenuWidget> createState() => _TeacherMenuWidgetState();
+  State<StudentMenuWidget> createState() => _StudentMenuWidgetState();
 }
 
-class _TeacherMenuWidgetState extends State<TeacherMenuWidget> {
+class _StudentMenuWidgetState extends State<StudentMenuWidget> {
   final List<Map<String, dynamic>> menuItems = [
     {
       "icon": AppImages.attendance,
       "title": "হাজিরা",
-      "page": SelectBatchTeacherPage(),
+      "page": null,
     },
     {"icon": AppImages.payment, "title": "বেতন", "page": null},
     {"icon": AppImages.notice, "title": "বিজ্ঞপ্তি", "page": null},
@@ -42,7 +41,7 @@ class _TeacherMenuWidgetState extends State<TeacherMenuWidget> {
                 if (item["page"] != null) {
                   Navigator.push(
                     context,
-                    CupertinoPageRoute(builder: (context) => item["page"]),
+                    MaterialPageRoute(builder: (context) => item["page"]),
                   );
                 } else {
                   ScaffoldMessenger.of(

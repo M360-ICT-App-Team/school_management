@@ -27,7 +27,7 @@ class _NewAttendanceCreatePageState extends State<NewAttendanceCreatePage> {
         return Colors.green;
       case "অনুপস্থিত":
         return Colors.red;
-      case "সিডিউল হযনি":
+      case "সিদ্ধান্ত হয়নি":
         return Colors.black87;
       case "ছুটি":
         return Colors.blue;
