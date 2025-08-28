@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:school_management/core/constants/app_colors.dart';
 import 'package:school_management/core/constants/app_images.dart';
 
+import '../../app/route/app_routes.dart';
+import '../local_database/auth_db.dart';
+
+
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double height;
-  final bool showBack;
+   final bool showBack;
+   final String value;
 
-  const CustomAppBar({super.key, this.height = 70, this.showBack = true});
+  const CustomAppBar({super.key, this.height = 70, this.showBack = true, this.value=''});
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +49,22 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         // Add invisible widget with same width as leading to balance
         if (showBack) const SizedBox(width: kToolbarHeight),
+        value==''?SizedBox():
+
+        GestureDetector(
+          onTap: (){
+            AuthLocalDB.removeToken();
+            Navigator.of(
+              context,
+            ).pushNamedAndRemoveUntil(AppRoutes.roleSelectionPage, (p) => false);
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: Icon(Icons.logout,color: Colors.white,),
+          ),
+        )
+
+
       ],
     );
   }

@@ -53,7 +53,7 @@ class _TeacherProfileUpdatePageState extends State<TeacherProfileUpdatePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: CustomAppBar(),
 
       body: BlocConsumer<TeacherProfileBloc, TeacherProfileState>(
@@ -104,156 +104,158 @@ class _TeacherProfileUpdatePageState extends State<TeacherProfileUpdatePage> {
             children: [
               Column(
                 children: [
-                  Container(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: AppSizes.insidePadding,
-                      vertical: AppSizes.insidePadding,
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSizes.insidePadding,
-                      vertical: AppSizes.insidePadding,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: AppColors.blue, width: 2),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        //!for basic information
-                        Row(
-                          children: [
-                            Center(
-                              child: Stack(
-                                alignment: Alignment.bottomRight,
-                                children: [
-                                  photo != null
-                                      ? Container(
-                                          height: 100,
-                                          width: 100,
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: Colors.grey.shade300,
-                                            ),
-                                          ),
-                                          child: Image.file(
-                                            File(photo!.path),
-                                            fit: BoxFit.cover,
-                                          ),
-                                        )
-                                      : AppCachedNetworkImage(
-                                          url: networkImage,
-                                          height: 100,
-                                          width: 100,
-                                          isPerson: true,
-                                        ),
-                                  Card(
-                                    child: IconButton(
-                                      onPressed: () async {
-                                        photo = await appPickImage(context);
-                                        if (photo != null) {
-                                          setState(() {});
-                                        }
-                                      },
-                                      icon: const Icon(
-                                        Icons.camera_alt_rounded,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(
-                                  AppSizes.insidePadding / 2,
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                  SingleChildScrollView(
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: AppSizes.insidePadding,
+                        vertical: AppSizes.insidePadding,
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSizes.insidePadding,
+                        vertical: AppSizes.insidePadding,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: AppColors.blue, width: 2),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          //!for basic information
+                          Row(
+                            children: [
+                              Center(
+                                child: Stack(
+                                  alignment: Alignment.bottomRight,
                                   children: [
-                                    Text(
-                                      teacherProfile?.name ?? "Unknown",
-                                      style: AppTextStyles.normalLight(
-                                        context,
-                                      ).copyWith(fontSize: 12),
-                                    ),
-                                    Text(
-                                      "আইডি: ${teacherProfile?.id ?? "Unknown"} ",
-                                      style: AppTextStyles.normalLight(
-                                        context,
-                                      ).copyWith(fontSize: 12),
-                                    ),
-                                    Text(
-                                      "দায়িত্বপ্রাপ্ত বিভাগ: ${teacherProfile?.departmentName ?? "Unknown"}",
-                                      style: AppTextStyles.normalLight(
-                                        context,
-                                      ).copyWith(fontSize: 12),
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 2,
-                                    ),
-
-                                    Text(
-                                      teacherProfile?.phone ?? "Unknown",
-                                      style: AppTextStyles.normalLight(
-                                        context,
-                                      ).copyWith(fontSize: 12),
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 2,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          teacherProfile?.email ?? "Unknown",
-                                          style: AppTextStyles.normalLight(
-                                            context,
-                                          ).copyWith(fontSize: 12),
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 2,
+                                    photo != null
+                                        ? Container(
+                                            height: 100,
+                                            width: 100,
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                color: Colors.grey.shade300,
+                                              ),
+                                            ),
+                                            child: Image.file(
+                                              File(photo!.path),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          )
+                                        : AppCachedNetworkImage(
+                                            url: networkImage,
+                                            height: 100,
+                                            width: 100,
+                                            isPerson: true,
+                                          ),
+                                    Card(
+                                      child: IconButton(
+                                        onPressed: () async {
+                                          photo = await appPickImage(context);
+                                          if (photo != null) {
+                                            setState(() {});
+                                          }
+                                        },
+                                        icon: const Icon(
+                                          Icons.camera_alt_rounded,
                                         ),
-                                      ],
+                                      ),
                                     ),
                                   ],
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        //!for update information
-                        SizedBox(height: AppSizes.insidePadding),
-                        profileInfoList(context, "ফোন নম্বর", phoneController),
-                        profileInfoList(context, "ইমেইল", emailController),
-                        profileInfoList(
-                          context,
-                          "পিতার নাম",
-                          fatherNameController,
-                        ),
-                        profileInfoList(
-                          context,
-                          "মাতার নাম",
-                          motherNameController,
-                        ),
-                        profileInfoList(
-                          context,
-                          "বর্তমান ঠিকানা",
-                          presentAddressController,
-                          isMultiLine: true,
-                        ),
-                        profileInfoList(
-                          context,
-                          "স্থায়ী ঠিকানা",
-                          permanentAddressController,
-                          isMultiLine: true,
-                        ),
-                        profileInfoList(
-                          context,
-                          "রক্তের গ্রুপ",
-                          bloodGroupController,
-                        ),
-                        //!end for update information
-                      ],
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(
+                                    AppSizes.insidePadding / 2,
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        teacherProfile?.name ?? "Unknown",
+                                        style: AppTextStyles.normalLight(
+                                          context,
+                                        ).copyWith(fontSize: 12),
+                                      ),
+                                      Text(
+                                        "আইডি: ${teacherProfile?.id ?? "Unknown"} ",
+                                        style: AppTextStyles.normalLight(
+                                          context,
+                                        ).copyWith(fontSize: 12),
+                                      ),
+                                      Text(
+                                        "দায়িত্বপ্রাপ্ত বিভাগ: ${teacherProfile?.departmentName ?? "Unknown"}",
+                                        style: AppTextStyles.normalLight(
+                                          context,
+                                        ).copyWith(fontSize: 12),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                      ),
+                    
+                                      Text(
+                                        teacherProfile?.phone ?? "Unknown",
+                                        style: AppTextStyles.normalLight(
+                                          context,
+                                        ).copyWith(fontSize: 12),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            teacherProfile?.email ?? "Unknown",
+                                            style: AppTextStyles.normalLight(
+                                              context,
+                                            ).copyWith(fontSize: 12),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 2,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          //!for update information
+                          SizedBox(height: AppSizes.insidePadding),
+                          profileInfoList(context, "ফোন নম্বর", phoneController),
+                          profileInfoList(context, "ইমেইল", emailController),
+                          profileInfoList(
+                            context,
+                            "পিতার নাম",
+                            fatherNameController,
+                          ),
+                          profileInfoList(
+                            context,
+                            "মাতার নাম",
+                            motherNameController,
+                          ),
+                          profileInfoList(
+                            context,
+                            "বর্তমান ঠিকানা",
+                            presentAddressController,
+                            isMultiLine: true,
+                          ),
+                          profileInfoList(
+                            context,
+                            "স্থায়ী ঠিকানা",
+                            permanentAddressController,
+                            isMultiLine: true,
+                          ),
+                          profileInfoList(
+                            context,
+                            "রক্তের গ্রুপ",
+                            bloodGroupController,
+                          ),
+                          //!end for update information
+                        ],
+                      ),
                     ),
                   ),
                   //!for call profile update event button

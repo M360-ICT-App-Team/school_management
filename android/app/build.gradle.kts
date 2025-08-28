@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.school_management"
+    namespace = "com.m360ict.polytech"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -20,7 +20,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.school_management"
+        applicationId = "com.m360ict.polytech"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode

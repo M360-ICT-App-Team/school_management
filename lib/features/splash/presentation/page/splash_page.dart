@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../app/route/app_routes.dart';
 import '../../../../core/constants/app_images.dart';
+import '../../../../core/widgets/app_adaptive_alert_dialog.dart';
 import '../../../teacher/profile/presentation/bloc/teacher_profile_bloc.dart';
 import '../bloc/splash_bloc.dart';
 
@@ -15,7 +19,6 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> {
   void _navigateToNextPage(SplashState state) {
-    Future.delayed(const Duration(milliseconds: 5400), () async {
       debugPrint("object state: $state");
       if (!mounted) return;
       debugPrint("-" * 50);
@@ -51,20 +54,46 @@ class _SplashPageState extends State<SplashPage> {
           context,
         ).pushNamedAndRemoveUntil(AppRoutes.roleSelectionPage, (p) => false);
       }
-    });
   }
 
   @override
   void initState() {
     super.initState();
-    context.read<SplashBloc>().add(GoRouteEvent());
+    context.read<SplashBloc>().add(CheckVersionEvent());
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<SplashBloc, SplashState>(
+      // listenWhen: (previous, current) => current is UpdateAvailableState || current is AppMaintenanceState || current is NoUpdateState,
       listener: (context, state) {
-        _navigateToNextPage(state);
+        if (state is UpdateAvailableState){
+          appAdaptiveDialog(context: context, title: 'New Version Available', message: state.message, actions: [
+            if(!state.forceUpdate) AdaptiveDialogAction(text: "Later", onPressed: () {
+              Navigator.pop(context);
+              //handleIntroNavigation();
+              context.read<SplashBloc>().add(GoRouteEvent());
+            }),
+            AdaptiveDialogAction(text: "Update", onPressed: () {
+              context.read<SplashBloc>().add(UpdateAppEvent());
+            }, isDefault: true),
+          ]);
+        }else if(state is AppMaintenanceState){
+          appAdaptiveDialog(context: context, title: 'App Maintenance', message: state.message, actions: [
+            AdaptiveDialogAction(text: "Ok", onPressed: () {
+              //? close app
+              if (Platform.isAndroid) {
+                SystemNavigator.pop();
+              } else if (Platform.isIOS) {
+                exit(0); // Forcefully kills the process
+              }
+            }, isDefault: true),
+          ]);
+        }else if(state is NoUpdateState){
+          context.read<SplashBloc>().add(GoRouteEvent());
+        }else{
+          _navigateToNextPage(state);
+        }
       },
       child: Scaffold(body: Center(child: Image.asset(AppImages.logo))),
     );

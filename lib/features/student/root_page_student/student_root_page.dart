@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:school_management/features/teacher/dashboard/presentation/pages/teacher_dashboard_page.dart';
 
 import '../../../../../core/widgets/app_bottom_nav_bar.dart';
+import '../dashboard/presentation/pages/student_dashboard_page.dart';
+
 
 class StudentRootPage extends StatefulWidget {
   const StudentRootPage({super.key});
@@ -15,7 +17,9 @@ class _StudentRootPageState extends State<StudentRootPage> {
   final ValueNotifier<int> pageIndex = ValueNotifier<int>(0);
 
   final List<Widget> pages = [
-    TeacherDashboardPage(),
+   // TeacherDashboardPage(),
+    StudentDashboardPage()
+   // StudentProfilePage()
     // MyRequestPageHiring()
   ];
   @override

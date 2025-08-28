@@ -40,7 +40,7 @@ class StudentProfileDataSource {
       final result = await ApiClient.multipartRequestPatch(
         files: files,
         url: AppUrls.studentProfile,
-        body: StudentProfileUpdateRequestModelToJson(payload),
+        body: studentProfileUpdateRequestModelToJson(payload),
         token: await AuthLocalDB.getToken(),
       );
       return Right(result ! == null );
