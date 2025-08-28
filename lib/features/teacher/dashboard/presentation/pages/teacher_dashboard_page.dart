@@ -23,7 +23,7 @@ class _TeacherDashboardPageState extends State<TeacherDashboardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xfff7f7f7),
-      appBar: CustomAppBar(showBack: false),
+      appBar: CustomAppBar(showBack: false,value: 'login',),
       body: Column(
         children: [
           Container(

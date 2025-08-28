@@ -1,4 +1,4 @@
-package com.m360ict.bpi
+package com.m360ict.polytech
 
 import io.flutter.embedding.android.FlutterActivity
 
