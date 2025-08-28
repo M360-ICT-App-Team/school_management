@@ -90,10 +90,16 @@ class _FilteringAttendanceWidgetState extends State<FilteringAttendanceWidget> {
                       builder: (context, state) {
                         if (state is GetSubjectLoading) {
                           return const Center(
-                            child: CircularProgressIndicator(),
+                            child: CircularProgressIndicator.adaptive(),
                           );
                         } else if (state is GetSubjectSuccess) {
                           final subjects = state.subjectResponseModel;
+                          if (subjects.isEmpty) {
+                            return const Center(
+                              child: Text("কোনো সাবজেক্ট পাওয়া যায়নি"),
+                            );
+                          }
+
                           return ListView.builder(
                             itemCount: subjects.length,
                             itemBuilder: (context, index) {
@@ -233,7 +239,7 @@ class _FilteringAttendanceWidgetState extends State<FilteringAttendanceWidget> {
             context.read<TeacherAttendanceBloc>().add(
               GetStudentListEvent(
                 id: widget.attendanceModel.batchId,
-                subjectId: selectedSubjectId.value,
+                subjectId: widget.attendanceModel.subjectId,
                 branchId: selectedBranchId.value,
                 date: attendanceDate.value,
               ),
