@@ -31,7 +31,7 @@ class _StudentDashboardPageState extends State<StudentDashboardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xfff7f7f7),
-      appBar: CustomAppBar(showBack: false),
+      appBar: CustomAppBar(showBack: false,value: 'logout',),
       body: Column(
         children: [
           Container(
