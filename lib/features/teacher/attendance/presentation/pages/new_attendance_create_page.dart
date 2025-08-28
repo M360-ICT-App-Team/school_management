@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:school_management/core/widgets/app_bar.dart';
 
 import '../../../../../app/route/app_routes.dart';
@@ -68,20 +67,20 @@ class _NewAttendanceCreatePageState extends State<NewAttendanceCreatePage> {
                     onTap: () {
                       //showDateDialog(context);
 
-                      DatePicker.showDatePicker(
-                        context,
-                        showTitleActions: true,
-                        minTime: DateTime(2018, 3, 5),
-                        maxTime: DateTime(2019, 6, 7),
-                        onChanged: (date) {
-                          debugPrint('change $date');
-                        },
-                        onConfirm: (date) {
-                          debugPrint('confirm $date');
-                        },
-                        currentTime: DateTime.now(),
-                        locale: LocaleType.bn,
-                      );
+                      // DatePicker.showDatePicker(
+                      //   context,
+                      //   showTitleActions: true,
+                      //   minTime: DateTime(2018, 3, 5),
+                      //   maxTime: DateTime(2019, 6, 7),
+                      //   onChanged: (date) {
+                      //     debugPrint('change $date');
+                      //   },
+                      //   onConfirm: (date) {
+                      //     debugPrint('confirm $date');
+                      //   },
+                      //   currentTime: DateTime.now(),
+                      //   locale: LocaleType.bn,
+                      // );
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(

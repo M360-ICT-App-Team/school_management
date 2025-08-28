@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:school_management/core/constants/app_enum.dart';
 
@@ -41,9 +42,22 @@ class AppColors {
   );
 
   static final Map<String, Color> statusColors = {
-    AttendanceStatus.no_action.value.toLowerCase(): Colors.black,
-    AttendanceStatus.present.value.toLowerCase(): Colors.green,
-    AttendanceStatus.leave.value.toLowerCase(): Colors.blue,
-    AttendanceStatus.absent.value.toLowerCase(): Colors.red,
+    "no_action": Colors.black,
+    "present": Colors.green,
+    "late": Colors.blue,
+    "absent": Colors.red,
   };
+
+  static Color status(String? status) {
+    try {
+      final lowerStatus = status?.toLowerCase().trim();
+      if (lowerStatus == null) return Colors.black;
+      return statusColors[lowerStatus] ?? Colors.black;
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print("object convert status color e: $e");
+      }
+      return Colors.black;
+    }
+  }
 }

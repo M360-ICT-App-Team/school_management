@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:school_management/core/constants/app_colors.dart';
 import 'package:school_management/core/constants/app_enum.dart';
 import 'package:school_management/core/constants/app_sizes.dart';
@@ -9,10 +8,11 @@ import 'package:school_management/core/widgets/app_bar.dart';
 import 'package:school_management/features/teacher/attendance/data/model/attendance_model.dart';
 import 'package:school_management/features/teacher/attendance/presentation/bloc/teacher_attendance_bloc.dart';
 
-import '../../../../../app/route/app_routes.dart';
 import '../../../../../core/utilities/app_convert_date_time.dart';
 import '../../../../../core/widgets/app_adaptive_date.dart';
+import '../../../../../core/widgets/app_bottom_list_sheet.dart';
 import '../../../../../core/widgets/app_empty.dart';
+import '../widgets/add_new_attendance_button_widget.dart';
 
 class AttendanceTeacherPage extends StatefulWidget {
   final AttendanceModel attendanceModel;
@@ -38,53 +38,25 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
     }
   }
 
-  final List<String> options = ["উপস্থিত", "অনুপস্থিত", "সিদ্ধান্ত হয়নি"];
+  final List<String> options = [
+    "উপস্থিত",
+    "অনুপস্থিত",
+    "সিদ্ধান্ত হয়নি",
+    "উপস্থিত",
+    "অনুপস্থিত",
+    "সিদ্ধান্ত হয়নি",
+    "উপস্থিত",
+    "অনুপস্থিত",
+    "সিদ্ধান্ত হয়নি",
+    "উপস্থিত",
+    "অনুপস্থিত",
+    "সিদ্ধান্ত হয়নি",
+    "উপস্থিত",
+    "অনুপস্থিত",
+    "সিদ্ধান্ত হয়নি",
+  ];
 
   final ValueNotifier<DateTime> attendanceDate = ValueNotifier(DateTime.now());
-
-  void showStatusBottomSheet(BuildContext context, List<String> items) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (BuildContext context) {
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: items.map((option) {
-              return InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                  print("Selected: $option");
-                },
-                child: Container(
-                  width: double.infinity,
-                  margin: const EdgeInsets.only(bottom: 12),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 14,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[100],
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    option,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-        );
-      },
-    );
-  }
 
   @override
   void initState() {
@@ -123,46 +95,10 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
                 ),
               ),
 
-              /// New Add Button
-              Container(
-                width: MediaQuery.of(context).size.width,
-                margin: const EdgeInsets.symmetric(
-                  horizontal: AppSizes.bodyPadding / 2,
-                  vertical: AppSizes.bodyPadding / 2,
-                ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSizes.insidePadding * 5,
-                  vertical: AppSizes.insidePadding,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: AppColors.blue, width: 2),
-                ),
-                child: SizedBox(
-                  width: 160,
-                  height: 40,
-                  child: FilledButton(
-                    style: FilledButton.styleFrom(
-                      backgroundColor: AppColors.blue,
-                    ),
-                    onPressed: () {
-                      Navigator.pushNamed(
-                        context,
-                        AppRoutes.newAttendanceCreatePage,
-                      );
-                    },
-                    child: Text(
-                      "নতুন যোগ করুন",
-                      style: AppTextStyles.normalLight(
-                        context,
-                      ).copyWith(color: AppColors.white, fontSize: 16),
-                    ),
-                  ),
-                ),
-              ),
+              //! New Add Button
+              AddNewAttendanceButtonWidget(),
 
-              /// Date + Subject + Filter Row
+              /// Date + Subject +branch + Filter Row
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -172,7 +108,6 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
                     builder: (context, value, child) {
                       return InkWell(
                         onTap: () async {
-                          //showDateDialog(context);
                           await pickAdaptiveDate(
                             context: context,
                             notifier: attendanceDate,
@@ -183,7 +118,7 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
+                            horizontal: 4,
                             vertical: 6,
                           ),
                           decoration: BoxDecoration(
@@ -215,7 +150,7 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
                   //! subject choice
                   Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
+                      horizontal: 4,
                       vertical: 6,
                     ),
                     decoration: BoxDecoration(
@@ -233,6 +168,35 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
                         const SizedBox(width: 4),
                         Text(
                           "সাবজেক্ট",
+                          style: AppTextStyles.normalLight(
+                            context,
+                          ).copyWith(fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  //!select branch
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 4,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xffd9d9d9),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.black, width: 1.5),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.arrow_drop_down,
+                          size: 20,
+                          color: Colors.black,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          "শাখা",
                           style: AppTextStyles.normalLight(
                             context,
                           ).copyWith(fontSize: 14),
@@ -415,11 +379,12 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
                                     Expanded(
                                       child: Text(
                                         status.value,
-                                        style: AppTextStyles.normalBold(context)
+                                        style: AppTextStyles.smallBold(context)
                                             .copyWith(
-                                              color: AppColors
-                                                  .statusColors[student.status],
-                                              fontSize: 10,
+                                              color: AppColors.status(
+                                                student.status?.toLowerCase() ??
+                                                    '',
+                                              ),
                                             ),
                                       ),
                                     ),
@@ -430,9 +395,15 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
                                         alignment: Alignment.centerRight,
                                         child: InkWell(
                                           onTap: () {
-                                            showStatusBottomSheet(
-                                              context,
-                                              options,
+                                            AppBottomListSheet.showStatusBottomSheet(
+                                              context: context,
+                                              title: "Select Status",
+                                              items: options,
+                                              onSelected: (value) {
+                                                debugPrint(
+                                                  "Selected status: $value",
+                                                );
+                                              },
                                             );
                                           },
                                           child: Container(
