@@ -28,7 +28,6 @@ class _SelectBatchTeacherCardWidgetState
     
     return InkWell(
       onTap: () {
-    
         Navigator.pushNamed(context, AppRoutes.attendanceTeacherPage,arguments: AttendanceModel( 
           batchId: batchOverView.id!,
           subjectId: batchOverView.subjectOfferingId!,
