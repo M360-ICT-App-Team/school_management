@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../../core/constants/app_urls.dart';
 import '../../../../../core/errors/exceptions.dart';
@@ -72,12 +73,11 @@ class TeacherAttendanceRemoteDataSource {
             )
             .toList(),
         "subject_offering_id": subjectOfferingId,
-        "date": date,
+        "date": date != null ? DateFormat("yyyy-MM-dd").format(date) : null,
         "batch_semester_id": batchSemesterId,
       };
 
-            log("Create Attendance payload : ${(payload)}");
-
+      log("Create Attendance payload : ${(payload)}");
 
       final result = await ApiClient.post(
         body: jsonEncode(payload),

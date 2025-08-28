@@ -55,10 +55,7 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: FilledButton(onPressed: () {}, child: const Text("Submit")),
-      ),
+
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -91,10 +88,11 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
 
               //!for attendance list
               BlocConsumer<TeacherAttendanceBloc, TeacherAttendanceState>(
-                buildWhen: (previous, current) =>  current is GetStudentListLoading ||
+                buildWhen: (previous, current) =>
+                    current is GetStudentListLoading ||
                     current is GetStudentListSuccess ||
                     current is GetStudentListError,
-                    
+
                 listener: (context, state) {
                   log("==========state attendance=-=====: $state");
                   if (state is CreateAttendanceTeacherLoading) {
@@ -192,10 +190,6 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
                             itemBuilder: (context, index) {
                               final student = studentList[index];
 
-                              final status = attendanceStatusFromString(
-                                student.status?.value ?? "",
-                              );
-
                               // student.status?.value =
                               //     status.name == AttendanceStatus.no_action.name
                               //     ? AttendanceStatus.present.value
@@ -269,8 +263,16 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
                                       child: ValueListenableBuilder(
                                         valueListenable: student.status!,
                                         builder: (context, value, child) {
+                                          log(
+                                            " =========Status======== : $value",
+                                          );
+                                          log(
+                                            " =========Bangla Status======== : ${attendanceStatusFromString(value).value}",
+                                          );
                                           return Text(
-                                            value,
+                                            attendanceStatusFromString(
+                                              value,
+                                            ).value,
                                             style:
                                                 AppTextStyles.smallBold(
                                                   context,
@@ -302,10 +304,12 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
                                                           (context, index) {
                                                             final branch =
                                                                 options[index];
+
                                                             return ListTile(
                                                               title: Text(
-                                                                branch ??
-                                                                    "unknown",
+                                                                attendanceStatusFromString(
+                                                                  branch,
+                                                                ).value,
                                                               ),
                                                               onTap: () =>
                                                                   onSelect(
@@ -365,9 +369,11 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
                                   CreateAttendanceTeacherEvent(
                                     studentListResponseTeacherModelList:
                                         studentList,
-                                    subjectOfferingId: widget.attendanceModel.subjectId,
+                                    subjectOfferingId:
+                                        widget.attendanceModel.subjectId,
                                     date: attendanceDate.value,
-                                    batchSemesterId: widget.attendanceModel.batchId,
+                                    batchSemesterId:
+                                        widget.attendanceModel.batchId,
                                   ),
                                 );
                               },
