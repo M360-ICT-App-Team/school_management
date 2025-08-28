@@ -36,6 +36,9 @@ class _SelectBatchTeacherPageState extends State<SelectBatchTeacherPage> {
           } else if (state is GetTeacherBatchOverViewError) {
             return Center(child: AppEmpty(msg: state.message));
           } else if (state is GetTeacherBatchOverViewSuccess) {
+            if (state.batchOverViewTeacherResponseModel.isEmpty) {
+              return Center(child: AppEmpty(msg: "No batch found"));
+            }
             return ListView.builder(
               itemCount: state.batchOverViewTeacherResponseModel.length,
               itemBuilder: (context, index) {

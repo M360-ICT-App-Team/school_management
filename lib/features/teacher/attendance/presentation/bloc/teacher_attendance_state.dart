@@ -33,3 +33,15 @@ final class GetStudentListError extends TeacherAttendanceState {
 }
 
 
+//!for create attendance
+
+final class CreateAttendanceTeacherLoading extends TeacherAttendanceState {}
+
+final class CreateAttendanceTeacherSuccess extends TeacherAttendanceState {
+  
+}
+
+final class CreateAttendanceTeacherError extends TeacherAttendanceState {
+  final String message;
+  CreateAttendanceTeacherError(this.message);
+}

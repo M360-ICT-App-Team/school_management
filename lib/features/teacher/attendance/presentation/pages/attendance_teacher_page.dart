@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:school_management/core/constants/app_colors.dart';
@@ -8,15 +10,10 @@ import 'package:school_management/core/widgets/app_bar.dart';
 import 'package:school_management/features/teacher/attendance/data/model/attendance_model.dart';
 import 'package:school_management/features/teacher/attendance/presentation/bloc/teacher_attendance_bloc.dart';
 
-import '../../../../../core/utilities/app_convert_date_time.dart';
-import '../../../../../core/widgets/app_adaptive_date.dart';
 import '../../../../../core/widgets/app_bottom_list_sheet.dart';
 import '../../../../../core/widgets/app_empty.dart';
-import '../../../../common/subject/data/model/subject_list_response_teacher_model.dart';
-import '../../../../common/subject/presentation/bloc/subject_bloc.dart';
-import '../../../branch/data/model/branch_response_model.dart';
-import '../../../branch/presentation/bloc/branch_bloc.dart';
-import '../widgets/add_new_attendance_button_widget.dart';
+
+import '../../../../../core/widgets/app_snackbar.dart';
 import '../widgets/filtering_attendance_widget.dart';
 
 class AttendanceTeacherPage extends StatefulWidget {
@@ -28,30 +25,14 @@ class AttendanceTeacherPage extends StatefulWidget {
 }
 
 class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
-  final List<String> options = [
-    "উপস্থিত",
-    "অনুপস্থিত",
-    "সিদ্ধান্ত হয়নি",
-    "উপস্থিত",
-    "অনুপস্থিত",
-    "সিদ্ধান্ত হয়নি",
-    "উপস্থিত",
-    "অনুপস্থিত",
-    "সিদ্ধান্ত হয়নি",
-    "উপস্থিত",
-    "অনুপস্থিত",
-    "সিদ্ধান্ত হয়নি",
-    "উপস্থিত",
-    "অনুপস্থিত",
-    "সিদ্ধান্ত হয়নি",
-  ];
+  final List<String> options = ["present", "late", "leave", "absent"];
 
   final ValueNotifier<DateTime> attendanceDate = ValueNotifier(DateTime.now());
   final ValueNotifier<String?> selectedSubject = ValueNotifier(null);
-    final ValueNotifier<int?> selectedSubjectId = ValueNotifier(null);
+  final ValueNotifier<int?> selectedSubjectId = ValueNotifier(null);
 
-final ValueNotifier<String?> selectedBranch = ValueNotifier(null);
-final ValueNotifier<int?> selectedBranchId = ValueNotifier(null);
+  final ValueNotifier<String?> selectedBranch = ValueNotifier(null);
+  final ValueNotifier<int?> selectedBranchId = ValueNotifier(null);
 
   @override
   void initState() {
@@ -66,7 +47,6 @@ final ValueNotifier<int?> selectedBranchId = ValueNotifier(null);
         id: widget.attendanceModel.batchId,
         date: onlyDate,
         subjectId: widget.attendanceModel.subjectId,
-        
       ),
     );
   }
@@ -75,6 +55,10 @@ final ValueNotifier<int?> selectedBranchId = ValueNotifier(null);
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: FilledButton(onPressed: () {}, child: const Text("Submit")),
+      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -93,19 +77,42 @@ final ValueNotifier<int?> selectedBranchId = ValueNotifier(null);
                   decorationColor: AppColors.blue,
                 ),
               ),
+              const SizedBox(height: 16),
 
               //! New Add Button
-              AddNewAttendanceButtonWidget(),
+              // AddNewAttendanceButtonWidget(),
 
               /// Date + Subject +branch + Filter Row
-            FilteringAttendanceWidget( 
-              attendanceModel: widget.attendanceModel,
-            ),
+              FilteringAttendanceWidget(
+                attendanceModel: widget.attendanceModel,
+              ),
 
               const SizedBox(height: 16),
 
               //!for attendance list
-              BlocBuilder<TeacherAttendanceBloc, TeacherAttendanceState>(
+              BlocConsumer<TeacherAttendanceBloc, TeacherAttendanceState>(
+                buildWhen: (previous, current) =>  current is GetStudentListLoading ||
+                    current is GetStudentListSuccess ||
+                    current is GetStudentListError,
+                    
+                listener: (context, state) {
+                  log("==========state attendance=-=====: $state");
+                  if (state is CreateAttendanceTeacherLoading) {
+                    AppBottomSheets.showLoading(
+                      context,
+                      message: "Please wait...",
+                    );
+                  } else if (state is CreateAttendanceTeacherSuccess) {
+                    AppBottomSheets.hide(context);
+                    AppBottomSheets.showSuccess(
+                      context,
+                      message: "Attendance Created",
+                    );
+                  } else if (state is CreateAttendanceTeacherError) {
+                    AppBottomSheets.hide(context);
+                    AppBottomSheets.showError(context, message: state.message);
+                  }
+                },
                 builder: (context, state) {
                   if (state is GetStudentListLoading) {
                     return const Center(
@@ -186,8 +193,13 @@ final ValueNotifier<int?> selectedBranchId = ValueNotifier(null);
                               final student = studentList[index];
 
                               final status = attendanceStatusFromString(
-                                student.status!,
+                                student.status?.value ?? "",
                               );
+
+                              // student.status?.value =
+                              //     status.name == AttendanceStatus.no_action.name
+                              //     ? AttendanceStatus.present.value
+                              //     : status.value;
 
                               return Container(
                                 padding: const EdgeInsets.symmetric(
@@ -254,15 +266,21 @@ final ValueNotifier<int?> selectedBranchId = ValueNotifier(null);
 
                                     /// Status
                                     Expanded(
-                                      child: Text(
-                                        status.value,
-                                        style: AppTextStyles.smallBold(context)
-                                            .copyWith(
-                                              color: AppColors.status(
-                                                student.status?.toLowerCase() ??
-                                                    '',
-                                              ),
-                                            ),
+                                      child: ValueListenableBuilder(
+                                        valueListenable: student.status!,
+                                        builder: (context, value, child) {
+                                          return Text(
+                                            value,
+                                            style:
+                                                AppTextStyles.smallBold(
+                                                  context,
+                                                ).copyWith(
+                                                  color: AppColors.status(
+                                                    value.toLowerCase(),
+                                                  ),
+                                                ),
+                                          );
+                                        },
                                       ),
                                     ),
 
@@ -271,17 +289,37 @@ final ValueNotifier<int?> selectedBranchId = ValueNotifier(null);
                                       child: Align(
                                         alignment: Alignment.centerRight,
                                         child: InkWell(
-                                          onTap: () {
-                                            // AppBottomListSheet.showStatusBottomSheet(
-                                            //   context: context,
-                                            //   title: "Select Status",
-                                            //   items: options,
-                                            //   onSelected: (value) {
-                                            //     debugPrint(
-                                            //       "Selected status: $value",
-                                            //     );
-                                            //   },
-                                            // );
+                                          onTap: () async {
+                                            final selected =
+                                                await showSelectionBottomSheet<
+                                                  String
+                                                >(
+                                                  context: context,
+                                                  builder: (ctx, onSelect) {
+                                                    return ListView.builder(
+                                                      itemCount: options.length,
+                                                      itemBuilder:
+                                                          (context, index) {
+                                                            final branch =
+                                                                options[index];
+                                                            return ListTile(
+                                                              title: Text(
+                                                                branch ??
+                                                                    "unknown",
+                                                              ),
+                                                              onTap: () =>
+                                                                  onSelect(
+                                                                    branch,
+                                                                  ),
+                                                            );
+                                                          },
+                                                    );
+                                                  },
+                                                );
+
+                                            if (selected != null) {
+                                              student.status!.value = selected;
+                                            }
                                           },
                                           child: Container(
                                             padding: const EdgeInsets.symmetric(
@@ -313,6 +351,28 @@ final ValueNotifier<int?> selectedBranchId = ValueNotifier(null);
                                 ),
                               );
                             },
+                          ),
+                          SizedBox(height: AppSizes.insidePadding),
+                          SizedBox(
+                            width: 140,
+                            height: 40,
+                            child: FilledButton(
+                              style: FilledButton.styleFrom(
+                                backgroundColor: AppColors.blue,
+                              ),
+                              onPressed: () {
+                                context.read<TeacherAttendanceBloc>().add(
+                                  CreateAttendanceTeacherEvent(
+                                    studentListResponseTeacherModelList:
+                                        studentList,
+                                    subjectOfferingId: widget.attendanceModel.subjectId,
+                                    date: attendanceDate.value,
+                                    batchSemesterId: widget.attendanceModel.batchId,
+                                  ),
+                                );
+                              },
+                              child: Text("নিশ্চিত করুন"),
+                            ),
                           ),
                         ],
                       ),

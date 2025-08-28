@@ -1,6 +1,8 @@
 
 import 'dart:convert';
 
+import 'package:flutter/widgets.dart';
+
 List<StudentListResponseTeacherModel> studentListResponseTeacherModel(String str) => List<StudentListResponseTeacherModel>.from(json.decode(str).map((x) => StudentListResponseTeacherModel.fromJson(x)));
 
 class StudentListResponseTeacherModel {
@@ -12,7 +14,7 @@ class StudentListResponseTeacherModel {
     final dynamic studentAttendanceId;
     final String? subjectOfferingId;
     final String? subjectName;
-    final String? status;
+    final ValueNotifier<String>? status;
 
     StudentListResponseTeacherModel({
         this.rollNo,
@@ -35,7 +37,7 @@ class StudentListResponseTeacherModel {
         studentAttendanceId: json["student_attendance_id"],
         subjectOfferingId: json["subject_offering_id"],
         subjectName: json["subject_name"],
-        status: json["status"],
+        status: ValueNotifier(json["status"]),
     );
 
     Map<String, dynamic> toJson() => {
