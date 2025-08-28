@@ -4,6 +4,7 @@ import 'package:school_management/features/teacher/profile/presentation/bloc/tea
 
 import '../features/splash/presentation/bloc/splash_bloc.dart';
 import '../features/student/auth/presentation/bloc/student_auth_bloc.dart';
+import '../features/student/profile/presentation/bloc/student_profile_bloc.dart';
 import '../features/teacher/attendance/presentation/bloc/teacher_attendance_bloc.dart';
 import '../features/teacher/auth/presentation/bloc/teacher_auth_bloc.dart';
 import 'route/app_router.dart';
@@ -28,6 +29,8 @@ class MyApp extends StatelessWidget {
 
         //!-------for student--------
          BlocProvider<StudentAuthBloc>(create: (context) => StudentAuthBloc()),
+        BlocProvider<StudentProfileBloc>(create: (context) => StudentProfileBloc()),
+
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

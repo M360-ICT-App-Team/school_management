@@ -22,6 +22,12 @@ class StudentDashboardPage extends StatefulWidget {
 
 class _StudentDashboardPageState extends State<StudentDashboardPage> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    context.read<StudentProfileBloc>().add(GetStudentProfileEvent());
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xfff7f7f7),
