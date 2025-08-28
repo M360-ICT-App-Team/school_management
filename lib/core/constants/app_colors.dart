@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:school_management/core/constants/app_enum.dart';
 
 class AppColors {
   static const primary = Color(0xff002147);
@@ -42,7 +41,7 @@ class AppColors {
   );
 
   static final Map<String, Color> statusColors = {
-    "no_action": Colors.black,
+    "no_action": Colors.green,
     "present": Colors.green,
     "late": Colors.blue,
     "absent": Colors.red,

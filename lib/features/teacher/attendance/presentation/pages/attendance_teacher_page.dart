@@ -51,6 +51,13 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
     );
   }
 
+  bool isToday(DateTime date) {
+    final now = DateTime.now();
+    return date.year == now.year &&
+        date.month == now.month &&
+        date.day == now.day;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -357,29 +364,31 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
                             },
                           ),
                           SizedBox(height: AppSizes.insidePadding),
-                          SizedBox(
-                            width: 140,
-                            height: 40,
-                            child: FilledButton(
-                              style: FilledButton.styleFrom(
-                                backgroundColor: AppColors.blue,
-                              ),
-                              onPressed: () {
-                                context.read<TeacherAttendanceBloc>().add(
-                                  CreateAttendanceTeacherEvent(
-                                    studentListResponseTeacherModelList:
-                                        studentList,
-                                    subjectOfferingId:
-                                        widget.attendanceModel.subjectId,
-                                    date: attendanceDate.value,
-                                    batchSemesterId:
-                                        widget.attendanceModel.batchId,
+                          isToday(attendanceDate.value)
+                              ? SizedBox(
+                                  width: 140,
+                                  height: 40,
+                                  child: FilledButton(
+                                    style: FilledButton.styleFrom(
+                                      backgroundColor: AppColors.blue,
+                                    ),
+                                    onPressed: () {
+                                      context.read<TeacherAttendanceBloc>().add(
+                                        CreateAttendanceTeacherEvent(
+                                          studentListResponseTeacherModelList:
+                                              studentList,
+                                          subjectOfferingId:
+                                              widget.attendanceModel.subjectId,
+                                          date: attendanceDate.value,
+                                          batchSemesterId:
+                                              widget.attendanceModel.batchId,
+                                        ),
+                                      );
+                                    },
+                                    child: Text("নিশ্চিত করুন"),
                                   ),
-                                );
-                              },
-                              child: Text("নিশ্চিত করুন"),
-                            ),
-                          ),
+                                )
+                              : SizedBox.shrink(),
                         ],
                       ),
                     );
