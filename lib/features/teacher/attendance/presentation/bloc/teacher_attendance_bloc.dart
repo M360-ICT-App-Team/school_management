@@ -15,6 +15,8 @@ class TeacherAttendanceBloc
   TeacherAttendanceBloc() : super(TeacherAttendanceInitial()) {
     on<GetTeacherBatchOverViewEvent>(_getTeacherBatchOverView);
     on<GetStudentListEvent>(_getStudentList);
+        on<CreateAttendanceTeacherEvent>(_createAttendance);
+
   }
   Future<void> _getTeacherBatchOverView(
     GetTeacherBatchOverViewEvent event,
@@ -59,6 +61,34 @@ class TeacherAttendanceBloc
       );
     } catch (e, stackTrace) {
       emit(GetTeacherBatchOverViewError(AppExceptionMessage.serverDefault));
+      if (kDebugMode) {
+        print("error: $e \n stackTrace: $stackTrace");
+      }
+    }
+  }
+
+  Future<void> _createAttendance(
+    CreateAttendanceTeacherEvent event,
+    Emitter<TeacherAttendanceState> emit,
+  ) async {
+    emit(CreateAttendanceTeacherLoading());
+    try {
+      final result =
+          await TeacherAttendanceRemoteDataSource.createAttendance( 
+              studentList: event.studentListResponseTeacherModelList
+              ,subjectOfferingId: event.subjectOfferingId
+              ,date: event.date
+              ,batchSemesterId: event.batchSemesterId
+        
+          );
+      result.fold(
+        (ifLeft) => emit(CreateAttendanceTeacherError(ifLeft.message)),
+        (ifRight) {
+          emit(CreateAttendanceTeacherSuccess());
+        },
+      );
+    } catch (e, stackTrace) {
+      emit(CreateAttendanceTeacherError(AppExceptionMessage.serverDefault));
       if (kDebugMode) {
         print("error: $e \n stackTrace: $stackTrace");
       }

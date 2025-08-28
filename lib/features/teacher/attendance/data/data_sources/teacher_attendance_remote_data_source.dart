@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 
@@ -9,7 +10,6 @@ import '../../../../../core/local_database/auth_db.dart';
 import '../../../../../core/network/api_client.dart';
 import '../model/batch_over_view_teacher_response_model.dart';
 import '../model/student_list_response_teacher_model.dart';
-import '../../../../common/subject/data/model/subject_list_response_teacher_model.dart';
 
 class TeacherAttendanceRemoteDataSource {
   //!for get batch over view
@@ -38,18 +38,53 @@ class TeacherAttendanceRemoteDataSource {
   }) async {
     try {
       String url;
-      if (branchId == null) { 
-        url = "${AppUrls.teacherAttendance}/$id?date=$date&subject_offering_id=$subjectId";
-      }
-      else {
-        url = "${AppUrls.teacherAttendance}/$id?branch_id=$branchId&date=$date&subject_offering_id=$subjectId";
+      if (branchId == null) {
+        url =
+            "${AppUrls.teacherAttendance}/$id?date=$date&subject_offering_id=$subjectId";
+      } else {
+        url =
+            "${AppUrls.teacherAttendance}/$id?branch_id=$branchId&date=$date&subject_offering_id=$subjectId";
       }
       final result = await ApiClient.get(
-        url:
-           url,
+        url: url,
         token: await AuthLocalDB.getToken(),
       );
       return Right(studentListResponseTeacherModel(jsonEncode(result)));
+    } catch (e, stackTrace) {
+      return Left(handleException(e, stackTrace));
+    }
+  }
+
+  static Future<Either<Failure, void>> createAttendance({
+    required List<StudentListResponseTeacherModel> studentList,
+    required int? subjectOfferingId,
+    required DateTime? date,
+    required int? batchSemesterId,
+  }) async {
+    try {
+      final Map<String, dynamic> payload = {
+        "attendances": studentList
+            .map(
+              (student) => {
+                "enrollment_id": student.enrollmentId,
+                "status": student.status!.value.toString(),
+              },
+            )
+            .toList(),
+        "subject_offering_id": subjectOfferingId,
+        "date": date,
+        "batch_semester_id": batchSemesterId,
+      };
+
+            log("Create Attendance payload : ${(payload)}");
+
+
+      final result = await ApiClient.post(
+        body: jsonEncode(payload),
+        url: AppUrls.teacherAttendance,
+        token: await AuthLocalDB.getToken(),
+      );
+      return Right(result != null);
     } catch (e, stackTrace) {
       return Left(handleException(e, stackTrace));
     }

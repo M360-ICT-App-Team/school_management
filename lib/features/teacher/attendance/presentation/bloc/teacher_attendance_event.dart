@@ -16,4 +16,14 @@ class GetStudentListEvent extends TeacherAttendanceEvent {
   GetStudentListEvent({required this.id,required this.date,required this.subjectId , this.branchId});
 }
 
-//!for get subject
+
+
+//!for create attendance
+class CreateAttendanceTeacherEvent extends TeacherAttendanceEvent { 
+ final List<StudentListResponseTeacherModel> studentListResponseTeacherModelList;
+ final DateTime? date;
+ final int? subjectOfferingId;
+ final int? batchSemesterId;
+
+  CreateAttendanceTeacherEvent({required this.studentListResponseTeacherModelList,required this.date,required this.subjectOfferingId,required this.batchSemesterId});
+}
