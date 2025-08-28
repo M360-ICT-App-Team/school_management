@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 import '../constants/app_colors.dart';
 import '../constants/app_sizes.dart';
 
-Future<void> appBottomSheet(
-  BuildContext context, {
-  required Widget child,
-}) async {
+Future<void> appBottomSheet(BuildContext context,
+    {required Widget child}) async {
   await showModalBottomSheet(
-    context: context,
-    showDragHandle: true,
-    useSafeArea: true,
-    isScrollControlled: true,
-    builder: (context) => SafeArea(
-      child: Container(
-        padding: const EdgeInsets.only(
-          left: AppSizes.bodyPadding,
-          bottom: AppSizes.bodyPadding,
-          right: AppSizes.bodyPadding,
-        ),
-        child: child,
-      ),
-    ),
-  );
+      context: context,
+      showDragHandle: true,
+      useSafeArea: true,
+      isScrollControlled: true,
+      builder: (context) => Container(
+          margin: const EdgeInsets.only(
+            left: AppSizes.bodyPadding,
+            bottom: AppSizes.bodyPadding,
+            right: AppSizes.bodyPadding,
+          ),
+          decoration: BoxDecoration(
+              color: AppColors.backgroundColor,
+              borderRadius: BorderRadius.circular(AppSizes.radiusMedium)),
+          child: child));
 }
 
 class AppTextField extends StatelessWidget {
@@ -135,7 +133,130 @@ class AppTextField extends StatelessWidget {
     );
   }
 }
+// Future<void> appBottomSheet(BuildContext context,
+//     {required Widget child}) async {
+//   await showModalBottomSheet(
+//       context: context,
+//       showDragHandle: true,
+//       useSafeArea: true,
+//       isScrollControlled: true,
+//       builder: (context) => Container(
+//           margin: const EdgeInsets.only(
+//             left: AppSizes.paddingBody,
+//             bottom: AppSizes.paddingBody,
+//             right: AppSizes.paddingBody,
+//           ),
+//           decoration: BoxDecoration(
+//               color: AppColors.scaffoldBackgroundColor(context),
+//               borderRadius: BorderRadius.circular(AppSizes.radius)),
+//           child: child));
+// }
 
+class AppBottomSheet {
+  static Future<T?> show<T>({
+    required BuildContext context,
+    required List<T> items,
+    required String Function(T) getLabel,
+    T? selectedItem,
+    bool isSearchable = false,
+    double? height,
+    String searchHint = "Search...",
+  }) {
+    final TextEditingController searchController = TextEditingController();
+    final ValueNotifier<List<T>> filteredItems = ValueNotifier<List<T>>(items);
+
+    return showModalBottomSheet<T>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      showDragHandle: true,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setModalState) {
+            return Container(
+              height: height,
+              margin: const EdgeInsets.only(
+                left: AppSizes.bodyPadding,
+                bottom: AppSizes.bodyPadding,
+                right: AppSizes.bodyPadding,
+              ),
+              decoration: BoxDecoration(
+                color: AppColors.primary,
+                borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (isSearchable) ...[
+                     SizedBox(height: AppSizes.insidePadding),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: AppSizes.insidePadding),
+                      child: TextField(
+                        controller: searchController,
+                        decoration: InputDecoration(
+                          hintText: searchHint,
+                          fillColor: AppColors.secondary,
+                          prefixIcon: HugeIcon(
+                            icon: HugeIcons.strokeRoundedSearch01,
+                            color: AppColors.lightGrey,
+                            size: 20,
+                          ),
+                        ),
+                        onChanged: (value) {
+                          filteredItems.value = items
+                              .where((item) => getLabel(item)
+                                  .toLowerCase()
+                                  .contains(value.toLowerCase()))
+                              .toList();
+                        },
+                      ),
+                    ),
+                  ],
+                  Expanded(
+                    child: ValueListenableBuilder<List<T>>(
+                      valueListenable: filteredItems,
+                      builder: (context, filteredItems, _) {
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: filteredItems.length,
+                          itemBuilder: (context, index) {
+                            final item = filteredItems[index];
+                            final isSelected = selectedItem == item;
+                            return ListTile(
+                              title: Text(
+                                getLabel(item),
+                                style: TextStyle(
+                                  color: isSelected
+                                      ? AppColors.primary
+                                      : null,
+                                  fontWeight: isSelected
+                                      ? FontWeight.bold
+                                      : FontWeight.normal,
+                                ),
+                              ),
+                              leading: isSelected
+                                  ? Icon(Icons.check,
+                                      color: AppColors.primary)
+                                  : const SizedBox(width: 24),
+                              onTap: () {
+                                Navigator.pop(context, item);
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+}
 
 
 

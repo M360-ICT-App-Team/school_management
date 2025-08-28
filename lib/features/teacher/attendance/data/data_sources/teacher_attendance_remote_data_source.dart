@@ -9,35 +9,44 @@ import '../../../../../core/local_database/auth_db.dart';
 import '../../../../../core/network/api_client.dart';
 import '../model/batch_over_view_teacher_response_model.dart';
 import '../model/student_list_response_teacher_model.dart';
+import '../../../../common/subject/data/model/subject_list_response_teacher_model.dart';
 
-class TeacherAttendanceRemoteDataSource { 
-
+class TeacherAttendanceRemoteDataSource {
   //!for get batch over view
-  static Future<Either<Failure, List<BatchOverViewTeacherResponseModel>>> getTeacherBatchOverView(
-    
-  ) async {
+  static Future<Either<Failure, List<BatchOverViewTeacherResponseModel>>>
+  getTeacherBatchOverView() async {
     try {
       final result = await ApiClient.get(
         url: AppUrls.teacherAttendance,
         token: await AuthLocalDB.getToken(),
       );
-      return Right(batchOverViewTeacherResponseModelFromJson(jsonEncode(result)));
+      return Right(
+        batchOverViewTeacherResponseModelFromJson(jsonEncode(result)),
+      );
     } catch (e, stackTrace) {
       return Left(handleException(e, stackTrace));
     }
   }
 
   //!for get student list
-    static Future<Either<Failure, List<StudentListResponseTeacherModel>>> getStudentList({ 
-      required int id,
-      required DateTime? date,
-      required int subjectId
-    }
-    
-  ) async {
+  static Future<Either<Failure, List<StudentListResponseTeacherModel>>>
+  getStudentList({
+    required int? id,
+    required DateTime? date,
+    required int? subjectId,
+    required int? branchId,
+  }) async {
     try {
+      String url;
+      if (branchId == null) { 
+        url = "${AppUrls.teacherAttendance}/$id?date=$date&subject_offering_id=$subjectId";
+      }
+      else {
+        url = "${AppUrls.teacherAttendance}/$id?branch_id=$branchId&date=$date&subject_offering_id=$subjectId";
+      }
       final result = await ApiClient.get(
-        url: "${AppUrls.teacherAttendance}/$id?date=$date&subject_offering_id=$subjectId",
+        url:
+           url,
         token: await AuthLocalDB.getToken(),
       );
       return Right(studentListResponseTeacherModel(jsonEncode(result)));
@@ -45,5 +54,4 @@ class TeacherAttendanceRemoteDataSource {
       return Left(handleException(e, stackTrace));
     }
   }
-
 }

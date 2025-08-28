@@ -12,7 +12,12 @@ import '../../../../../core/utilities/app_convert_date_time.dart';
 import '../../../../../core/widgets/app_adaptive_date.dart';
 import '../../../../../core/widgets/app_bottom_list_sheet.dart';
 import '../../../../../core/widgets/app_empty.dart';
+import '../../../../common/subject/data/model/subject_list_response_teacher_model.dart';
+import '../../../../common/subject/presentation/bloc/subject_bloc.dart';
+import '../../../branch/data/model/branch_response_model.dart';
+import '../../../branch/presentation/bloc/branch_bloc.dart';
 import '../widgets/add_new_attendance_button_widget.dart';
+import '../widgets/filtering_attendance_widget.dart';
 
 class AttendanceTeacherPage extends StatefulWidget {
   final AttendanceModel attendanceModel;
@@ -23,21 +28,6 @@ class AttendanceTeacherPage extends StatefulWidget {
 }
 
 class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
-  Color getStatusColor(String status) {
-    switch (status) {
-      case "উপস্থিত":
-        return Colors.green;
-      case "অনুপস্থিত":
-        return Colors.red;
-      case "সিদ্ধান্ত হয়নি":
-        return Colors.black87;
-      case "ছুটি":
-        return Colors.blue;
-      default:
-        return Colors.grey;
-    }
-  }
-
   final List<String> options = [
     "উপস্থিত",
     "অনুপস্থিত",
@@ -57,17 +47,26 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
   ];
 
   final ValueNotifier<DateTime> attendanceDate = ValueNotifier(DateTime.now());
+  final ValueNotifier<String?> selectedSubject = ValueNotifier(null);
+    final ValueNotifier<int?> selectedSubjectId = ValueNotifier(null);
+
+final ValueNotifier<String?> selectedBranch = ValueNotifier(null);
+final ValueNotifier<int?> selectedBranchId = ValueNotifier(null);
 
   @override
   void initState() {
-    DateTime today = DateTime.now();
-    DateTime onlyDate = DateTime(today.year, today.month, today.day);
+    DateTime onlyDate = DateTime(
+      attendanceDate.value.year,
+      attendanceDate.value.month,
+      attendanceDate.value.day,
+    );
     super.initState();
     context.read<TeacherAttendanceBloc>().add(
       GetStudentListEvent(
         id: widget.attendanceModel.batchId,
         date: onlyDate,
         subjectId: widget.attendanceModel.subjectId,
+        
       ),
     );
   }
@@ -99,131 +98,9 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
               AddNewAttendanceButtonWidget(),
 
               /// Date + Subject +branch + Filter Row
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  //!date picker
-                  ValueListenableBuilder(
-                    valueListenable: attendanceDate,
-                    builder: (context, value, child) {
-                      return InkWell(
-                        onTap: () async {
-                          await pickAdaptiveDate(
-                            context: context,
-                            notifier: attendanceDate,
-                            initialDate: value,
-                            firstDate: DateTime(DateTime.now().year - 1),
-                            lastDate: DateTime.now(),
-                          );
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 4,
-                            vertical: 6,
-                          ),
-                          decoration: BoxDecoration(
-                            color: const Color(0xffd9d9d9),
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: Colors.black, width: 1.5),
-                          ),
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.arrow_drop_down,
-                                size: 20,
-                                color: Colors.black,
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                "${formatDateTime(dateTime: value, format: "yyyy-MM-dd")}",
-                                style: AppTextStyles.normalLight(
-                                  context,
-                                ).copyWith(fontSize: 14),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-
-                  //! subject choice
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 4,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: const Color(0xffd9d9d9),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.black, width: 1.5),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.arrow_drop_down,
-                          size: 20,
-                          color: Colors.black,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          "সাবজেক্ট",
-                          style: AppTextStyles.normalLight(
-                            context,
-                          ).copyWith(fontSize: 14),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  //!select branch
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 4,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: const Color(0xffd9d9d9),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.black, width: 1.5),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.arrow_drop_down,
-                          size: 20,
-                          color: Colors.black,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          "শাখা",
-                          style: AppTextStyles.normalLight(
-                            context,
-                          ).copyWith(fontSize: 14),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  //! Filter Button
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 18,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.blue,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      "ফিল্টার",
-                      style: AppTextStyles.normalBold(
-                        context,
-                      ).copyWith(fontSize: 16, color: AppColors.white),
-                    ),
-                  ),
-                ],
-              ),
+            FilteringAttendanceWidget( 
+              attendanceModel: widget.attendanceModel,
+            ),
 
               const SizedBox(height: 16),
 
@@ -395,16 +272,16 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
                                         alignment: Alignment.centerRight,
                                         child: InkWell(
                                           onTap: () {
-                                            AppBottomListSheet.showStatusBottomSheet(
-                                              context: context,
-                                              title: "Select Status",
-                                              items: options,
-                                              onSelected: (value) {
-                                                debugPrint(
-                                                  "Selected status: $value",
-                                                );
-                                              },
-                                            );
+                                            // AppBottomListSheet.showStatusBottomSheet(
+                                            //   context: context,
+                                            //   title: "Select Status",
+                                            //   items: options,
+                                            //   onSelected: (value) {
+                                            //     debugPrint(
+                                            //       "Selected status: $value",
+                                            //     );
+                                            //   },
+                                            // );
                                           },
                                           child: Container(
                                             padding: const EdgeInsets.symmetric(

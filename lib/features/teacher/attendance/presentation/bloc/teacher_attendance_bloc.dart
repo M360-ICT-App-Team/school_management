@@ -48,7 +48,8 @@ class TeacherAttendanceBloc
           await TeacherAttendanceRemoteDataSource.getStudentList( 
               id: event.id,
               date: event.date,
-              subjectId: event.subjectId
+              subjectId: event.subjectId,
+              branchId: event.branchId
           );
       result.fold(
         (ifLeft) => emit(GetStudentListError(ifLeft.message)),
@@ -63,4 +64,7 @@ class TeacherAttendanceBloc
       }
     }
   }
+
+
+
 }
