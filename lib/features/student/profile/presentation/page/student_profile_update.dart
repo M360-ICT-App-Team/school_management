@@ -1,11 +1,10 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:school_management/core/constants/app_urls.dart';
+import 'package:school_management/core/utilities/app_convert_date_time.dart';
 
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_sizes.dart';
@@ -19,7 +18,6 @@ import '../../../../../core/widgets/pick_image.dart';
 import '../../data/model/student_profile_response_model.dart';
 import '../../data/model/student_profile_update_request_model.dart';
 import '../bloc/student_profile_bloc.dart';
-
 
 class StudentProfileUpdatePage extends StatefulWidget {
   const StudentProfileUpdatePage({super.key});
@@ -47,19 +45,21 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
   TextEditingController localGuardianController = TextEditingController();
   TextEditingController localGuardianNidController = TextEditingController();
   TextEditingController localGuardianPhoneController = TextEditingController();
-  TextEditingController localGuardianEmaPhoneController = TextEditingController();
-
+  TextEditingController localGuardianEmaPhoneController =
+      TextEditingController();
 
   XFile? photo;
   String networkImage = '';
   StudentProfileResponseModel? studentProfile;
-  // Instead of String? religion, gender, etc.
-   ValueNotifier<String> religion = ValueNotifier('ধর্ম নির্বাচন করুন');
-   ValueNotifier<String> gender = ValueNotifier('লিঙ্গ নির্বাচন করুন');
-   ValueNotifier<String> permanentAddressDivision = ValueNotifier('বিভাগ নির্বাচন করুন');
-   ValueNotifier<String> presentAddressDivision = ValueNotifier('বিভাগ নির্বাচন করুন');
-   ValueNotifier<String?> selectedDate = ValueNotifier(null);
-
+  ValueNotifier<String> religion = ValueNotifier('ধর্ম নির্বাচন করুন');
+  ValueNotifier<String> gender = ValueNotifier('লিঙ্গ নির্বাচন করুন');
+  ValueNotifier<String> permanentAddressDivision = ValueNotifier(
+    'বিভাগ নির্বাচন করুন',
+  );
+  ValueNotifier<String> presentAddressDivision = ValueNotifier(
+    'বিভাগ নির্বাচন করুন',
+  );
+  ValueNotifier<String?> selectedDate = ValueNotifier(null);
 
   @override
   void dispose() {
@@ -99,70 +99,41 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
           }
         },
         builder: (context, state) {
-          //StudentProfileUpdateRequestModel? teacherProfile;
-
           if (state is StudentProfileSuccess) {
+            studentProfile = state.studentProfileResponseModel;
+            birthRegNo.text = studentProfile?.dobNo ?? '';
+            bloodGroupController.text = studentProfile?.bloodGroup ?? '';
+            permanentAddressController.text =
+                studentProfile?.permanentAddress ?? '';
+            zipCodeController.text = studentProfile?.permanentPostalCode ?? '';
+            presentZipCodeController.text =
+                studentProfile?.presentPostalCode ?? '';
+            thanaController.text = studentProfile?.permanentThana ?? '';
+            presentAddressController.text =
+                studentProfile?.presentAddress ?? '';
+            presentThanaController.text = studentProfile?.presentThana ?? '';
+            fatherNameController.text = studentProfile?.fatherName ?? '';
+            fatherNidController.text = studentProfile?.fatherNidNo ?? '';
+            fatherPhoneController.text = studentProfile?.fatherPhone ?? '';
+            motherNameController.text = studentProfile?.motherName ?? '';
+            motherNidController.text = studentProfile?.motherNidNo ?? '';
+            motherPhoneController.text = studentProfile?.motherPhone ?? '';
+            localGuardianController.text =
+                studentProfile?.localGuardianName ?? '';
+            localGuardianNidController.text =
+                studentProfile?.localGuardianNidNo ?? '';
+            localGuardianPhoneController.text =
+                studentProfile?.localGuardianPhone ?? '';
 
-            // Only set controllers if they are empty (first load)
+            // dropdowns
+            gender.value = studentProfile?.gender ?? 'লিঙ্গ নির্বাচন করুন';
+            religion.value = studentProfile?.religion ?? 'ধর্ম নির্বাচন করুন';
+            permanentAddressDivision.value =
+                studentProfile?.permanentDivision ?? 'বিভাগ নির্বাচন করুন';
+            presentAddressDivision.value =
+                studentProfile?.presentDivision ?? 'বিভাগ নির্বাচন করুন';
 
-              birthRegNo.text = studentProfile?.dobNo ?? '';
-              bloodGroupController.text = studentProfile?.bloodGroup ?? '';
-              permanentAddressController.text =
-                  studentProfile?.permanentAddress ?? '';
-              zipCodeController.text =
-                  studentProfile?.permanentPostalCode ?? '';
-              presentZipCodeController.text =
-                  studentProfile?.presentPostalCode ?? '';
-              thanaController.text = studentProfile?.permanentThana ?? '';
-              presentAddressController.text =
-                  studentProfile?.presentAddress ?? '';
-              presentThanaController.text = studentProfile?.presentThana ?? '';
-              fatherNameController.text = studentProfile?.fatherName ?? '';
-              fatherNidController.text = studentProfile?.fatherNidNo ?? '';
-              fatherPhoneController.text = studentProfile?.fatherPhone ?? '';
-              motherNameController.text = studentProfile?.motherName ?? '';
-              motherNidController.text = studentProfile?.motherNidNo ?? '';
-              motherPhoneController.text = studentProfile?.motherPhone ?? '';
-              localGuardianController.text =
-                  studentProfile?.localGuardianName ?? '';
-              localGuardianNidController.text =
-                  studentProfile?.localGuardianNidNo ?? '';
-              localGuardianPhoneController.text =
-                  studentProfile?.localGuardianPhone ?? '';
-
-              // dropdowns
-              gender.value = studentProfile?.gender ?? 'লিঙ্গ নির্বাচন করুন';
-              religion.value = studentProfile?.religion ?? 'ধর্ম নির্বাচন করুন';
-              permanentAddressDivision.value =
-                  studentProfile?.permanentDivision ?? 'বিভাগ নির্বাচন করুন';
-              presentAddressDivision.value =
-                  studentProfile?.presentDivision ?? 'বিভাগ নির্বাচন করুন';
-
-              selectedDate.value = studentProfile?.dobDate;
-
-            //gender=studentProfile!.gender??'লিঙ্গ নির্বাচন করুন';
-           // religion=studentProfile!.religion??'ধর্ম নির্বাচন করুন';
-           // permanentAddressDivision=studentProfile!.permanentDivision??'বিভাগ নির্বাচন করুন';
-           // presentAddressDivision=studentProfile!.presentDivision??'বিভাগ নির্বাচন করুন';
-          //  localGuardianEmaPhoneController.text = studentProfile!.loca??'';
-           /* phoneController.text = teacherProfile.phone.toString();
-            emailController.text = teacherProfile.email.toString();
-            fatherNameController.text = teacherProfile.fatherName.toString();
-            motherNameController.text = teacherProfile.motherName.toString();
-            presentAddressController.text = teacherProfile.presentAddress
-                .toString();
-            permanentAddressController.text = teacherProfile.permanentAddress
-                .toString();
-            bloodGroupController.text = teacherProfile.bloodGroup.toString();
-            final serverPhoto = teacherProfile.photo;
-            networkImage =
-            (serverPhoto == null ||
-                serverPhoto.isEmpty ||
-                serverPhoto.contains("https://shorturl.at"))
-                ? 'https://shorturl.at/RfnsS'
-                : serverPhoto;
-            debugPrint("======== photo url ======  ${AppUrls.imageUrl}");
-            log("======== photo ======  $serverPhoto");*/
+            selectedDate.value = studentProfile?.dobDate;
           }
 
           return ListView(
@@ -196,24 +167,24 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
                                   children: [
                                     photo != null
                                         ? Container(
-                                      height: 100,
-                                      width: 100,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: Colors.grey.shade300,
-                                        ),
-                                      ),
-                                      child: Image.file(
-                                        File(photo!.path),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )
+                                            height: 100,
+                                            width: 100,
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                color: Colors.grey.shade300,
+                                              ),
+                                            ),
+                                            child: Image.file(
+                                              File(photo!.path),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          )
                                         : AppCachedNetworkImage(
-                                      url: networkImage,
-                                      height: 100,
-                                      width: 100,
-                                      isPerson: true,
-                                    ),
+                                            url: studentProfile?.photo ?? '',
+                                            height: 100,
+                                            width: 100,
+                                            isPerson: true,
+                                          ),
                                     Card(
                                       child: IconButton(
                                         onPressed: () async {
@@ -236,7 +207,8 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
                                     AppSizes.insidePadding / 2,
                                   ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         studentProfile?.name ?? "Unknown",
@@ -258,7 +230,7 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 2,
                                       ),
-                    
+
                                       /*Text(
                                         studentProfile?.phone ?? "Unknown",
                                         style: AppTextStyles.normalLight(
@@ -289,7 +261,11 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
                           ),
                           //!for update information
                           SizedBox(height: AppSizes.insidePadding),
-                          profileInfoList(context, "জন্ম নিবন্ধ নং", birthRegNo),
+                          profileInfoList(
+                            context,
+                            "জন্ম নিবন্ধ নং",
+                            birthRegNo,
+                          ),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -297,38 +273,52 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
                                 width: 100,
                                 child: Text(
                                   'জন্ম তারিখ',
-                                  style: AppTextStyles.normalLight(context).copyWith(fontSize: 16),
+                                  style: AppTextStyles.normalLight(
+                                    context,
+                                  ).copyWith(fontSize: 16),
                                 ),
                               ),
                               const Text(" : "),
                               GestureDetector(
-                                onTap: (){
+                                onTap: () {
                                   _selectDate(context);
+                                  
                                 },
                                 child: Container(
                                   width: 230,
-                                  height: 30, // 👈 matches your screenshot style
+                                  height:
+                                      30, 
                                   padding: EdgeInsets.symmetric(horizontal: 12),
                                   decoration: BoxDecoration(
                                     color: Colors.grey[300],
                                     borderRadius: BorderRadius.circular(6),
                                     border: Border.all(color: Colors.grey),
                                   ),
-                                  child:  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       ValueListenableBuilder(
                                         valueListenable: selectedDate,
                                         builder: (context, value, child) {
-                                          return Text(value??'', style: TextStyle(fontSize: 14));
-                                        }
+                                          return Text(
+                                            formatDateTime(
+                                                  dateTime: value,
+                                                  format: "dd-MM-yyyy",
+                                                ) ??
+                                                '',
+                                            style: TextStyle(fontSize: 14),
+                                          );
+                                        },
                                       ),
-                                      Icon(Icons.arrow_drop_down, color: Colors.black),
+                                      Icon(
+                                        Icons.arrow_drop_down,
+                                        color: Colors.black,
+                                      ),
                                     ],
                                   ),
-                    
                                 ),
-                              )
+                              ),
                             ],
                           ),
                           Row(
@@ -338,38 +328,47 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
                                 width: 100,
                                 child: Text(
                                   'ধর্ম',
-                                  style: AppTextStyles.normalLight(context).copyWith(fontSize: 16),
+                                  style: AppTextStyles.normalLight(
+                                    context,
+                                  ).copyWith(fontSize: 16),
                                 ),
                               ),
                               const Text(" : "),
                               GestureDetector(
-                                onTap: (){
-                                   _openBottomSheet(religionList,'religion');
-                                    },
+                                onTap: () {
+                                  _openBottomSheet(religionList, 'religion');
+                                },
                                 child: Container(
                                   width: 230,
-                                  height: 30, // 👈 matches your screenshot style
+                                  height:
+                                      30, // 👈 matches your screenshot style
                                   padding: EdgeInsets.symmetric(horizontal: 12),
                                   decoration: BoxDecoration(
                                     color: Colors.grey[300],
                                     borderRadius: BorderRadius.circular(6),
                                     border: Border.all(color: Colors.grey),
                                   ),
-                                  child:  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       ValueListenableBuilder(
                                         valueListenable: religion,
                                         builder: (context, value, child) {
-                                          return Text(value, style: TextStyle(fontSize: 14));
-                                        }
+                                          return Text(
+                                            value,
+                                            style: TextStyle(fontSize: 14),
+                                          );
+                                        },
                                       ),
-                                      Icon(Icons.arrow_drop_down, color: Colors.black),
+                                      Icon(
+                                        Icons.arrow_drop_down,
+                                        color: Colors.black,
+                                      ),
                                     ],
                                   ),
-
                                 ),
-                              )
+                              ),
                             ],
                           ),
                           Row(
@@ -379,42 +378,55 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
                                 width: 100,
                                 child: Text(
                                   'লিঙ্গ',
-                                  style: AppTextStyles.normalLight(context).copyWith(fontSize: 16),
+                                  style: AppTextStyles.normalLight(
+                                    context,
+                                  ).copyWith(fontSize: 16),
                                 ),
                               ),
                               const Text(" : "),
                               GestureDetector(
-                                onTap: (){
-                                  _openBottomSheet(sexList,'gender');
+                                onTap: () {
+                                  _openBottomSheet(sexList, 'gender');
                                 },
                                 child: Container(
                                   width: 230,
-                                  height: 30, // 👈 matches your screenshot style
+                                  height:
+                                      30, // 👈 matches your screenshot style
                                   padding: EdgeInsets.symmetric(horizontal: 12),
                                   decoration: BoxDecoration(
                                     color: Colors.grey[300],
                                     borderRadius: BorderRadius.circular(6),
                                     border: Border.all(color: Colors.grey),
                                   ),
-                                  child:  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       ValueListenableBuilder(
                                         valueListenable: gender,
                                         builder: (context, value, child) {
-                                          return Text(value, style: TextStyle(fontSize: 14));
-                                        }
+                                          return Text(
+                                            value,
+                                            style: TextStyle(fontSize: 14),
+                                          );
+                                        },
                                       ),
-                                      Icon(Icons.arrow_drop_down, color: Colors.black),
+                                      Icon(
+                                        Icons.arrow_drop_down,
+                                        color: Colors.black,
+                                      ),
                                     ],
                                   ),
-                    
                                 ),
-                              )
+                              ),
                             ],
                           ),
-                    
-                          profileInfoList(context, "রক্তের গ্রুপ", bloodGroupController),
+
+                          profileInfoList(
+                            context,
+                            "রক্তের গ্রুপ",
+                            bloodGroupController,
+                          ),
                           profileInfoList(
                             context,
                             "স্থায়ী ঠিকানা",
@@ -425,14 +437,10 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
                             context,
                             "পোস্ট কোড",
                             zipCodeController,
-                           // isMultiLine: true,
+                            // isMultiLine: true,
                           ),
-                    
-                          profileInfoList(
-                            context,
-                            "থানা",
-                            thanaController,
-                          ),
+
+                          profileInfoList(context, "থানা", thanaController),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -440,38 +448,51 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
                                 width: 100,
                                 child: Text(
                                   'বিভাগ',
-                                  style: AppTextStyles.normalLight(context).copyWith(fontSize: 16),
+                                  style: AppTextStyles.normalLight(
+                                    context,
+                                  ).copyWith(fontSize: 16),
                                 ),
                               ),
                               const Text(" : "),
                               GestureDetector(
-                                onTap: (){
-                                  _openBottomSheet(divisionList,'permanentAddressDivision');
+                                onTap: () {
+                                  _openBottomSheet(
+                                    divisionList,
+                                    'permanentAddressDivision',
+                                  );
                                 },
                                 child: Container(
                                   width: 230,
-                                  height: 30, // 👈 matches your screenshot style
+                                  height:
+                                      30, // 👈 matches your screenshot style
                                   padding: EdgeInsets.symmetric(horizontal: 12),
                                   decoration: BoxDecoration(
                                     color: Colors.grey[300],
                                     borderRadius: BorderRadius.circular(6),
                                     border: Border.all(color: Colors.grey),
                                   ),
-                                  child:  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       ValueListenableBuilder(
-                                        valueListenable: permanentAddressDivision,
+                                        valueListenable:
+                                            permanentAddressDivision,
                                         builder: (context, value, child) {
-                                          return Text(value, style: TextStyle(fontSize: 14));
-                                        }
+                                          return Text(
+                                            value,
+                                            style: TextStyle(fontSize: 14),
+                                          );
+                                        },
                                       ),
-                                      Icon(Icons.arrow_drop_down, color: Colors.black),
+                                      Icon(
+                                        Icons.arrow_drop_down,
+                                        color: Colors.black,
+                                      ),
                                     ],
                                   ),
-                    
                                 ),
-                              )
+                              ),
                             ],
                           ),
                           profileInfoList(
@@ -486,7 +507,7 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
                             presentZipCodeController,
                             // isMultiLine: true,
                           ),
-                    
+
                           profileInfoList(
                             context,
                             "থানা",
@@ -496,43 +517,54 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(
-                                width: 90
-                                ,
+                                width: 90,
                                 child: Text(
                                   'বিভাগ',
-                                  style: AppTextStyles.normalLight(context).copyWith(fontSize: 16),
+                                  style: AppTextStyles.normalLight(
+                                    context,
+                                  ).copyWith(fontSize: 16),
                                 ),
                               ),
                               const Text(" : "),
                               GestureDetector(
-                                onTap: (){
-                                  _openBottomSheet(divisionList,'presentAddressDivision');
+                                onTap: () {
+                                  _openBottomSheet(
+                                    divisionList,
+                                    'presentAddressDivision',
+                                  );
                                 },
                                 child: Container(
                                   width: 230,
                                   //padding:EdgeInsets.symmetric(horizontal: 40),
-                                  height: 30, // 👈 matches your screenshot style
+                                  height:
+                                      30, // 👈 matches your screenshot style
                                   padding: EdgeInsets.symmetric(horizontal: 12),
                                   decoration: BoxDecoration(
                                     color: Colors.grey[300],
                                     borderRadius: BorderRadius.circular(6),
                                     border: Border.all(color: Colors.grey),
                                   ),
-                                  child:  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       ValueListenableBuilder(
                                         valueListenable: presentAddressDivision,
                                         builder: (context, value, child) {
-                                          return Text(value, style: TextStyle(fontSize: 14));
-                                        }
+                                          return Text(
+                                            value,
+                                            style: TextStyle(fontSize: 14),
+                                          );
+                                        },
                                       ),
-                                      Icon(Icons.arrow_drop_down, color: Colors.black),
+                                      Icon(
+                                        Icons.arrow_drop_down,
+                                        color: Colors.black,
+                                      ),
                                     ],
                                   ),
-                    
                                 ),
-                              )
+                              ),
                             ],
                           ),
                           profileInfoList(
@@ -603,87 +635,88 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
                         backgroundColor: AppColors.blue,
                       ),
                       onPressed: () {
+                        final studentProfileUpdateRequestModel =
+                            StudentProfileUpdateRequestModel(
+                              dobNo: birthRegNo.text.trim(),
+                              dobDate: selectedDate.value,
+                              religion: religion.value,
+                              gender: gender.value,
+                              bloodGroup: bloodGroupController.text.trim(),
+                              permanentAddress: permanentAddressController.text
+                                  .trim(),
+                              permanentPostalCode: zipCodeController.text
+                                  .trim(),
+                              permanentThana: thanaController.text.trim(),
+                              permanentDivision: permanentAddressDivision.value,
+                              presentAddress: presentAddressController.text
+                                  .trim(),
+                              presentThana: presentThanaController.text.trim(),
+                              presentPostelCode: presentZipCodeController.text
+                                  .trim(),
+                              fatherName: fatherNameController.text.trim(),
+                              fatherNidNo: fatherNidController.text.trim(),
 
-                        final studentProfileUpdateRequestModel =StudentProfileUpdateRequestModel(
-                          dobNo: birthRegNo.text.trim(),
-                          dobDate: selectedDate.value,
-                          religion: religion.value,
-                          gender: gender.value,
-                          bloodGroup: bloodGroupController.text.trim(),
-                          permanentAddress: permanentAddressController.text.trim(),
-                          permanentPostalCode: zipCodeController.text.trim(),
-                          permanentThana: thanaController.text.trim(),
-                          permanentDivision: permanentAddressDivision.value,
-                          presentAddress: presentAddressController.text.trim(),
-                          presentThana: presentThanaController.text.trim(),
-                          presentPostelCode: presentZipCodeController.text.trim(),
-                          fatherName: fatherNameController.text.trim(),
-                          fatherNidNo: fatherNidController.text.trim(),
+                              // fatherPhone: fatherPhoneController.text.trim(),
+                              fatherPhone:
+                                  fatherPhoneController.text.trim() ==
+                                      (studentProfile?.fatherPhone ?? "").trim()
+                                  ? null
+                                  : fatherPhoneController.text.trim(),
 
-                         // fatherPhone: fatherPhoneController.text.trim(),
+                              motherName: motherNameController.text.trim(),
+                              motherNidNo: motherNidController.text.trim(),
 
-                            fatherPhone:  fatherPhoneController.text.trim() ==
-                                (studentProfile?.fatherPhone ?? "").trim()
-                                ? null
-                                : fatherPhoneController.text.trim(),
+                              //motherPhone: motherPhoneController.text.trim(),
+                              motherPhone:
+                                  motherPhoneController.text.trim() ==
+                                      (studentProfile?.motherPhone ?? "").trim()
+                                  ? null
+                                  : motherPhoneController.text.trim(),
 
+                              localGuardianName: localGuardianController.text
+                                  .trim(),
+                              localGuardianNidNo: localGuardianNidController
+                                  .text
+                                  .trim(),
 
-                          motherName: motherNameController.text.trim(),
-                          motherNidNo: motherNidController.text.trim(),
-
-                          //motherPhone: motherPhoneController.text.trim(),
-
-                            motherPhone:  motherPhoneController.text.trim() ==
-                                (studentProfile?.motherPhone ?? "").trim()
-                                ? null
-                                : motherPhoneController.text.trim(),
-
-
-                          localGuardianName: localGuardianController.text.trim(),
-                          localGuardianNidNo: localGuardianNidController.text.trim(),
-
-                         // emergencyPhoneNo: localGuardianPhoneController.text.trim(),
-                          /*  emergencyPhoneNo:  localGuardianPhoneController.text.trim() ==
+                              // emergencyPhoneNo: localGuardianPhoneController.text.trim(),
+                              /*  emergencyPhoneNo:  localGuardianPhoneController.text.trim() ==
                                 (studentProfile?.localGuardianPhone ?? "").trim()
                                 ? null
                                 : localGuardianPhoneController.text.trim(),*/
+                              localGuardianRelation:
+                                  studentProfile?.localGuardianRelation,
 
+                              //localGuardianPhone: localGuardianPhoneController.text.trim(),
+                              localGuardianPhone:
+                                  localGuardianPhoneController.text.trim() ==
+                                      (studentProfile?.localGuardianPhone ?? "")
+                                          .trim()
+                                  ? null
+                                  : localGuardianPhoneController.text.trim(),
 
-                          localGuardianRelation: studentProfile?.localGuardianRelation,
+                              presentDivision: presentAddressDivision.value,
 
-
-                          //localGuardianPhone: localGuardianPhoneController.text.trim(),
-                            localGuardianPhone:  localGuardianPhoneController.text.trim() ==
-                                (studentProfile?.localGuardianPhone ?? "").trim()
-                                ? null
-                                : localGuardianPhoneController.text.trim(),
-
-
-                          presentDivision: presentAddressDivision.value,
-
-                         // phone: studentProfile!.phone,
-                          name: studentProfile!.name,
-                            is2FaOn:false
-
-                        );
+                              // phone: studentProfile!.phone,
+                              name: studentProfile!.name,
+                              is2FaOn: false,
+                            );
 
                         context.read<StudentProfileBloc>().add(
                           UpdateStudentProfileEvent(
                             payload: studentProfileUpdateRequestModel,
                             files: photo != null
                                 ? [
-                              SendFileModel(
-                                filePath: photo!.path,
-                                key: "photo",
-                              ),
-                            ]
+                                    SendFileModel(
+                                      filePath: photo!.path,
+                                      key: "photo",
+                                    ),
+                                  ]
                                 : [],
                           ),
                         );
 
-
-
-                       /* final teacherProfileUpdateRequestModel =
+                        /* final teacherProfileUpdateRequestModel =
                         StudentProfileUpdateRequestModel(
                           email:
                           emailController.text.trim() ==
@@ -729,11 +762,11 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
   }
 
   Widget profileInfoList(
-      BuildContext context,
-      String key,
-      TextEditingController controller, {
-        bool? isMultiLine = false,
-      }) {
+    BuildContext context,
+    String key,
+    TextEditingController controller, {
+    bool? isMultiLine = false,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppSizes.insidePadding / 3),
       child: Row(
@@ -765,15 +798,15 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(), // আজকের তারিখ
-      firstDate: DateTime(1900),  // শুরুর সীমা
-      lastDate: DateTime(2100),   // শেষ সীমা
+      firstDate: DateTime(1900), // শুরুর সীমা
+      lastDate: DateTime(2100), // শেষ সীমা
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: ColorScheme.light(
               primary: Colors.deepPurple, // হেডার রঙ
-              onPrimary: Colors.white,    // হেডারের টেক্সট রঙ
-              onSurface: Colors.black,    // বডির টেক্সট রঙ
+              onPrimary: Colors.white, // হেডারের টেক্সট রঙ
+              onSurface: Colors.black, // বডির টেক্সট রঙ
             ),
           ),
           child: child!,
@@ -793,11 +826,7 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
     "খ্রিষ্টান",
     "অন্যান্য",
   ];
-  final List<String> sexList = [
-    "পুরুষ",
-    "মহিলা",
-    "অন্যান্য",
-  ];
+  final List<String> sexList = ["পুরুষ", "মহিলা", "অন্যান্য"];
 
   final List<String> divisionList = [
     "ঢাকা",
@@ -809,35 +838,33 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
     "রংপুর",
     "ময়মনসিংহ",
   ];
-  void _openBottomSheet(List selectedList,String value) {
+  void _openBottomSheet(List selectedList, String value) {
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
       ),
       builder: (context) {
-        return
-           ListView.builder(
-            itemCount: selectedList.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(selectedList[index]),
-                onTap: () {
-                  if (value == 'religion') {
-                      religion.value = selectedList[index];
-                  } else if (value == 'gender') {
-                    gender.value = selectedList[index];
-                  } else if (value == 'permanentAddressDivision') {
-                    permanentAddressDivision.value = selectedList[index];
-                  } else if (value == 'presentAddressDivision') {
-                    presentAddressDivision.value = selectedList[index];
-                  }
-                  Navigator.pop(context);
-                },
-              );
-            },
-          );
-
+        return ListView.builder(
+          itemCount: selectedList.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(selectedList[index]),
+              onTap: () {
+                if (value == 'religion') {
+                  religion.value = selectedList[index];
+                } else if (value == 'gender') {
+                  gender.value = selectedList[index];
+                } else if (value == 'permanentAddressDivision') {
+                  permanentAddressDivision.value = selectedList[index];
+                } else if (value == 'presentAddressDivision') {
+                  presentAddressDivision.value = selectedList[index];
+                }
+                Navigator.pop(context);
+              },
+            );
+          },
+        );
       },
     );
   }
