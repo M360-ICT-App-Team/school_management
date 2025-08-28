@@ -76,11 +76,11 @@ class _TeacherProfileUpdatePageState extends State<TeacherProfileUpdatePage> {
           }
         },
         builder: (context, state) {
-          TeacherProfileResponseModel? teacherProfile;
+          TeacherProfileResponseModel  ? teacherProfile;
 
           if (state is TeacherProfileSuccess) {
             teacherProfile = state.teacherProfileResponseModel;
-            phoneController.text = teacherProfile.phone.toString();
+            phoneController.text = teacherProfile.phone.toString()  ;
             emailController.text = teacherProfile.email.toString();
             fatherNameController.text = teacherProfile.fatherName.toString();
             motherNameController.text = teacherProfile.motherName.toString();
