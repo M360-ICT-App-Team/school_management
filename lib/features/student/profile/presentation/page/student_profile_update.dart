@@ -354,7 +354,7 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
                               const Text(" : "),
                               GestureDetector(
                                 onTap: (){
-                                  _openBottomSheet(sexList,'sex');
+                                  _openBottomSheet(sexList,'gender');
                                 },
                                 child: Container(
                                   width: 250,
@@ -780,10 +780,12 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
                   setState(() {
                     if(value=='religion'){
                       religion=selectedList[index];
-                    }else if(value=='sex'){
+                    }else if(value=='gender'){
                       gender=selectedList[index];
-                    }else if(value==permanentAddressDivision){
+                    }else if(value=='permanentAddressDivision'){
                       permanentAddressDivision=selectedList[index];
+                    }else{
+                      presentAddressDivision = selectedList[index];
                     }
 
                   });

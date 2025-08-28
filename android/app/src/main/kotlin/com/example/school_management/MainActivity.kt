@@ -1,4 +1,4 @@
-package com.example.school_management
+package com.m360ict.bpi
 
 import io.flutter.embedding.android.FlutterActivity
 
