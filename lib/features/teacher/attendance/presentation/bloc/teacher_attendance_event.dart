@@ -20,10 +20,17 @@ class GetStudentListEvent extends TeacherAttendanceEvent {
 
 //!for create attendance
 class CreateAttendanceTeacherEvent extends TeacherAttendanceEvent { 
- final List<StudentListResponseTeacherModel> studentListResponseTeacherModelList;
+ final List<AttendanceList> attendanceListModel;
  final DateTime? date;
  final int? subjectOfferingId;
  final int? batchSemesterId;
 
-  CreateAttendanceTeacherEvent({required this.studentListResponseTeacherModelList,required this.date,required this.subjectOfferingId,required this.batchSemesterId});
+  CreateAttendanceTeacherEvent({required this.attendanceListModel,required this.date,required this.subjectOfferingId,required this.batchSemesterId});
+}
+
+//!update attendance
+class UpdateAttendanceTeacherEvent extends TeacherAttendanceEvent { 
+final int attendanceId;
+final String status;
+  UpdateAttendanceTeacherEvent({required this.attendanceId,required this.status});
 }

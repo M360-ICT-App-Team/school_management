@@ -10,10 +10,12 @@ import 'package:school_management/core/widgets/app_bar.dart';
 import 'package:school_management/features/teacher/attendance/data/model/attendance_model.dart';
 import 'package:school_management/features/teacher/attendance/presentation/bloc/teacher_attendance_bloc.dart';
 
+import '../../../../../core/utilities/app_convert_date_time.dart';
 import '../../../../../core/widgets/app_bottom_list_sheet.dart';
 import '../../../../../core/widgets/app_empty.dart';
 
 import '../../../../../core/widgets/app_snackbar.dart';
+import '../../../branch/data/model/branch_response_model.dart';
 import '../widgets/filtering_attendance_widget.dart';
 
 class AttendanceTeacherPage extends StatefulWidget {
@@ -28,12 +30,11 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
   final List<String> options = ["present", "late", "leave", "absent"];
 
   final ValueNotifier<DateTime> attendanceDate = ValueNotifier(DateTime.now());
-  final ValueNotifier<String?> selectedSubject = ValueNotifier(null);
-  final ValueNotifier<int?> selectedSubjectId = ValueNotifier(null);
 
-  final ValueNotifier<String?> selectedBranch = ValueNotifier(null);
-  final ValueNotifier<int?> selectedBranchId = ValueNotifier(null);
-
+  final ValueNotifier<String> selectedOption = ValueNotifier("present");
+ final ValueNotifier<BranchResponseModel?> selectedBranch = ValueNotifier(
+    null,
+  );
   @override
   void initState() {
     DateTime onlyDate = DateTime(
@@ -82,6 +83,8 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
               /// Date + Subject +branch + Filter Row
               FilteringAttendanceWidget(
                 attendanceModel: widget.attendanceModel,
+                attendanceDate: attendanceDate,
+                selectedBranch:  selectedBranch,
               ),
 
               const SizedBox(height: 16),
@@ -102,11 +105,42 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
                     );
                   } else if (state is CreateAttendanceTeacherSuccess) {
                     AppBottomSheets.hide(context);
+                       context.read<TeacherAttendanceBloc>().add(
+              GetStudentListEvent(
+                id: widget.attendanceModel.batchId,
+                subjectId: widget.attendanceModel.subjectId,
+                branchId: selectedBranch.value?.id,
+                date: attendanceDate.value,
+              ),
+            );
                     AppBottomSheets.showSuccess(
                       context,
                       message: "Attendance Created",
                     );
                   } else if (state is CreateAttendanceTeacherError) {
+                    AppBottomSheets.hide(context);
+                    AppBottomSheets.showError(context, message: state.message);
+                  }
+                  else if (state is UpdateAttendanceTeacherLoading) {
+                    AppBottomSheets.showLoading(
+                      context,
+                      message: "Please wait...",
+                    );
+                  } else if (state is UpdateAttendanceTeacherSuccess) {
+                    AppBottomSheets.hide(context);
+                       context.read<TeacherAttendanceBloc>().add(
+              GetStudentListEvent(
+                id: widget.attendanceModel.batchId,
+                subjectId: widget.attendanceModel.subjectId,
+                branchId: selectedBranch.value?.id,
+                date: attendanceDate.value,
+              ),
+            );
+                    AppBottomSheets.showSuccess(
+                      context,
+                      message: "Attendance Updated",
+                    );
+                  } else if (state is UpdateAttendanceTeacherError) {
                     AppBottomSheets.hide(context);
                     AppBottomSheets.showError(context, message: state.message);
                   }
@@ -119,7 +153,11 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
                   } else if (state is GetStudentListError) {
                     return Center(child: AppEmpty(msg: state.message));
                   } else if (state is GetStudentListSuccess) {
-                    final studentList = state.studentListResponseTeacherModel;
+                    final studentList =
+                        state.studentListResponseTeacherModel.attendanceList;
+
+                    final isSubmittedAttendance =
+                        state.studentListResponseTeacherModel.isSubmitted;
 
                     return Container(
                       width: double.infinity,
@@ -186,15 +224,16 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
                           ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: studentList.length,
+                            itemCount: studentList!.length,
                             itemBuilder: (context, index) {
                               final student = studentList[index];
 
-                              // student.status?.value =
-                              //     status.name == AttendanceStatus.no_action.name
-                              //     ? AttendanceStatus.present.value
-                              //     : status.value;
+                              final attendanceStatus = student.status!.value;
 
+                              if (student.status!.value == "no_action") {
+                                student.status!.value = "present";
+                              }
+                              log("student status: ${student.status!.value}");
                               return Container(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: AppSizes.insidePadding,
@@ -260,128 +299,221 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
 
                                     /// Status
                                     Expanded(
-                                      child: ValueListenableBuilder(
-                                        valueListenable: student.status!,
-                                        builder: (context, value, child) {
-                                          log(
-                                            " =========Status======== : $value",
-                                          );
-                                          log(
-                                            " =========Bangla Status======== : ${attendanceStatusFromString(value).value}",
-                                          );
-                                          return Text(
-                                            attendanceStatusFromString(
-                                              value,
-                                            ).value,
-                                            style:
-                                                AppTextStyles.smallBold(
-                                                  context,
-                                                ).copyWith(
-                                                  color: AppColors.status(
-                                                    value.toLowerCase(),
-                                                  ),
-                                                ),
-                                          );
-                                        },
+                                      child: Text(
+                                        attendanceStatusFromString(
+                                          attendanceStatus,
+                                        ).value,
+                                        style: AppTextStyles.smallBold(context)
+                                            .copyWith(
+                                              color: AppColors.status(
+                                                attendanceStatus.toLowerCase(),
+                                              ),
+                                            ),
                                       ),
                                     ),
 
                                     /// Action Button
-                                    Expanded(
-                                      child: Align(
-                                        alignment: Alignment.centerRight,
-                                        child: InkWell(
-                                          onTap: () async {
-                                            final selected =
-                                                await showSelectionBottomSheet<
-                                                  String
-                                                >(
-                                                  context: context,
-                                                  builder: (ctx, onSelect) {
-                                                    return ListView.builder(
-                                                      itemCount: options.length,
-                                                      itemBuilder:
-                                                          (context, index) {
-                                                            final branch =
-                                                                options[index];
+                                    isSubmittedAttendance == true
+                                        ? Expanded(
+                                            child: Align(
+                                              alignment: Alignment.centerRight,
+                                              child: InkWell(
+                                                onTap: () async {
+                                                  final selected =
+                                                      await showSelectionBottomSheet<
+                                                        String
+                                                      >(
+                                                        context: context,
+                                                        builder: (ctx, onSelect) {
+                                                          return ListView.builder(
+                                                            itemCount:
+                                                                options.length,
+                                                            itemBuilder: (context, index) {
+                                                              final branch =
+                                                                  options[index];
 
-                                                            return ListTile(
-                                                              title: Text(
-                                                                attendanceStatusFromString(
-                                                                  branch,
-                                                                ).value,
-                                                              ),
-                                                              onTap: () =>
-                                                                  onSelect(
+                                                              return ListTile(
+                                                                title: Text(
+                                                                  attendanceStatusFromString(
                                                                     branch,
-                                                                  ),
-                                                            );
-                                                          },
-                                                    );
-                                                  },
-                                                );
+                                                                  ).value,
+                                                                ),
+                                                                onTap: () =>
+                                                                    onSelect(
+                                                                      branch,
+                                                                    ),
+                                                              );
+                                                            },
+                                                          );
+                                                        },
+                                                      );
 
-                                            if (selected != null) {
-                                              student.status!.value = selected;
-                                            }
-                                          },
-                                          child: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal:
-                                                  AppSizes.insidePadding - 2,
-                                              vertical:
-                                                  AppSizes.insidePadding - 4,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              border: Border.all(
-                                                color: AppColors.blue,
-                                                width: 1.5,
+                                                  if (selected != null) {
+                                                    context
+                                                        .read<
+                                                          TeacherAttendanceBloc
+                                                        >()
+                                                        .add(
+                                                          UpdateAttendanceTeacherEvent(
+                                                            attendanceId: student
+                                                                .studentAttendanceId!,
+                                                            status: selected,
+                                                          ),
+                                                        );
+                                                  }
+                                                },
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
+                                                        horizontal:
+                                                            AppSizes
+                                                                .insidePadding -
+                                                            2,
+                                                        vertical:
+                                                            AppSizes
+                                                                .insidePadding -
+                                                            4,
+                                                      ),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    border: Border.all(
+                                                      color: AppColors.blue,
+                                                      width: 1.5,
+                                                    ),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          8,
+                                                        ),
+                                                  ),
+                                                  child: Text(
+                                                    "পরিবর্তন",
+                                                    style:
+                                                        AppTextStyles.normalLight(
+                                                          context,
+                                                        ).copyWith(
+                                                          fontSize: 10,
+                                                        ),
+                                                  ),
+                                                ),
                                               ),
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
                                             ),
-                                            child: Text(
-                                              "পরিবর্তন",
-                                              style: AppTextStyles.normalLight(
-                                                context,
-                                              ).copyWith(fontSize: 10),
+                                          )
+                                        : InkWell(
+                                            onTap: () async {
+                                              final selected =
+                                                  await showSelectionBottomSheet<
+                                                    String
+                                                  >(
+                                                    context: context,
+                                                    builder: (ctx, onSelect) {
+                                                      return ListView.builder(
+                                                        itemCount:
+                                                            options.length,
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                              final branch =
+                                                                  options[index];
+
+                                                              return ListTile(
+                                                                title: Text(
+                                                                  attendanceStatusFromString(
+                                                                    branch,
+                                                                  ).value,
+                                                                ),
+                                                                onTap: () =>
+                                                                    onSelect(
+                                                                      branch,
+                                                                    ),
+                                                              );
+                                                            },
+                                                      );
+                                                    },
+                                                  );
+
+                                              if (selected != null) {
+                                                student.status!.value =
+                                                    selected;
+                                                selectedOption.value = selected;
+                                              }
+                                            },
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    horizontal:
+                                                        AppSizes.insidePadding /
+                                                        4,
+                                                  ),
+                                              decoration: BoxDecoration(
+                                                color: AppColors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                border: Border.all(
+                                                  color: Colors.black,
+                                                  width: 1.5,
+                                                ),
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  const Icon(
+                                                    Icons.arrow_drop_down,
+                                                    size: 20,
+                                                    color: Colors.black,
+                                                  ),
+                                                  const SizedBox(
+                                                    width:
+                                                        AppSizes.insidePadding,
+                                                  ),
+                                                  ValueListenableBuilder(
+                                                    valueListenable:
+                                                        student.status!,
+                                                    builder: (context, value, child) {
+                                                      return Text(
+                                                        attendanceStatusFromString(
+                                                          value,
+                                                        ).value,
+                                                        style:
+                                                            AppTextStyles.normalLight(
+                                                              context,
+                                                            ).copyWith(
+                                                              fontSize: 14,
+                                                            ),
+                                                      );
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                    ),
                                   ],
                                 ),
                               );
                             },
                           ),
                           SizedBox(height: AppSizes.insidePadding),
-                          // isToay(attendanceDate.value)
-                          //     ? SizedBox(
-                          //         width: 140,
-                          //         height: 40,
-                          //         child: FilledButton(
-                          //           style: FilledButton.styleFrom(
-                          //             backgroundColor: AppColors.blue,
-                          //           ),
-                          //           onPressed: () {
-                          //             context.read<TeacherAttendanceBloc>().add(
-                          //               CreateAttendanceTeacherEvent(
-                          //                 studentListResponseTeacherModelList:
-                          //                     studentList,
-                          //                 subjectOfferingId:
-                          //                     widget.attendanceModel.subjectId,
-                          //                 date: attendanceDate.value,
-                          //                 batchSemesterId:
-                          //                     widget.attendanceModel.batchId,
-                          //               ),
-                          //             );
-                          //           },
-                          //           child: Text("নিশ্চিত করুন"),
-                          //         ),
-                          //       )
-                          //     : SizedBox.shrink(),
+                          isSubmittedAttendance == false 
+                              ? SizedBox(
+                                  width: 140,
+                                  height: 40,
+                                  child: FilledButton(
+                                    style: FilledButton.styleFrom(
+                                      backgroundColor: AppColors.blue,
+                                    ),
+                                    onPressed: () {
+                                      context.read<TeacherAttendanceBloc>().add(
+                                        CreateAttendanceTeacherEvent(
+                                          attendanceListModel: studentList,
+                                          subjectOfferingId:
+                                              widget.attendanceModel.subjectId,
+                                          date: attendanceDate.value,
+                                          batchSemesterId:
+                                              widget.attendanceModel.batchId,
+                                        ),
+                                      );
+                                    },
+                                    child: Text("নিশ্চিত করুন"),
+                                  ),
+                                )
+                              : SizedBox.shrink(),
                         ],
                       ),
                     );

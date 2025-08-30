@@ -13,8 +13,10 @@ import '../bloc/teacher_attendance_bloc.dart';
 
 class FilteringAttendanceWidget extends StatefulWidget {
   final AttendanceModel attendanceModel;
+  final ValueNotifier<DateTime> attendanceDate;
+  final ValueNotifier<BranchResponseModel?> selectedBranch ;
 
-  const FilteringAttendanceWidget({super.key, required this.attendanceModel});
+  const FilteringAttendanceWidget({super.key, required this.attendanceModel, required this.attendanceDate, required this.selectedBranch});
 
   @override
   State<FilteringAttendanceWidget> createState() =>
@@ -22,7 +24,7 @@ class FilteringAttendanceWidget extends StatefulWidget {
 }
 
 class _FilteringAttendanceWidgetState extends State<FilteringAttendanceWidget> {
-  final ValueNotifier<DateTime> attendanceDate = ValueNotifier(DateTime.now());
+  // final ValueNotifier<DateTime> filteringDate = ValueNotifier(DateTime.now());
   final ValueNotifier<String?> selectedSubject = ValueNotifier(null);
   final ValueNotifier<int?> selectedSubjectId = ValueNotifier(null);
 
@@ -37,13 +39,13 @@ class _FilteringAttendanceWidgetState extends State<FilteringAttendanceWidget> {
       children: [
         //!date picker
         ValueListenableBuilder(
-          valueListenable: attendanceDate,
+          valueListenable: widget.attendanceDate,
           builder: (context, value, child) {
             return InkWell(
               onTap: () async {
                 await pickAdaptiveDate(
                   context: context,
-                  notifier: attendanceDate,
+                  notifier: widget.attendanceDate,
                   initialDate: value,
                   firstDate: DateTime(DateTime.now().year - 1),
                   lastDate: DateTime.now(),
@@ -119,7 +121,7 @@ class _FilteringAttendanceWidgetState extends State<FilteringAttendanceWidget> {
                 id: widget.attendanceModel.batchId,
                 subjectId: widget.attendanceModel.subjectId,
                 branchId: selectedBranch.value?.id,
-                date: attendanceDate.value,
+                date: widget.attendanceDate.value,
               ),
             );
           },

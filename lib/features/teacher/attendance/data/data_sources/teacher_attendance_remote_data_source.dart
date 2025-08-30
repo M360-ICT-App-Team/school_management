@@ -30,7 +30,7 @@ class TeacherAttendanceRemoteDataSource {
   }
 
   //!for get student list
-  static Future<Either<Failure, List<StudentListResponseTeacherModel>>>
+  static Future<Either<Failure, StudentListResponseTeacherModel>>
   getStudentList({
     required int? id,
     required DateTime? date,
@@ -50,14 +50,15 @@ class TeacherAttendanceRemoteDataSource {
         url: url,
         token: await AuthLocalDB.getToken(),
       );
-      return Right(studentListResponseTeacherModel(jsonEncode(result)));
+      return Right(studentListResponseTeacherModelFromJson(jsonEncode(result)));
     } catch (e, stackTrace) {
       return Left(handleException(e, stackTrace));
     }
   }
 
+//!create attendance
   static Future<Either<Failure, void>> createAttendance({
-    required List<StudentListResponseTeacherModel> studentList,
+    required List<AttendanceList> studentList,
     required int? subjectOfferingId,
     required DateTime? date,
     required int? batchSemesterId,
@@ -89,4 +90,27 @@ class TeacherAttendanceRemoteDataSource {
       return Left(handleException(e, stackTrace));
     }
   }
+  //!for update attendance
+  static Future<Either<Failure, void>>
+  updateAttendance({
+    required int? id,
+    required String? status,
+
+  }) async {
+    try {
+     
+      final result = await ApiClient.patch(
+        url: AppUrls.teacherAttendance+"/$id",
+        token: await AuthLocalDB.getToken(),
+        body: jsonEncode({
+          "status": status,
+        }),
+      );
+      return Right(result!=null);
+    } catch (e, stackTrace) {
+      return Left(handleException(e, stackTrace));
+    }
+  }
 }
+
+

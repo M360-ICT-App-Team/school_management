@@ -23,7 +23,7 @@ final class GetTeacherBatchOverViewError extends TeacherAttendanceState {
 final class GetStudentListLoading extends TeacherAttendanceState {}
 
 final class GetStudentListSuccess extends TeacherAttendanceState {
-  final List<StudentListResponseTeacherModel> studentListResponseTeacherModel;
+  final StudentListResponseTeacherModel studentListResponseTeacherModel;
   GetStudentListSuccess(this.studentListResponseTeacherModel);
 }
 
@@ -44,4 +44,15 @@ final class CreateAttendanceTeacherSuccess extends TeacherAttendanceState {
 final class CreateAttendanceTeacherError extends TeacherAttendanceState {
   final String message;
   CreateAttendanceTeacherError(this.message);
+}
+
+//!for update attendance
+final class UpdateAttendanceTeacherLoading extends TeacherAttendanceState {}
+
+final class UpdateAttendanceTeacherSuccess extends TeacherAttendanceState {
+  
+}
+final class UpdateAttendanceTeacherError extends TeacherAttendanceState {
+  final String message;
+  UpdateAttendanceTeacherError(this.message);
 }

@@ -5,7 +5,6 @@ import 'package:school_management/features/teacher/attendance/data/model/attenda
 import '../../features/role_selection/presentation/pages/role_selection_page.dart';
 import '../../features/splash/presentation/page/splash_page.dart';
 import '../../features/student/auth/presentation/pages/student_login_page.dart';
-import '../../features/student/profile/presentation/page/student_profile_update.dart';
 import '../../features/student/root_page_student/student_root_page.dart';
 import '../../features/teacher/attendance/presentation/pages/attendance_teacher_page.dart';
 import '../../features/teacher/attendance/presentation/pages/new_attendance_create_page.dart';

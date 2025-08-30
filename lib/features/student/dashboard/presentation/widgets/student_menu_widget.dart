@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:school_management/core/constants/app_images.dart';
-import 'package:school_management/features/teacher/attendance/presentation/pages/attendance_teacher_page.dart';
 
 import '../../../../../core/constants/app_text_styles.dart';
 

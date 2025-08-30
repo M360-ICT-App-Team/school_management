@@ -41,7 +41,7 @@ class AppColors {
   );
 
   static final Map<String, Color> statusColors = {
-    "no_action": Colors.green,
+    "no_action": Colors.black,
     "present": Colors.green,
     "late": Colors.blue,
     "absent": Colors.red,
