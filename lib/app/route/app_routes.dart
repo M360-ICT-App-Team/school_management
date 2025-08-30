@@ -18,6 +18,7 @@ class AppRoutes {
     static const String studentRootPage = 'StudentRootPage';
     static const String studentLoginPage = 'StudentLoginPage';
     static const String studentProfileUpdate = 'studentProfileUpdate';
+    static const String studentCurrentSemester = 'studentCurrentSemester';
 
 
 }

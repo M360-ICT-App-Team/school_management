@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:school_management/app/route/app_routes.dart';
 import 'package:school_management/core/constants/app_images.dart';
 import 'package:school_management/features/teacher/attendance/presentation/pages/attendance_teacher_page.dart';
 
 import '../../../../../core/constants/app_text_styles.dart';
+import '../../../attendance/presentation/page/student_current_semister.dart';
 
 class StudentMenuWidget extends StatefulWidget {
   const StudentMenuWidget({super.key});
@@ -16,7 +18,7 @@ class _StudentMenuWidgetState extends State<StudentMenuWidget> {
     {
       "icon": AppImages.attendance,
       "title": "হাজিরা",
-      "page": null,
+      "page": AppRoutes.studentCurrentSemester,
     },
     {"icon": AppImages.payment, "title": "বেতন", "page": null},
     {"icon": AppImages.notice, "title": "বিজ্ঞপ্তি", "page": null},
@@ -41,7 +43,8 @@ class _StudentMenuWidgetState extends State<StudentMenuWidget> {
                 if (item["page"] != null) {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => item["page"]),
+                   // MaterialPageRoute(builder: (context) => item["page"]),
+                    MaterialPageRoute(builder: (context) => StudentCurrentSemester()),
                   );
                 } else {
                   ScaffoldMessenger.of(
