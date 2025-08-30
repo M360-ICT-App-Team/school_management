@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'School Management',
+        title: 'Polytech',
         theme: lightTheme,
         //  initialRoute: AppRoutes.splashPage,
         initialRoute: AppRoutes.splashPage,
