@@ -4,6 +4,7 @@ import 'package:school_management/features/teacher/attendance/data/model/attenda
 
 import '../../features/role_selection/presentation/pages/role_selection_page.dart';
 import '../../features/splash/presentation/page/splash_page.dart';
+import '../../features/student/attendance/presentation/page/student_current_semister.dart';
 import '../../features/student/auth/presentation/pages/student_login_page.dart';
 import '../../features/student/root_page_student/student_root_page.dart';
 import '../../features/teacher/attendance/presentation/pages/attendance_teacher_page.dart';
@@ -55,6 +56,8 @@ case AppRoutes.studentRootPage:
         return CupertinoPageRoute(builder: (_) => const StudentRootPage());
    case AppRoutes.studentLoginPage:
         return CupertinoPageRoute(builder: (_) => const StudentLoginPage());
+   case AppRoutes.studentCurrentSemester:
+        return CupertinoPageRoute(builder: (_) => const StudentCurrentSemester());
       default:
         return CupertinoPageRoute(
           builder: (_) =>

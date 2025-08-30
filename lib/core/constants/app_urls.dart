@@ -25,4 +25,5 @@ class AppUrls {
 //!for student
   static String studentLogin = '$baseUrl/auth/student/login';
   static String studentProfile = '$baseUrl/student/profile';
+  static String studentCurrentSemester = '$baseUrl/student/attendance/semester';
 }
