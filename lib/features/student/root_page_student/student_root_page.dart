@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../core/widgets/app_bottom_nav_bar.dart';
+import '../../teacher/notification/presentation/pages/notification_teacher_page.dart';
+import '../../teacher/setting/presentation/page/setting_teacher_page.dart';
 import '../dashboard/presentation/pages/student_dashboard_page.dart';
 
 
@@ -17,9 +19,9 @@ class _StudentRootPageState extends State<StudentRootPage> {
 
   final List<Widget> pages = [
    // TeacherDashboardPage(),
-    StudentDashboardPage()
-   // StudentProfilePage()
-    // MyRequestPageHiring()
+    StudentDashboardPage(),
+       NotificationTeacherPage(),
+    SettingTeacherPage(),
   ];
   @override
   Widget build(BuildContext context) {
