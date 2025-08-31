@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../../../core/constants/app_colors.dart';
-import '../../../../../core/constants/app_sizes.dart';
 import '../../../../../core/widgets/app_bar.dart';
 import '../bloc/attendance_bloc.dart';
 import '../widget/SemesterPagerCard.dart';
@@ -17,7 +14,6 @@ class _StudentCurrentSemesterState extends State<StudentCurrentSemester> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     context.read<AttendanceBloc>().add(FetchCurrentSemesterList());
   }
@@ -30,7 +26,6 @@ class _StudentCurrentSemesterState extends State<StudentCurrentSemester> {
             children: [
               BlocConsumer<AttendanceBloc, AttendanceState>(
                 listener: (context, state) {
-                  // TODO: implement listener
                 },
                 builder: (context, state) {
                   if (state is AttendanceLoading) {

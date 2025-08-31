@@ -1,8 +1,4 @@
-// To parse this JSON data, do
-//
-//     final currentSemesterListModel = currentSemesterListModelFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 List<CurrentSemesterListModel> currentSemesterListModelFromJson(String str) => List<CurrentSemesterListModel>.from(json.decode(str).map((x) => CurrentSemesterListModel.fromJson(x)));

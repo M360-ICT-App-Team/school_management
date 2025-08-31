@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:intl/intl.dart';
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_text_styles.dart';
 import '../../../../../core/utilities/app_convert_date_time.dart';
-import '../../../../../core/utilities/app_filtering_bottom_sheet.dart';
 import '../../../../../core/widgets/app_adaptive_date.dart';
+import '../../../../../core/widgets/app_bottom_list.dart';
 import '../../../branch/data/model/branch_response_model.dart';
 import '../../../branch/presentation/bloc/branch_bloc.dart';
 import '../../data/model/attendance_model.dart';
@@ -14,9 +14,14 @@ import '../bloc/teacher_attendance_bloc.dart';
 class FilteringAttendanceWidget extends StatefulWidget {
   final AttendanceModel attendanceModel;
   final ValueNotifier<DateTime> attendanceDate;
-  final ValueNotifier<BranchResponseModel?> selectedBranch ;
+  final ValueNotifier<BranchResponseModel?> selectedBranch;
 
-  const FilteringAttendanceWidget({super.key, required this.attendanceModel, required this.attendanceDate, required this.selectedBranch});
+  const FilteringAttendanceWidget({
+    super.key,
+    required this.attendanceModel,
+    required this.attendanceDate,
+    required this.selectedBranch,
+  });
 
   @override
   State<FilteringAttendanceWidget> createState() =>
@@ -24,20 +29,14 @@ class FilteringAttendanceWidget extends StatefulWidget {
 }
 
 class _FilteringAttendanceWidgetState extends State<FilteringAttendanceWidget> {
-  // final ValueNotifier<DateTime> filteringDate = ValueNotifier(DateTime.now());
-  final ValueNotifier<String?> selectedSubject = ValueNotifier(null);
-  final ValueNotifier<int?> selectedSubjectId = ValueNotifier(null);
+  List<BranchResponseModel> branchList = [];
 
-  final ValueNotifier<BranchResponseModel?> selectedBranch = ValueNotifier(
-    null,
-  );
-  final ValueNotifier<int?> selectedBranchId = ValueNotifier(null);
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        //!date picker
+        //! Date picker
         ValueListenableBuilder(
           valueListenable: widget.attendanceDate,
           builder: (context, value, child) {
@@ -51,54 +50,47 @@ class _FilteringAttendanceWidgetState extends State<FilteringAttendanceWidget> {
                   lastDate: DateTime.now(),
                 );
               },
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
-                decoration: BoxDecoration(
-                  color: const Color(0xffd9d9d9),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.black, width: 1.5),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.arrow_drop_down,
-                      size: 20,
-                      color: Colors.black,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      "${formatDateTime(dateTime: value, format: "yyyy-MM-dd")}",
-                      style: AppTextStyles.normalLight(
-                        context,
-                      ).copyWith(fontSize: 14),
-                    ),
-                  ],
+              child: _buildBox(
+                child: Text(
+                  "${formatDateTime(dateTime: value, format: "yyyy-MM-dd")}",
+                  style: AppTextStyles.normalLight(
+                    context,
+                  ).copyWith(fontSize: 14),
                 ),
               ),
             );
           },
         ),
 
-        //!select branch
-        InkWell(
-          onTap: () => pickBranch(context),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
-            decoration: BoxDecoration(
-              color: const Color(0xffd9d9d9),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.black, width: 1.5),
-            ),
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.arrow_drop_down,
-                  size: 20,
-                  color: Colors.black,
-                ),
-                const SizedBox(width: 4),
-                ValueListenableBuilder<BranchResponseModel?>(
-                  valueListenable: selectedBranch,
+        //! Select Branch
+        BlocConsumer<BranchBloc, BranchState>(
+          listener: (context, state) {
+            if (state is GetBranchListSuccess) {
+              branchList = state.branchResponseModel;
+            }
+          },
+          builder: (context, state) {
+            return InkWell(
+              onTap: () async {
+                if (branchList.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("কোন শাখা পাওয়া যায়নি")),
+                  );
+                  return;
+                }
+                final selected =
+                    await showSelectionBottomSheetList<BranchResponseModel>(
+                      context: context,
+                      items: branchList,
+                      itemLabel: (item) => item.name ?? "",
+                    );
+                if (selected != null) {
+                  widget.selectedBranch.value = selected;
+                }
+              },
+              child: _buildBox(
+                child: ValueListenableBuilder<BranchResponseModel?>(
+                  valueListenable: widget.selectedBranch,
                   builder: (context, value, child) {
                     return Text(
                       value?.name ?? "শাখা",
@@ -108,9 +100,9 @@ class _FilteringAttendanceWidgetState extends State<FilteringAttendanceWidget> {
                     );
                   },
                 ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         ),
 
         //! Filter Button
@@ -120,8 +112,8 @@ class _FilteringAttendanceWidgetState extends State<FilteringAttendanceWidget> {
               GetStudentListEvent(
                 id: widget.attendanceModel.batchId,
                 subjectId: widget.attendanceModel.subjectId,
-                branchId: selectedBranch.value?.id,
-                date: widget.attendanceDate.value,
+                branchId: widget.selectedBranch.value?.id,
+                date: DateFormat("yyyy-MM-dd").format(widget.attendanceDate.value),
               ),
             );
           },
@@ -143,17 +135,21 @@ class _FilteringAttendanceWidgetState extends State<FilteringAttendanceWidget> {
     );
   }
 
-  Future<void> pickBranch(BuildContext context) async {
-    final selected = await filteringBottomSheet<BranchResponseModel>(
-      context: context,
-      bloc: context.read<BranchBloc>(),
-      event: GetBranchListEvent(),
-      extractItems: (state) =>
-          state is GetBranchListSuccess ? state.branchResponseModel : null,
-      getTitle: (s) => s.name ?? "Unknown",
-      emptyText: "কোনো শাখা পাওয়া যায়নি",
+  Widget _buildBox({required Widget child}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+      decoration: BoxDecoration(
+        color: AppColors.grey,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.black, width: 1.5),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.arrow_drop_down, size: 20, color: Colors.black),
+          const SizedBox(width: 4),
+          child,
+        ],
+      ),
     );
-
-    if (selected != null) selectedBranch.value = selected;
   }
 }

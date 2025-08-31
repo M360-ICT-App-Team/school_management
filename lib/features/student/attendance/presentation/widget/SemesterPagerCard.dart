@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../../core/constants/app_colors.dart';
 import '../../data/model/current_semester_list_model.dart';
@@ -45,7 +44,6 @@ class _SemesterPagerCardState extends State<SemesterPagerCard> {
       );
     }
     final item = widget.items[index];
-    final df = DateFormat('dd MMM, yyyy');
 
     final canPrev = index > 0;
     final canNext = index < widget.items.length - 1;

@@ -221,6 +221,9 @@ class _TeacherProfileUpdatePageState extends State<TeacherProfileUpdatePage> {
                               ),
                             ],
                           ),
+                          //!end for basic information
+
+
                           //!for update information
                           SizedBox(height: AppSizes.insidePadding),
                           profileInfoList(context, "ফোন নম্বর", phoneController),
@@ -257,6 +260,8 @@ class _TeacherProfileUpdatePageState extends State<TeacherProfileUpdatePage> {
                       ),
                     ),
                   ),
+
+                  
                   //!for call profile update event button
                   SizedBox(
                     width: 190,

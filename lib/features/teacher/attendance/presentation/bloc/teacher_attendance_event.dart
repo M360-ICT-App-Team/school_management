@@ -10,7 +10,7 @@ class GetTeacherBatchOverViewEvent extends TeacherAttendanceEvent {}
 //!for get student list
 class GetStudentListEvent extends TeacherAttendanceEvent { 
   final int id;
-  final DateTime? date;
+  final String? date;
   final int ? subjectId;
    final int ? branchId;
   GetStudentListEvent({required this.id,required this.date,required this.subjectId , this.branchId});

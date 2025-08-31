@@ -33,7 +33,7 @@ class TeacherAttendanceRemoteDataSource {
   static Future<Either<Failure, StudentListResponseTeacherModel>>
   getStudentList({
     required int? id,
-    required DateTime? date,
+    required String? date,
     required int? subjectId,
     required int? branchId,
   }) async {
