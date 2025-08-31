@@ -4,7 +4,7 @@ extension AttendanceStatusExtension on AttendanceStatus {
   String get value {
     switch (this) {
       case AttendanceStatus.no_action:
-        return "উপস্থিত";
+        return "সিদ্ধান্ত হয়নি";
       case AttendanceStatus.present:
         return "উপস্থিত";
       case AttendanceStatus.late:

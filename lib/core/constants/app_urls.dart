@@ -1,6 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-final bool isLive = true;
+final bool isLive = false;
 
 class AppUrls {
   static String currentVersion = dotenv.env['ANDROID_VERSION']!; //ex: "1.0.19"
@@ -21,7 +21,9 @@ class AppUrls {
     static String branchList = '$baseUrl/teacher/student-attendance/branch';
 
 
+
 //!for student
   static String studentLogin = '$baseUrl/auth/student/login';
   static String studentProfile = '$baseUrl/student/profile';
+  static String studentCurrentSemester = '$baseUrl/student/attendance/semester';
 }

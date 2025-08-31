@@ -74,3 +74,39 @@ bool availablePartialPayment(DateTime? departureDate) {
     return false;
   }
 }
+
+// bool? isToday({required dynamic yourDateTime}) {
+//   try {
+//     if (yourDateTime == null) {
+//       return null;
+//     }
+//     final myDate = DateTime.parse("$yourDateTime").toLocal();
+//     final currentDate = DateTime.now();
+//     return myDate.year == currentDate.year &&
+//         myDate.month == currentDate.month &&
+//         myDate.day == currentDate.day;
+//   } on Exception catch (e) {
+//     if (kDebugMode) {
+//       print("object convertDateTime e: $e");
+//     }
+//     return null;
+//   }
+// }
+
+bool isToday(DateTime? yourDateTime) {
+  try {
+    if (yourDateTime == null) return false;
+
+    final myDate = DateTime(yourDateTime.year, yourDateTime.month, yourDateTime.day);
+    final currentDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
+    return myDate == currentDate;
+  } catch (e, s) {
+    if (kDebugMode) {
+      print("isToday error: $e");
+      print(s);
+    }
+    return false;
+  }
+}
+

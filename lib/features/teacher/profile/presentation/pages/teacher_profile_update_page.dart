@@ -80,15 +80,14 @@ class _TeacherProfileUpdatePageState extends State<TeacherProfileUpdatePage> {
 
           if (state is TeacherProfileSuccess) {
             teacherProfile = state.teacherProfileResponseModel;
-            phoneController.text = teacherProfile.phone.toString()  ;
-            emailController.text = teacherProfile.email.toString();
-            fatherNameController.text = teacherProfile.fatherName.toString();
-            motherNameController.text = teacherProfile.motherName.toString();
-            presentAddressController.text = teacherProfile.presentAddress
-                .toString();
-            permanentAddressController.text = teacherProfile.permanentAddress
-                .toString();
-            bloodGroupController.text = teacherProfile.bloodGroup.toString();
+            phoneController.text = teacherProfile.phone ?? "";
+            emailController.text = teacherProfile.email??"";
+            fatherNameController.text = teacherProfile.fatherName??"";
+            motherNameController.text = teacherProfile.motherName??"";
+            presentAddressController.text = teacherProfile.presentAddress ??"";
+            permanentAddressController.text = teacherProfile.permanentAddress ??"";
+
+            bloodGroupController.text = teacherProfile.bloodGroup??"";
             final serverPhoto = teacherProfile.photo;
             networkImage =
                 (serverPhoto == null ||
