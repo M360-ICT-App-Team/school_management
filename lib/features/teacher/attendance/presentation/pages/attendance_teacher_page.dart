@@ -12,7 +12,6 @@ import 'package:school_management/features/teacher/attendance/presentation/bloc/
 import 'package:school_management/features/teacher/attendance/presentation/widgets/create_and_update_attendance_button_widget.dart';
 
 import '../../../../../core/widgets/app_empty.dart';
-
 import '../../../../../core/widgets/app_snackbar.dart';
 import '../../../branch/data/model/branch_response_model.dart';
 import '../widgets/filtering_attendance_widget.dart';
@@ -27,11 +26,9 @@ class AttendanceTeacherPage extends StatefulWidget {
 
 class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
   final ValueNotifier<DateTime> attendanceDate = ValueNotifier(DateTime.now());
-
   final ValueNotifier<String> selectedOption = ValueNotifier("present");
-  final ValueNotifier<BranchResponseModel?> selectedBranch = ValueNotifier(
-    null,
-  );
+  final ValueNotifier<BranchResponseModel?> selectedBranch = ValueNotifier(null);
+
   @override
   void initState() {
     DateTime onlyDate = DateTime(
@@ -41,20 +38,19 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
     );
     super.initState();
     context.read<TeacherAttendanceBloc>().add(
-      GetStudentListEvent(
-        id: widget.attendanceModel.batchId,
-        date: onlyDate,
-        subjectId: widget.attendanceModel.subjectId,
-      ),
-    );
+          GetStudentListEvent(
+            id: widget.attendanceModel.batchId,
+            date: onlyDate,
+            subjectId: widget.attendanceModel.subjectId,
+          ),
+        );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(),
-
-      body: Center(
+      body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: AppSizes.insidePadding,
@@ -63,6 +59,7 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              //! Title
               Text(
                 "হাজিরা",
                 style: AppTextStyles.normalBold(context).copyWith(
@@ -74,86 +71,68 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
               ),
               const SizedBox(height: 16),
 
-              //! for filtering widget
+              //! Filter widget
               FilteringAttendanceWidget(
                 attendanceModel: widget.attendanceModel,
                 attendanceDate: attendanceDate,
                 selectedBranch: selectedBranch,
               ),
-
               const SizedBox(height: 16),
 
-              //!for attendance list
-              BlocConsumer<TeacherAttendanceBloc, TeacherAttendanceState>(
-                buildWhen: (previous, current) =>
-                    current is GetStudentListLoading ||
-                    current is GetStudentListSuccess ||
-                    current is GetStudentListError,
+              //! Attendance List (main content)
+              Expanded(
+                child: BlocConsumer<TeacherAttendanceBloc, TeacherAttendanceState>(
+                  buildWhen: (previous, current) =>
+                      current is GetStudentListLoading ||
+                      current is GetStudentListSuccess ||
+                      current is GetStudentListError,
+                  listener: (context, state) {
+                    log("==========state attendance=-=====: $state");
 
-                listener: (context, state) {
-                  log("==========state attendance=-=====: $state");
-                  if (state is CreateAttendanceTeacherLoading) {
-                    AppBottomSheets.showLoading(
-                      context,
-                      message: "Please wait...",
-                    );
-                  } else if (state is CreateAttendanceTeacherSuccess) {
-                    AppBottomSheets.hide(context);
-                    context.read<TeacherAttendanceBloc>().add(
-                      GetStudentListEvent(
-                        id: widget.attendanceModel.batchId,
-                        subjectId: widget.attendanceModel.subjectId,
-                        branchId: selectedBranch.value?.id,
-                        date: attendanceDate.value,
-                      ),
-                    );
-                    AppBottomSheets.showSuccess(
-                      context,
-                      message: "Attendance Created",
-                    );
-                  } else if (state is CreateAttendanceTeacherError) {
-                    AppBottomSheets.hide(context);
-                    AppBottomSheets.showError(context, message: state.message);
-                  } else if (state is UpdateAttendanceTeacherLoading) {
-                    AppBottomSheets.showLoading(
-                      context,
-                      message: "Please wait...",
-                    );
-                  } else if (state is UpdateAttendanceTeacherSuccess) {
-                    AppBottomSheets.hide(context);
-                    context.read<TeacherAttendanceBloc>().add(
-                      GetStudentListEvent(
-                        id: widget.attendanceModel.batchId,
-                        subjectId: widget.attendanceModel.subjectId,
-                        branchId: selectedBranch.value?.id,
-                        date: attendanceDate.value,
-                      ),
-                    );
-                    AppBottomSheets.showSuccess(
-                      context,
-                      message: "Attendance Updated",
-                    );
-                  } else if (state is UpdateAttendanceTeacherError) {
-                    AppBottomSheets.hide(context);
-                    AppBottomSheets.showError(context, message: state.message);
-                  }
-                },
-                builder: (context, state) {
-                  if (state is GetStudentListLoading) {
-                    return const Center(
-                      child: CircularProgressIndicator.adaptive(),
-                    );
-                  } else if (state is GetStudentListError) {
-                    return Center(child: AppEmpty(msg: state.message));
-                  } else if (state is GetStudentListSuccess) {
-                    final studentList =
-                        state.studentListResponseTeacherModel.attendanceList;
+                    if (state is CreateAttendanceTeacherLoading) {
+                      AppBottomSheets.showLoading(context, message: "Please wait...");
+                    } else if (state is CreateAttendanceTeacherSuccess) {
+                      AppBottomSheets.hide(context);
+                      context.read<TeacherAttendanceBloc>().add(
+                            GetStudentListEvent(
+                              id: widget.attendanceModel.batchId,
+                              subjectId: widget.attendanceModel.subjectId,
+                              branchId: selectedBranch.value?.id,
+                              date: attendanceDate.value,
+                            ),
+                          );
+                      AppBottomSheets.showSuccess(context, message: "Attendance Created");
+                    } else if (state is CreateAttendanceTeacherError) {
+                      AppBottomSheets.hide(context);
+                      AppBottomSheets.showError(context, message: state.message);
+                    } else if (state is UpdateAttendanceTeacherLoading) {
+                      AppBottomSheets.showLoading(context, message: "Please wait...");
+                    } else if (state is UpdateAttendanceTeacherSuccess) {
+                      AppBottomSheets.hide(context);
+                      context.read<TeacherAttendanceBloc>().add(
+                            GetStudentListEvent(
+                              id: widget.attendanceModel.batchId,
+                              subjectId: widget.attendanceModel.subjectId,
+                              branchId: selectedBranch.value?.id,
+                              date: attendanceDate.value,
+                            ),
+                          );
+                      AppBottomSheets.showSuccess(context, message: "Attendance Updated");
+                    } else if (state is UpdateAttendanceTeacherError) {
+                      AppBottomSheets.hide(context);
+                      AppBottomSheets.showError(context, message: state.message);
+                    }
+                  },
+                  builder: (context, state) {
+                    if (state is GetStudentListLoading) {
+                      return const Center(child: CircularProgressIndicator.adaptive());
+                    } else if (state is GetStudentListError) {
+                      return Center(child: AppEmpty(msg: state.message));
+                    } else if (state is GetStudentListSuccess) {
+                      final studentList = state.studentListResponseTeacherModel.attendanceList;
+                      final studentAttendanceModel = state.studentListResponseTeacherModel;
 
-                    final studentAttendanceModel =
-                        state.studentListResponseTeacherModel;
-
-                    return SingleChildScrollView(
-                      child: Container(
+                      return Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
                           color: AppColors.white,
@@ -187,171 +166,155 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
                                       ),
                                       child: Text(
                                         "আইডি",
-                                        style: AppTextStyles.normalBold(
-                                          context,
-                                        ).copyWith(color: AppColors.blue),
+                                        style: AppTextStyles.normalBold(context)
+                                            .copyWith(color: AppColors.blue),
                                       ),
                                     ),
                                   ),
                                   Expanded(
                                     child: Text(
                                       "উপস্থিতি",
-                                      style: AppTextStyles.normalBold(
-                                        context,
-                                      ).copyWith(color: AppColors.blue),
+                                      style: AppTextStyles.normalBold(context)
+                                          .copyWith(color: AppColors.blue),
                                     ),
                                   ),
                                   Expanded(
                                     child: Text(
                                       "একশন",
                                       textAlign: TextAlign.end,
-                                      style: AppTextStyles.normalBold(
-                                        context,
-                                      ).copyWith(color: AppColors.blue),
+                                      style: AppTextStyles.normalBold(context)
+                                          .copyWith(color: AppColors.blue),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                      
-                            //! Student Rows with ListView.builder
-                            ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: studentList!.length,
-                              itemBuilder: (context, index) {
-                                final student = studentList[index];
-                      
-                                final attendanceStatus = student.status!.value;
-                      
-                                if (student.status!.value == "no_action") {
-                                  student.status!.value = "present";
-                                }
-                                log("student status: ${student.status!.value}");
-                                return Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: AppSizes.insidePadding,
-                                    vertical: AppSizes.insidePadding,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                      bottom: BorderSide(
-                                        color: AppColors.blue.withAlpha(40),
-                                        width: 1,
-                                      ),
+
+                            //! Student List
+                            Expanded(
+                              child: ListView.builder(
+                                itemCount: studentList!.length,
+                                itemBuilder: (context, index) {
+                                  final student = studentList[index];
+                                  final attendanceStatus = student.status!.value;
+
+                                  if (student.status!.value == "no_action") {
+                                    student.status!.value = "present";
+                                  }
+
+                                  return Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: AppSizes.insidePadding,
+                                      vertical: AppSizes.insidePadding,
                                     ),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      //! Name + ID + Avatar
-                                      Expanded(
-                                        flex: 2,
-                                        child: Row(
-                                          children: [
-                                            CircleAvatar(
-                                              backgroundColor: AppColors.blue,
-                                              child: const Icon(
-                                                Icons.person,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 8),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    student.studentName ??
-                                                        "Unknown",
-                                                    style:
-                                                        AppTextStyles.normalLight(
-                                                          context,
-                                                        ),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    maxLines: 2,
-                                                  ),
-                                                  Text(
-                                                    student.rollNo ?? "Unknown",
-                                                    style:
-                                                        AppTextStyles.normalLight(
-                                                          context,
-                                                        ).copyWith(fontSize: 12),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    maxLines: 1,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
+                                    decoration: BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: AppColors.blue.withAlpha(40),
+                                          width: 1,
                                         ),
                                       ),
-                      
-                                      /// Status
-                                      Expanded(
-                                        child: Text(
-                                          attendanceStatusFromString(
-                                            attendanceStatus,
-                                          ).value,
-                                          style: AppTextStyles.smallBold(context)
-                                              .copyWith(
-                                                color: AppColors.status(
-                                                  attendanceStatus.toLowerCase(),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        //! Name + ID + Avatar
+                                        Expanded(
+                                          flex: 2,
+                                          child: Row(
+                                            children: [
+                                              CircleAvatar(
+                                                backgroundColor: AppColors.blue,
+                                                child: const Icon(Icons.person,
+                                                    color: Colors.white),
+                                              ),
+                                              const SizedBox(width: 8),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      student.studentName ?? "Unknown",
+                                                      style: AppTextStyles.normalLight(context),
+                                                      overflow: TextOverflow.ellipsis,
+                                                      maxLines: 2,
+                                                    ),
+                                                    Text(
+                                                      student.rollNo ?? "Unknown",
+                                                      style: AppTextStyles.normalLight(context)
+                                                          .copyWith(fontSize: 12),
+                                                      overflow: TextOverflow.ellipsis,
+                                                      maxLines: 1,
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
-                                        ),
-                                      ),
-                      
-                                      //!for update and create attendance
-                                      CreateAndUpdateAttendanceButtonWidget(
-                                        studentListResponseTeacherModel:
-                                            studentAttendanceModel,
-                                        selectedOption: selectedOption,
-                                        student: student,
-                                      ),
-                                      //!end of create and update attendance
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                            SizedBox(height: AppSizes.insidePadding),
-                            studentAttendanceModel.isSubmitted == false
-                                ? SizedBox(
-                                    width: 140,
-                                    height: 40,
-                                    child: FilledButton(
-                                      style: FilledButton.styleFrom(
-                                        backgroundColor: AppColors.blue,
-                                      ),
-                                      onPressed: () {
-                                        context.read<TeacherAttendanceBloc>().add(
-                                          CreateAttendanceTeacherEvent(
-                                            attendanceListModel: studentList,
-                                            subjectOfferingId:
-                                                widget.attendanceModel.subjectId,
-                                            date: attendanceDate.value,
-                                            batchSemesterId:
-                                                widget.attendanceModel.batchId,
+                                            ],
                                           ),
-                                        );
-                                      },
-                                      child: Text("নিশ্চিত করুন"),
+                                        ),
+
+                                        /// Status
+                                        Expanded(
+                                          child: Text(
+                                            attendanceStatusFromString(attendanceStatus).value,
+                                            style: AppTextStyles.smallBold(context).copyWith(
+                                              color: AppColors.status(
+                                                attendanceStatus.toLowerCase(),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+
+                                        //! Update / Create button
+                                        CreateAndUpdateAttendanceButtonWidget(
+                                          studentListResponseTeacherModel:
+                                              studentAttendanceModel,
+                                          selectedOption: selectedOption,
+                                          student: student,
+                                        ),
+                                      ],
                                     ),
-                                  )
-                                : SizedBox.shrink(),
+                                  );
+                                },
+                              ),
+                            ),
+
+                            //! Confirm Button
+                            if (studentAttendanceModel.isSubmitted == false)
+                              Padding(
+                                padding: const EdgeInsets.all(AppSizes.insidePadding),
+                                child: SizedBox(
+                                  width: 140,
+                                  height: 40,
+                                  child: FilledButton(
+                                    style: FilledButton.styleFrom(
+                                      backgroundColor: AppColors.blue,
+                                    ),
+                                    onPressed: () {
+                                      context.read<TeacherAttendanceBloc>().add(
+                                            CreateAttendanceTeacherEvent(
+                                              attendanceListModel: studentList,
+                                              subjectOfferingId:
+                                                  widget.attendanceModel.subjectId,
+                                              date: attendanceDate.value,
+                                              batchSemesterId:
+                                                  widget.attendanceModel.batchId,
+                                            ),
+                                          );
+                                    },
+                                    child: Text("নিশ্চিত করুন"),
+                                  ),
+                                ),
+                              ),
                           ],
                         ),
-                      ),
-                    );
-                  } else {
-                    return Center(child: AppEmpty(msg: "Something went wrong"));
-                  }
-                },
+                      );
+                    } else {
+                      return Center(child: AppEmpty(msg: "Something went wrong"));
+                    }
+                  },
+                ),
               ),
             ],
           ),
