@@ -8,6 +8,8 @@ class AuthLocalDB {
   static final String authKey = "authKey_bpi";
 static final String teacher = "teacher";
 static final String student = "student";
+static final String semesterId = "semesterId";
+
 
   static final String roleKey = "roleKey_bpi";
 
@@ -26,6 +28,12 @@ static final String student = "student";
       print("Role set successfully $role");
     }
   }
+  static Future<void> setSemesterId(String id) async {
+    await storage.write(key: semesterId, value: id);
+    if (kDebugMode) {
+      print("semesterId set successfully $id");
+    }
+  }
 
   static Future<String?> getToken() async {
     final token = await storage.read(key: authKey);
@@ -42,6 +50,15 @@ static final String student = "student";
     }
     return role;
   }
+
+  static Future<int?> getSemesterId() async {
+    final id = await storage.read(key: semesterId);
+    if (id == null) {
+      return null;
+    }
+    return int.parse(id);
+  }
+
     Future<void> setAccountStatus(String status) async {
     await storage.write(key: "accountStatus", value: status);
     if (kDebugMode) {

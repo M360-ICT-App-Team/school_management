@@ -44,7 +44,7 @@ class _FilteringAttendanceWidgetState extends State<FilteringAttendanceWidget> {
                   notifier: widget.attendanceDate,
                   initialDate: value,
                   firstDate: DateTime(DateTime.now().year - 1),
-                  lastDate: DateTime.now(),
+                  lastDate: DateTime(DateTime.now().year +100),
                 );
               },
               child: _buildBox(

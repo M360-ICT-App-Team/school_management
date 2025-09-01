@@ -10,6 +10,7 @@ import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_sizes.dart';
 import '../../../../../core/constants/app_text_styles.dart';
 import '../../../../../core/model/send_file_model.dart';
+import '../../../../../core/widgets/app_adaptive_date.dart';
 import '../../../../../core/widgets/app_bar.dart';
 import '../../../../../core/widgets/app_image_view.dart';
 import '../../../../../core/widgets/app_input_widgets.dart';
@@ -59,17 +60,10 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
   ValueNotifier<String> presentAddressDivision = ValueNotifier(
     'বিভাগ নির্বাচন করুন',
   );
-  ValueNotifier<String?> selectedDate = ValueNotifier(null);
+  ValueNotifier<DateTime> selectedDate = ValueNotifier(DateTime.now());
 
   @override
   void dispose() {
-    birthRegNo.dispose();
-    bloodGroupController.dispose();
-    motherNameController.dispose();
-    presentAddressController.dispose();
-    permanentAddressController.dispose();
-    bloodGroupController.dispose();
-    zipCodeController.dispose();
     super.dispose();
   }
 
@@ -133,7 +127,7 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
             presentAddressDivision.value =
                 studentProfile?.presentDivision ?? 'বিভাগ নির্বাচন করুন';
 
-            selectedDate.value = studentProfile?.dobDate;
+            selectedDate.value = studentProfile?.dobDate??DateTime.now();
           }
 
           return ListView(
@@ -231,28 +225,7 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
                                         maxLines: 2,
                                       ),
 
-                                      /*Text(
-                                        studentProfile?.phone ?? "Unknown",
-                                        style: AppTextStyles.normalLight(
-                                          context,
-                                        ).copyWith(fontSize: 12),
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 2,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            studentProfile?.email ?? "Unknown",
-                                            style: AppTextStyles.normalLight(
-                                              context,
-                                            ).copyWith(fontSize: 12),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 2,
-                                          ),
-                                        ],
-                                      ),*/
+
                                     ],
                                   ),
                                 ),
@@ -279,45 +252,29 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
                                 ),
                               ),
                               const Text(" : "),
-                              GestureDetector(
-                                onTap: () {
-                                  _selectDate(context);
-                                  
+                              ValueListenableBuilder(
+                                valueListenable:selectedDate,
+                                builder: (context, value, child) {
+                                  return InkWell(
+                                    onTap: () async {
+                                      await pickAdaptiveDate(
+                                        context: context,
+                                        notifier: selectedDate,
+                                        initialDate: value,
+                                        firstDate: DateTime(1900),
+                                        lastDate: DateTime(2100),
+                                      );
+                                    },
+                                    child: _buildBox(
+                                      child: Text(
+                                        "${formatDateTime(dateTime: value, format: "yyyy-MM-dd")}",
+                                        style: AppTextStyles.normalLight(
+                                          context,
+                                        ).copyWith(fontSize: 14),
+                                      ),
+                                    ),
+                                  );
                                 },
-                                child: Container(
-                                  width: 230,
-                                  height:
-                                      30, 
-                                  padding: EdgeInsets.symmetric(horizontal: 12),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[300],
-                                    borderRadius: BorderRadius.circular(6),
-                                    border: Border.all(color: Colors.grey),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      ValueListenableBuilder(
-                                        valueListenable: selectedDate,
-                                        builder: (context, value, child) {
-                                          return Text(
-                                            formatDateTime(
-                                                  dateTime: value,
-                                                  format: "dd-MM-yyyy",
-                                                ) ??
-                                                '',
-                                            style: TextStyle(fontSize: 14),
-                                          );
-                                        },
-                                      ),
-                                      Icon(
-                                        Icons.arrow_drop_down,
-                                        color: Colors.black,
-                                      ),
-                                    ],
-                                  ),
-                                ),
                               ),
                             ],
                           ),
@@ -553,7 +510,7 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
                                         builder: (context, value, child) {
                                           return Text(
                                             value,
-                                            style: TextStyle(fontSize: 14),
+                                            style: AppTextStyles.normalLight(context),
                                           );
                                         },
                                       ),
@@ -567,12 +524,7 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
                               ),
                             ],
                           ),
-                          profileInfoList(
-                            context,
-                            "পিতার নাম",
-                            fatherNameController,
-                            // isMultiLine: true,
-                          ),
+                          profileInfoList(context, "পিতার নাম", fatherNameController),
                           profileInfoList(
                             context,
                             "জাতীয় পরিচয়পত্র নং",
@@ -638,7 +590,7 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
                         final studentProfileUpdateRequestModel =
                             StudentProfileUpdateRequestModel(
                               dobNo: birthRegNo.text.trim(),
-                              dobDate: selectedDate.value,
+                              dobDate: selectedDate.value.toIso8601String(),
                               religion: religion.value,
                               gender: gender.value,
                               bloodGroup: bloodGroupController.text.trim(),
@@ -716,37 +668,7 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
                           ),
                         );
 
-                        /* final teacherProfileUpdateRequestModel =
-                        StudentProfileUpdateRequestModel(
-                          email:
-                          emailController.text.trim() ==
-                              (teacherProfile?.email ?? "").trim()
-                              ? null
-                              : emailController.text.trim(),
-                          phone:
-                          phoneController.text.trim() ==
-                              (teacherProfile?.phone ?? "").trim()
-                              ? null
-                              : phoneController.text.trim(),
-                          fatherName: fatherNameController.text,
-                          motherName: motherNameController.text,
-                          presentAddress: presentAddressController.text,
-                          permanentAddress: permanentAddressController.text,
-                          bloodGroup: bloodGroupController.text,
-                        );
-                        context.read<TeacherProfileBloc>().add(
-                          UpdateTeacherProfileEvent(
-                            payload: teacherProfileUpdateRequestModel,
-                            files: photo != null
-                                ? [
-                              SendFileModel(
-                                filePath: photo!.path,
-                                key: "photo",
-                              ),
-                            ]
-                                : [],
-                          ),
-                        );*/
+
                       },
                       child: Text("নিশ্চিত করুন"),
                     ),
@@ -793,30 +715,23 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
       ),
     );
   }
+  Widget _buildBox({required Widget child}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 70, vertical: 6),
+      decoration: BoxDecoration(
+        color: AppColors.grey,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.black, width: 1.5),
+      ),
+      child: Row(
+        children: [
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(), // আজকের তারিখ
-      firstDate: DateTime(1900), // শুরুর সীমা
-      lastDate: DateTime(2100), // শেষ সীমা
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
-              primary: Colors.deepPurple, // হেডার রঙ
-              onPrimary: Colors.white, // হেডারের টেক্সট রঙ
-              onSurface: Colors.black, // বডির টেক্সট রঙ
-            ),
-          ),
-          child: child!,
-        );
-      },
+          const SizedBox(width: 4),
+          child,
+          const Icon(Icons.arrow_drop_down, size: 20, color: Colors.black),
+        ],
+      ),
     );
-
-    if (picked != null) {
-      selectedDate.value = DateFormat('yyyy-MM-dd').format(picked);
-    }
   }
 
   final List<String> religionList = [

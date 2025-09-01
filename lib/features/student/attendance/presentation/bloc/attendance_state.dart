@@ -12,3 +12,13 @@ final class CurrentSemesterListLoaded extends AttendanceState {
   final List<CurrentSemesterListModel> currentSemesterList;
   CurrentSemesterListLoaded(this.currentSemesterList);
 }
+
+final class SingleSemesterListLoaded extends AttendanceState {
+  final List<StudentSingleSemesterListModel> singleSemesterList;
+  SingleSemesterListLoaded(this.singleSemesterList);
+}
+final class SingleSemesterLoading extends AttendanceState {}
+final class SingleSemesterError extends AttendanceState {
+  final String message;
+  SingleSemesterError(this.message);
+}
