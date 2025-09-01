@@ -127,7 +127,7 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
             presentAddressDivision.value =
                 studentProfile?.presentDivision ?? 'বিভাগ নির্বাচন করুন';
 
-            selectedDate.value = studentProfile?.dobDate;
+            selectedDate.value = studentProfile?.dobDate??DateTime.now();
           }
 
           return ListView(
@@ -717,7 +717,7 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
   }
   Widget _buildBox({required Widget child}) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 70, vertical: 6),
       decoration: BoxDecoration(
         color: AppColors.grey,
         borderRadius: BorderRadius.circular(8),
@@ -725,9 +725,10 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
       ),
       child: Row(
         children: [
-          const Icon(Icons.arrow_drop_down, size: 20, color: Colors.black),
+
           const SizedBox(width: 4),
           child,
+          const Icon(Icons.arrow_drop_down, size: 20, color: Colors.black),
         ],
       ),
     );

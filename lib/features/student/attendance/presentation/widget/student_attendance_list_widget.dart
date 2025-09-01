@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/constants/app_enum.dart';
 import '../../../../../core/constants/app_sizes.dart';
 import '../../../../../core/constants/app_text_styles.dart';
 import '../../../../../core/widgets/app_empty.dart';
@@ -85,13 +86,14 @@ class _StudentAttendanceListWidgetState
                           Expanded(
                             flex: 2,
                             child: Text(
-                              "উপস্থিতি সময়",
+                              "উপস্থিতি",
                               style: AppTextStyles.normalBold(
                                 context,
                               ).copyWith(color: AppColors.blue),
                             ),
                           ),
                           Expanded(
+                            flex: 2,
                             child: Text(
                               "স্ট্যাটাস",
                               textAlign: TextAlign.end,
@@ -128,7 +130,7 @@ class _StudentAttendanceListWidgetState
                               mainAxisAlignment:
                               MainAxisAlignment.spaceBetween,
                               children: [
-                                //! Name + ID + Avatar
+                               //! Subject -------
                                 Expanded(
                                   flex: 3,
                                   child: Padding(
@@ -140,6 +142,7 @@ class _StudentAttendanceListWidgetState
                                     ),
                                   ),
                                 ),
+                                //! Date -------
                                 Expanded(
                                   flex: 2,
                                   child: Text(
@@ -148,9 +151,14 @@ class _StudentAttendanceListWidgetState
                                       ).format(singleSemester.attendanceTime!)
                                   ),
                                 ),
+                                //! Status -------
                                 Expanded(
+                                  flex: 2,
                                   child: Text(
-                                    singleSemester.status!,
+                                  attendanceStatusFromString(
+                                  singleSemester.status!,
+                                ).value,
+
                                     textAlign: TextAlign.end,
                                     style: AppTextStyles.normalBold(
                                       context,
