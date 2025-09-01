@@ -22,15 +22,15 @@ class TeacherAttendanceRemoteDataSource {
   }) async {
     try {
       String? subjectIdUrl;
-      if (subjectId != null) {
+       if (subjectId != null && dateRange != null) {
         subjectIdUrl =
-            "${AppUrls.teacherAttendance}?subject_offering_id=$subjectId";
+            "${AppUrls.teacherAttendance}?start_date=${DateFormat("yyyy-MM-dd").format(dateRange.start)}&end_date=${DateFormat("yyyy-MM-dd").format(dateRange.end)}&subject_offering_id=$subjectId";
       } else if (dateRange != null) {
         subjectIdUrl =
-            "${AppUrls.teacherAttendance}?from_date=${DateFormat("yyyy-MM-dd").format(dateRange.start)}&to_date=${DateFormat("yyyy-MM-dd").format(dateRange.end)}";
-      } else if (subjectId != null && dateRange != null) {
+            "${AppUrls.teacherAttendance}?start_date=${DateFormat("yyyy-MM-dd").format(dateRange.start)}&end_date=${DateFormat("yyyy-MM-dd").format(dateRange.end)}";
+      } else if (subjectId != null) {
         subjectIdUrl =
-            "${AppUrls.teacherAttendance}?from_date=${DateFormat("yyyy-MM-dd").format(dateRange.start)}&to_date=${DateFormat("yyyy-MM-dd").format(dateRange.end)}&subject_offering_id=$subjectId";
+            "${AppUrls.teacherAttendance}?subject_offering_id=$subjectId";
       } else {
         subjectIdUrl = AppUrls.teacherAttendance;
       }
