@@ -43,6 +43,13 @@ class _FilterStudentAttendanceWidgetState extends State<FilterStudentAttendanceW
                   firstDate: DateTime(1900),
                   lastDate: DateTime(2100),
                 );
+                context.read<AttendanceBloc>().add(
+                  FetchSingleSemesterList(
+                      dateTime: DateFormat(
+                        "yyyy-MM-dd",
+                      ).format(widget.attendanceDate.value)
+                  ),
+                );
               },
               child: _buildBox(
                 child: Text(

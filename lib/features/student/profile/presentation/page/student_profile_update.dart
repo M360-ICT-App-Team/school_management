@@ -10,6 +10,7 @@ import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_sizes.dart';
 import '../../../../../core/constants/app_text_styles.dart';
 import '../../../../../core/model/send_file_model.dart';
+import '../../../../../core/widgets/app_adaptive_date.dart';
 import '../../../../../core/widgets/app_bar.dart';
 import '../../../../../core/widgets/app_image_view.dart';
 import '../../../../../core/widgets/app_input_widgets.dart';
@@ -59,17 +60,10 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
   ValueNotifier<String> presentAddressDivision = ValueNotifier(
     'বিভাগ নির্বাচন করুন',
   );
-  ValueNotifier<String?> selectedDate = ValueNotifier(null);
+  ValueNotifier<DateTime> selectedDate = ValueNotifier(DateTime.now());
 
   @override
   void dispose() {
-    birthRegNo.dispose();
-    bloodGroupController.dispose();
-    motherNameController.dispose();
-    presentAddressController.dispose();
-    permanentAddressController.dispose();
-    bloodGroupController.dispose();
-    zipCodeController.dispose();
     super.dispose();
   }
 
@@ -258,45 +252,29 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
                                 ),
                               ),
                               const Text(" : "),
-                              GestureDetector(
-                                onTap: () {
-                                  _selectDate(context);
-                                  
+                              ValueListenableBuilder(
+                                valueListenable:selectedDate,
+                                builder: (context, value, child) {
+                                  return InkWell(
+                                    onTap: () async {
+                                      await pickAdaptiveDate(
+                                        context: context,
+                                        notifier: selectedDate,
+                                        initialDate: value,
+                                        firstDate: DateTime(1900),
+                                        lastDate: DateTime(2100),
+                                      );
+                                    },
+                                    child: _buildBox(
+                                      child: Text(
+                                        "${formatDateTime(dateTime: value, format: "yyyy-MM-dd")}",
+                                        style: AppTextStyles.normalLight(
+                                          context,
+                                        ).copyWith(fontSize: 14),
+                                      ),
+                                    ),
+                                  );
                                 },
-                                child: Container(
-                                  width: 230,
-                                  height:
-                                      30, 
-                                  padding: EdgeInsets.symmetric(horizontal: 12),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[300],
-                                    borderRadius: BorderRadius.circular(6),
-                                    border: Border.all(color: Colors.grey),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      ValueListenableBuilder(
-                                        valueListenable: selectedDate,
-                                        builder: (context, value, child) {
-                                          return Text(
-                                            formatDateTime(
-                                                  dateTime: value,
-                                                  format: "dd-MM-yyyy",
-                                                ) ??
-                                                '',
-                                            style: TextStyle(fontSize: 14),
-                                          );
-                                        },
-                                      ),
-                                      Icon(
-                                        Icons.arrow_drop_down,
-                                        color: Colors.black,
-                                      ),
-                                    ],
-                                  ),
-                                ),
                               ),
                             ],
                           ),
@@ -612,7 +590,7 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
                         final studentProfileUpdateRequestModel =
                             StudentProfileUpdateRequestModel(
                               dobNo: birthRegNo.text.trim(),
-                              dobDate: selectedDate.value,
+                              dobDate: selectedDate.value.toIso8601String(),
                               religion: religion.value,
                               gender: gender.value,
                               bloodGroup: bloodGroupController.text.trim(),
@@ -737,30 +715,22 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
       ),
     );
   }
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(), // আজকের তারিখ
-      firstDate: DateTime(1900), // শুরুর সীমা
-      lastDate: DateTime(2100), // শেষ সীমা
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
-              primary: Colors.deepPurple, // হেডার রঙ
-              onPrimary: Colors.white, // হেডারের টেক্সট রঙ
-              onSurface: Colors.black, // বডির টেক্সট রঙ
-            ),
-          ),
-          child: child!,
-        );
-      },
+  Widget _buildBox({required Widget child}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+      decoration: BoxDecoration(
+        color: AppColors.grey,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.black, width: 1.5),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.arrow_drop_down, size: 20, color: Colors.black),
+          const SizedBox(width: 4),
+          child,
+        ],
+      ),
     );
-
-    if (picked != null) {
-      selectedDate.value = DateFormat('yyyy-MM-dd').format(picked);
-    }
   }
 
   final List<String> religionList = [
