@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:school_management/core/constants/app_sizes.dart';
@@ -10,6 +12,7 @@ import '../../../../../core/utilities/app_filtering_bottom_sheet.dart';
 import '../../../../../core/widgets/app_bar.dart';
 import '../../../../common/subject/data/model/subject_list_response_teacher_model.dart';
 import '../../../../common/subject/presentation/bloc/subject_bloc.dart';
+import '../../../branch/presentation/bloc/branch_bloc.dart';
 import '../widgets/select_batch_teacher_card_widget.dart';
 
 class SelectBatchTeacherPage extends StatefulWidget {
@@ -24,11 +27,13 @@ class _SelectBatchTeacherPageState extends State<SelectBatchTeacherPage> {
       ValueNotifier(null);
 
   final ValueNotifier<DateTimeRange?> selectedDateRange = ValueNotifier(null);
+  int? branchId;
 
   @override
   void initState() {
     super.initState();
     context.read<TeacherAttendanceBloc>().add(GetTeacherBatchOverViewEvent());
+    context.read<BranchBloc>().add(GetBranchListEvent());
   }
 
   Future<void> pickDateRange(BuildContext context) async {
@@ -88,7 +93,7 @@ class _SelectBatchTeacherPageState extends State<SelectBatchTeacherPage> {
                         vertical: 10,
                       ),
                       decoration: BoxDecoration(
-                        color: const Color(0xffd9d9d9),
+                        color: AppColors.grey,
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(color: Colors.black, width: 1.5),
                       ),
@@ -174,7 +179,10 @@ class _SelectBatchTeacherPageState extends State<SelectBatchTeacherPage> {
                 InkWell(
                   onTap: () {
                     context.read<TeacherAttendanceBloc>().add(
-                      GetTeacherBatchOverViewEvent(),
+                      GetTeacherBatchOverViewEvent(
+                        subjectId: selectedSubject.value?.id,
+                        selectedDateRange: selectedDateRange.value,
+                      ),
                     );
                   },
                   child: Container(
@@ -201,12 +209,44 @@ class _SelectBatchTeacherPageState extends State<SelectBatchTeacherPage> {
 
             //! for building batch list
             Expanded(
-              child: BlocBuilder<TeacherAttendanceBloc, TeacherAttendanceState>(
+              child: BlocBuilder<BranchBloc, BranchState>(
                 buildWhen: (previous, current) =>
-                    current is GetTeacherBatchOverViewLoading ||
-                    current is GetTeacherBatchOverViewSuccess ||
-                    current is GetTeacherBatchOverViewError,
-                builder: (context, state) => buildBatchList(state),
+                    current is GetBranchListLoading ||
+                    current is GetBranchListSuccess ||
+                    current is GetBranchListError,
+                builder: (context, state) {
+                  log("=======Branch State======= : $state");
+                  if (state is GetBranchListLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    );
+                  } else if (state is GetBranchListSuccess) {
+                    branchId ??= state.branchResponseModel[0].id;
+
+                    return BlocBuilder<
+                      TeacherAttendanceBloc,
+                      TeacherAttendanceState
+                    >(
+                      buildWhen: (previous, current) =>
+                          current is GetTeacherBatchOverViewLoading ||
+                          current is GetTeacherBatchOverViewSuccess ||
+                          current is GetTeacherBatchOverViewError,
+                      builder: (context, teacherState) {
+                        log("=======Teacher State======= : $teacherState");
+                        if (branchId != null) {
+                          return buildBatchList(teacherState, branchId!);
+                        }
+                        return const Center(
+                          child: AppEmpty(msg: "Branch not found"),
+                        );
+                      },
+                    );
+                  } else {
+                    return const Center(
+                      child: AppEmpty(msg: "Something went wrong"),
+                    );
+                  }
+                },
               ),
             ),
           ],
@@ -215,7 +255,7 @@ class _SelectBatchTeacherPageState extends State<SelectBatchTeacherPage> {
     );
   }
 
-  Widget buildBatchList(TeacherAttendanceState state) {
+  Widget buildBatchList(TeacherAttendanceState state, int branchId) {
     if (state is GetTeacherBatchOverViewLoading) {
       return const Center(child: CircularProgressIndicator.adaptive());
     } else if (state is GetTeacherBatchOverViewError) {
@@ -230,6 +270,7 @@ class _SelectBatchTeacherPageState extends State<SelectBatchTeacherPage> {
           final batch = state.batchOverViewTeacherResponseModel[index];
           return SelectBatchTeacherCardWidget(
             batchOverViewTeacherResponseModel: batch,
+            branchId: branchId,
           );
         },
       );

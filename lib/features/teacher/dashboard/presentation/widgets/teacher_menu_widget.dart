@@ -19,14 +19,14 @@ class _TeacherMenuWidgetState extends State<TeacherMenuWidget> {
       "title": "হাজিরা",
       "page": SelectBatchTeacherPage(),
     },
-    // {"icon": AppImages.payment, "title": "বেতন", "page": null},
-    // {"icon": AppImages.notice, "title": "বিজ্ঞপ্তি", "page": null},
-    // {"icon": AppImages.schedule, "title": "কেলেন্ডার", "page": null},
-    // {"icon": AppImages.diary, "title": "ডাইরি", "page": null},
-    // {"icon": AppImages.program, "title": "ক্লাস রুটিন", "page": null},
-    // {"icon": AppImages.summerHolidays, "title": "মাসিক ছুটি", "page": null},
-    // {"icon": AppImages.reportCard, "title": "রেজাল্ট", "page": null},
-    // {"icon": AppImages.exStudent, "title": "শিক্ষার্থী", "page": null},
+    {"icon": AppImages.payment, "title": "বেতন", "page": null},
+    {"icon": AppImages.notice, "title": "বিজ্ঞপ্তি", "page": null},
+    {"icon": AppImages.schedule, "title": "কেলেন্ডার", "page": null},
+    {"icon": AppImages.diary, "title": "ডাইরি", "page": null},
+    {"icon": AppImages.program, "title": "ক্লাস রুটিন", "page": null},
+    {"icon": AppImages.summerHolidays, "title": "মাসিক ছুটি", "page": null},
+    {"icon": AppImages.reportCard, "title": "রেজাল্ট", "page": null},
+    {"icon": AppImages.exStudent, "title": "শিক্ষার্থী", "page": null},
   ];
   @override
   Widget build(BuildContext context) {

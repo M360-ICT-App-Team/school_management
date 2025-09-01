@@ -10,9 +10,11 @@ import '../../data/model/batch_over_view_teacher_response_model.dart';
 
 class SelectBatchTeacherCardWidget extends StatefulWidget {
   final BatchOverViewTeacherResponseModel batchOverViewTeacherResponseModel;
+  final int branchId;
   const SelectBatchTeacherCardWidget({
     super.key,
     required this.batchOverViewTeacherResponseModel,
+    required this.branchId,
   });
 
   @override
@@ -25,22 +27,27 @@ class _SelectBatchTeacherCardWidgetState
   @override
   Widget build(BuildContext context) {
     final batchOverView = widget.batchOverViewTeacherResponseModel;
-    
+
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, AppRoutes.attendanceTeacherPage,arguments: AttendanceModel( 
-          batchId: batchOverView.id!,
-          subjectId: batchOverView.subjectOfferingId!,
-        ) );
+        Navigator.pushNamed(
+          context,
+          AppRoutes.attendanceTeacherPage,
+          arguments: AttendanceModel(
+            batchId: batchOverView.id!,
+            subjectId: batchOverView.subjectOfferingId!,
+            branchId: widget.branchId,
+          ),
+        );
       },
       child: Container(
         padding: const EdgeInsets.symmetric(
-          horizontal: AppSizes.insidePadding,
+          horizontal: AppSizes.insidePadding / 2,
           vertical: AppSizes.insidePadding,
         ),
         margin: const EdgeInsets.symmetric(
           horizontal: AppSizes.bodyPadding,
-          vertical: AppSizes.bodyPadding,
+          vertical: AppSizes.bodyPadding / 2,
         ),
         decoration: BoxDecoration(
           color: AppColors.backgroundColor,

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../core/constants/app_urls.dart';
@@ -15,10 +16,26 @@ import '../model/student_list_response_teacher_model.dart';
 class TeacherAttendanceRemoteDataSource {
   //!for get batch over view
   static Future<Either<Failure, List<BatchOverViewTeacherResponseModel>>>
-  getTeacherBatchOverView() async {
+  getTeacherBatchOverView({
+    required int? subjectId,
+    required DateTimeRange? dateRange,
+  }) async {
     try {
+      String? subjectIdUrl;
+      if (subjectId != null) {
+        subjectIdUrl =
+            "${AppUrls.teacherAttendance}?subject_offering_id=$subjectId";
+      } else if (dateRange != null) {
+        subjectIdUrl =
+            "${AppUrls.teacherAttendance}?from_date=${DateFormat("yyyy-MM-dd").format(dateRange.start)}&to_date=${DateFormat("yyyy-MM-dd").format(dateRange.end)}";
+      } else if (subjectId != null && dateRange != null) {
+        subjectIdUrl =
+            "${AppUrls.teacherAttendance}?from_date=${DateFormat("yyyy-MM-dd").format(dateRange.start)}&to_date=${DateFormat("yyyy-MM-dd").format(dateRange.end)}&subject_offering_id=$subjectId";
+      } else {
+        subjectIdUrl = AppUrls.teacherAttendance;
+      }
       final result = await ApiClient.get(
-        url: AppUrls.teacherAttendance,
+        url: subjectIdUrl,
         token: await AuthLocalDB.getToken(),
       );
       return Right(
@@ -56,12 +73,13 @@ class TeacherAttendanceRemoteDataSource {
     }
   }
 
-//!create attendance
+  //!create attendance
   static Future<Either<Failure, void>> createAttendance({
     required List<AttendanceList> studentList,
     required int? subjectOfferingId,
     required DateTime? date,
     required int? batchSemesterId,
+    required int? branchId,
   }) async {
     try {
       final Map<String, dynamic> payload = {
@@ -76,6 +94,7 @@ class TeacherAttendanceRemoteDataSource {
         "subject_offering_id": subjectOfferingId,
         "date": date != null ? DateFormat("yyyy-MM-dd").format(date) : null,
         "batch_semester_id": batchSemesterId,
+        "branch_id": branchId,
       };
 
       log("Create Attendance payload : ${(payload)}");
@@ -90,27 +109,21 @@ class TeacherAttendanceRemoteDataSource {
       return Left(handleException(e, stackTrace));
     }
   }
+
   //!for update attendance
-  static Future<Either<Failure, void>>
-  updateAttendance({
+  static Future<Either<Failure, void>> updateAttendance({
     required int? id,
     required String? status,
-
   }) async {
     try {
-     
       final result = await ApiClient.patch(
-        url: AppUrls.teacherAttendance+"/$id",
+        url: "${AppUrls.teacherAttendance}/$id",
         token: await AuthLocalDB.getToken(),
-        body: jsonEncode({
-          "status": status,
-        }),
+        body: jsonEncode({"status": status}),
       );
-      return Right(result!=null);
+      return Right(result != null);
     } catch (e, stackTrace) {
       return Left(handleException(e, stackTrace));
     }
   }
 }
-
-

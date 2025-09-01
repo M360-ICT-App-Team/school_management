@@ -11,24 +11,21 @@ part 'branch_state.dart';
 
 class BranchBloc extends Bloc<BranchEvent, BranchState> {
   BranchBloc() : super(BranchInitial()) {
-       on<GetBranchListEvent>(_getBranchList);
-
+    on<GetBranchListEvent>(_getBranchList);
   }
 
-      Future<void> _getBranchList(
+  Future<void> _getBranchList(
     GetBranchListEvent event,
     Emitter<BranchState> emit,
   ) async {
     emit(GetBranchListLoading());
     try {
-      final result =
-          await BranchRemoteDataSource.getBranch();
-      result.fold(
-        (ifLeft) => emit(GetBranchListError(ifLeft.message)),
-        (ifRight) {
-          emit(GetBranchListSuccess(ifRight));
-        },
-      );
+      final result = await BranchRemoteDataSource.getBranch();
+      result.fold((ifLeft) => emit(GetBranchListError(ifLeft.message)), (
+        ifRight,
+      ) {
+        emit(GetBranchListSuccess(ifRight));
+      });
     } catch (e, stackTrace) {
       emit(GetBranchListError(AppExceptionMessage.serverDefault));
       if (kDebugMode) {

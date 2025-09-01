@@ -5,7 +5,11 @@ sealed class TeacherAttendanceEvent {}
 
 
 //!for get batch overview
-class GetTeacherBatchOverViewEvent extends TeacherAttendanceEvent {}
+class GetTeacherBatchOverViewEvent extends TeacherAttendanceEvent { 
+  final int ? subjectId;
+  final DateTimeRange ? selectedDateRange;
+  GetTeacherBatchOverViewEvent({this.subjectId,this.selectedDateRange});
+}
 
 //!for get student list
 class GetStudentListEvent extends TeacherAttendanceEvent { 
@@ -24,8 +28,10 @@ class CreateAttendanceTeacherEvent extends TeacherAttendanceEvent {
  final DateTime? date;
  final int? subjectOfferingId;
  final int? batchSemesterId;
+ final int ? branchId;
 
-  CreateAttendanceTeacherEvent({required this.attendanceListModel,required this.date,required this.subjectOfferingId,required this.batchSemesterId});
+
+  CreateAttendanceTeacherEvent({required this.attendanceListModel,required this.date,required this.subjectOfferingId,required this.batchSemesterId,required this.branchId});
 }
 
 //!update attendance

@@ -30,8 +30,7 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
   final ValueNotifier<DateTime> attendanceDate = ValueNotifier(DateTime.now());
   final ValueNotifier<String> selectedOption = ValueNotifier("present");
   final ValueNotifier<BranchResponseModel?> selectedBranch = ValueNotifier(
-    null,
-  );
+    null,);
 
   @override
   void initState() {
@@ -41,10 +40,9 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
         id: widget.attendanceModel.batchId,
         date: DateFormat("yyyy-MM-dd").format(attendanceDate.value),
         subjectId: widget.attendanceModel.subjectId,
+        branchId: widget.attendanceModel.branchId,
       ),
     );
-
-    context.read<BranchBloc>().add(GetBranchListEvent());
   }
 
   @override
@@ -373,6 +371,8 @@ class _AttendanceTeacherPageState extends State<AttendanceTeacherPage> {
                                                     batchSemesterId: widget
                                                         .attendanceModel
                                                         .batchId,
+                                                        branchId: selectedBranch.value!.id
+                                                         
                                                   ),
                                                 );
                                           },

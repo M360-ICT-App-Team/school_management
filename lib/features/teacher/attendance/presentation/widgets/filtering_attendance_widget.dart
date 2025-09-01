@@ -22,15 +22,12 @@ class FilteringAttendanceWidget extends StatefulWidget {
     required this.attendanceDate,
     required this.selectedBranch,
   });
-
   @override
   State<FilteringAttendanceWidget> createState() =>
       _FilteringAttendanceWidgetState();
 }
-
 class _FilteringAttendanceWidgetState extends State<FilteringAttendanceWidget> {
   List<BranchResponseModel> branchList = [];
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -62,14 +59,16 @@ class _FilteringAttendanceWidgetState extends State<FilteringAttendanceWidget> {
           },
         ),
 
+
         //! Select Branch
-        BlocConsumer<BranchBloc, BranchState>(
-          listener: (context, state) {
+        BlocBuilder<BranchBloc, BranchState>(
+          builder: (context, state) {
             if (state is GetBranchListSuccess) {
               branchList = state.branchResponseModel;
+              if (branchList.isNotEmpty) {
+                widget.selectedBranch.value = branchList.first;
+              }
             }
-          },
-          builder: (context, state) {
             return InkWell(
               onTap: () async {
                 if (branchList.isEmpty) {
@@ -86,6 +85,8 @@ class _FilteringAttendanceWidgetState extends State<FilteringAttendanceWidget> {
                     );
                 if (selected != null) {
                   widget.selectedBranch.value = selected;
+                } else {
+                  widget.selectedBranch.value = branchList.first;
                 }
               },
               child: _buildBox(
@@ -93,7 +94,7 @@ class _FilteringAttendanceWidgetState extends State<FilteringAttendanceWidget> {
                   valueListenable: widget.selectedBranch,
                   builder: (context, value, child) {
                     return Text(
-                      value?.name ?? "শাখা",
+                      value?.name ?? "",
                       style: AppTextStyles.normalLight(
                         context,
                       ).copyWith(fontSize: 14),
@@ -113,7 +114,9 @@ class _FilteringAttendanceWidgetState extends State<FilteringAttendanceWidget> {
                 id: widget.attendanceModel.batchId,
                 subjectId: widget.attendanceModel.subjectId,
                 branchId: widget.selectedBranch.value?.id,
-                date: DateFormat("yyyy-MM-dd").format(widget.attendanceDate.value),
+                date: DateFormat(
+                  "yyyy-MM-dd",
+                ).format(widget.attendanceDate.value),
               ),
             );
           },
