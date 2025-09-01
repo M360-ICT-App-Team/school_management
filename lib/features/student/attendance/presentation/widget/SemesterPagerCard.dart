@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/local_database/auth_db.dart';
 import '../../data/model/current_semester_list_model.dart';
 
 
@@ -24,13 +25,19 @@ class _SemesterPagerCardState extends State<SemesterPagerCard> {
 
   void _next() {
     if (index < widget.items.length - 1) {
-      setState(() => index++);
+      setState(() {
+        index++;
+        AuthLocalDB.setSemesterId(widget.items[index].id.toString());
+      } );
     }
   }
 
   void _prev() {
     if (index > 0) {
-      setState(() => index--);
+      setState(() {
+        index--;
+        AuthLocalDB.setSemesterId(widget.items[index].id.toString());
+      } );
     }
   }
 
@@ -44,6 +51,7 @@ class _SemesterPagerCardState extends State<SemesterPagerCard> {
       );
     }
     final item = widget.items[index];
+    AuthLocalDB.setSemesterId(item.id.toString());
 
     final canPrev = index > 0;
     final canNext = index < widget.items.length - 1;
