@@ -9,10 +9,12 @@ import '../../data/model/current_semester_list_model.dart';
 /// ---- Card Widget ----
 class SemesterPagerCard extends StatefulWidget {
   final List<CurrentSemesterListModel> items;
+  final ValueNotifier<bool> expand;
   final EdgeInsets padding;
   const SemesterPagerCard({
     super.key,
     required this.items,
+    required this.expand,
     this.padding = const EdgeInsets.all(12),
   });
 
@@ -28,6 +30,7 @@ class _SemesterPagerCardState extends State<SemesterPagerCard> {
       setState(() {
         index++;
         AuthLocalDB.setSemesterId(widget.items[index].id.toString());
+        widget.expand.value=false;
       } );
     }
   }
@@ -37,6 +40,7 @@ class _SemesterPagerCardState extends State<SemesterPagerCard> {
       setState(() {
         index--;
         AuthLocalDB.setSemesterId(widget.items[index].id.toString());
+        widget.expand.value=false;
       } );
     }
   }

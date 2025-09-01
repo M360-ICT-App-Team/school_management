@@ -231,28 +231,7 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
                                         maxLines: 2,
                                       ),
 
-                                      /*Text(
-                                        studentProfile?.phone ?? "Unknown",
-                                        style: AppTextStyles.normalLight(
-                                          context,
-                                        ).copyWith(fontSize: 12),
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 2,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            studentProfile?.email ?? "Unknown",
-                                            style: AppTextStyles.normalLight(
-                                              context,
-                                            ).copyWith(fontSize: 12),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 2,
-                                          ),
-                                        ],
-                                      ),*/
+
                                     ],
                                   ),
                                 ),
@@ -553,7 +532,7 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
                                         builder: (context, value, child) {
                                           return Text(
                                             value,
-                                            style: TextStyle(fontSize: 14),
+                                            style: AppTextStyles.normalLight(context),
                                           );
                                         },
                                       ),
@@ -567,12 +546,7 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
                               ),
                             ],
                           ),
-                          profileInfoList(
-                            context,
-                            "পিতার নাম",
-                            fatherNameController,
-                            // isMultiLine: true,
-                          ),
+                          profileInfoList(context, "পিতার নাম", fatherNameController),
                           profileInfoList(
                             context,
                             "জাতীয় পরিচয়পত্র নং",
@@ -716,37 +690,7 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
                           ),
                         );
 
-                        /* final teacherProfileUpdateRequestModel =
-                        StudentProfileUpdateRequestModel(
-                          email:
-                          emailController.text.trim() ==
-                              (teacherProfile?.email ?? "").trim()
-                              ? null
-                              : emailController.text.trim(),
-                          phone:
-                          phoneController.text.trim() ==
-                              (teacherProfile?.phone ?? "").trim()
-                              ? null
-                              : phoneController.text.trim(),
-                          fatherName: fatherNameController.text,
-                          motherName: motherNameController.text,
-                          presentAddress: presentAddressController.text,
-                          permanentAddress: permanentAddressController.text,
-                          bloodGroup: bloodGroupController.text,
-                        );
-                        context.read<TeacherProfileBloc>().add(
-                          UpdateTeacherProfileEvent(
-                            payload: teacherProfileUpdateRequestModel,
-                            files: photo != null
-                                ? [
-                              SendFileModel(
-                                filePath: photo!.path,
-                                key: "photo",
-                              ),
-                            ]
-                                : [],
-                          ),
-                        );*/
+
                       },
                       child: Text("নিশ্চিত করুন"),
                     ),
