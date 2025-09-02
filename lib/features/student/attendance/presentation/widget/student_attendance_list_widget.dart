@@ -21,16 +21,16 @@ class StudentAttendanceListWidget extends StatefulWidget {
 
 class _StudentAttendanceListWidgetState
     extends State<StudentAttendanceListWidget> {
-  Color getAttendanceColor(String status) {
+  Color? getAttendanceColor(String status) {
     switch (status.toLowerCase()) {
       case "absent":
-        return Colors.red; // ❌ Absent → red
+        return AppColors.statusColors['absent'];
       case "late":
-        return Colors.orange; // ⏰ Late → orange
+        return AppColors.statusColors['late'];
       case "present":
-        return Colors.green; // ✅ Present → green
+        return AppColors.statusColors['present'];
       default:
-        return Colors.grey; // Unknown → grey
+        return AppColors.statusColors['no_action'];
     }
   }
 

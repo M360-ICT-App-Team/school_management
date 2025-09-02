@@ -5,8 +5,8 @@ import 'package:school_management/core/widgets/app_empty.dart';
 import '../../../../../core/widgets/app_bar.dart';
 import '../../data/model/student_single_semester_list_model.dart';
 import '../bloc/attendance_bloc.dart';
-import '../widget/SemesterPagerCard.dart';
 import '../widget/filter_button_student_widget.dart';
+import '../widget/semester_pager_card_widget.dart';
 import '../widget/student_attendance_list_widget.dart';
 
 class StudentCurrentSemester extends StatefulWidget {

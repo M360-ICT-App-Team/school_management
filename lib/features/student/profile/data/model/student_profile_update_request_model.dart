@@ -14,7 +14,7 @@ class StudentProfileUpdateRequestModel {
   final String? email;
   final String? phone;
   final dynamic is2FaOn;
-  final String? dobDate;
+  final dynamic dobDate;
   final String? dobNo;
   final String? religion;
   final String? gender;

@@ -1,6 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-final bool isLive = false;
+final bool isLive = true;
 
 class AppUrls {
   static String currentVersion = dotenv.env['ANDROID_VERSION']!; //ex: "1.0.19"
