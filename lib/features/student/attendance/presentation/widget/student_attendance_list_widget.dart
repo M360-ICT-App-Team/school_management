@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../core/constants/app_colors.dart';
@@ -8,7 +7,6 @@ import '../../../../../core/constants/app_sizes.dart';
 import '../../../../../core/constants/app_text_styles.dart';
 import '../../../../../core/widgets/app_empty.dart';
 import '../../data/model/student_single_semester_list_model.dart';
-import '../bloc/attendance_bloc.dart';
 
 class StudentAttendanceListWidget extends StatefulWidget {
   final List<StudentSingleSemesterListModel> singleSemesterData;

@@ -15,7 +15,6 @@ import 'package:school_management/features/teacher/attendance/presentation/widge
 import '../../../../../core/widgets/app_empty.dart';
 import '../../../../../core/widgets/app_snackbar.dart';
 import '../../../branch/data/model/branch_response_model.dart';
-import '../../../branch/presentation/bloc/branch_bloc.dart';
 import '../widgets/filtering_attendance_widget.dart';
 
 class AttendanceTeacherPage extends StatefulWidget {
