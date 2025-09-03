@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
-import 'package:meta/meta.dart';
 import 'package:school_management/features/teacher/branch/data/data_sources/branch_remote_data_source.dart';
 import 'package:school_management/features/teacher/branch/data/model/branch_response_model.dart';
 

@@ -109,7 +109,7 @@ class _SemesterPagerCardState extends State<SemesterPagerCard> {
           border: Border.all(color: AppColors.blue, width: 2),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 3),
             )

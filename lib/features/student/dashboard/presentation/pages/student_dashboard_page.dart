@@ -23,7 +23,6 @@ class StudentDashboardPage extends StatefulWidget {
 class _StudentDashboardPageState extends State<StudentDashboardPage> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     context.read<StudentProfileBloc>().add(GetStudentProfileEvent());
   }

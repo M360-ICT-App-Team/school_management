@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
-import 'package:meta/meta.dart';
 
 import '../../../../../core/constants/app_exception_messages.dart';
 import '../../../../../core/model/send_file_model.dart';

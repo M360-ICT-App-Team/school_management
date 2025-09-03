@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:school_management/core/widgets/app_empty.dart';
 import '../../../../../core/widgets/app_bar.dart';
-import '../../data/model/student_single_semester_list_model.dart';
 import '../bloc/attendance_bloc.dart';
 import '../widget/filter_button_student_widget.dart';
 import '../widget/semester_pager_card_widget.dart';
@@ -22,7 +20,6 @@ class _StudentCurrentSemesterState extends State<StudentCurrentSemester> {
   @override
   void initState() {
     super.initState();
-    print('---------------expand ------------------->${expand.value}');
     context.read<AttendanceBloc>().add(FetchCurrentSemesterList());
   }
 

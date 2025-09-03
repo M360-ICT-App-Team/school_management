@@ -61,6 +61,7 @@ class _CreateAndUpdateAttendanceButtonWidgetState
                   );
 
                   if (selected != null) {
+                    if(!context.mounted) return;
                     context.read<TeacherAttendanceBloc>().add(
                       UpdateAttendanceTeacherEvent(
                         attendanceId: widget.student.studentAttendanceId!,

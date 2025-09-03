@@ -5,7 +5,6 @@ import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_text_styles.dart';
 import '../../../../../core/utilities/app_convert_date_time.dart';
 import '../../../../../core/widgets/app_adaptive_date.dart';
-import '../../../../../core/widgets/app_bottom_list.dart';
 import '../bloc/attendance_bloc.dart';
 
 class FilterStudentAttendanceWidget extends StatefulWidget {
@@ -43,6 +42,7 @@ class _FilterStudentAttendanceWidgetState extends State<FilterStudentAttendanceW
                   firstDate: DateTime(1900),
                   lastDate: DateTime(2100),
                 );
+                if(!context.mounted) return;
                 context.read<AttendanceBloc>().add(
                   FetchSingleSemesterList(
                       dateTime: DateFormat(

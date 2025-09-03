@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:school_management/features/teacher/attendance/data/data_sources/teacher_attendance_remote_data_source.dart';
 
 import '../../../../../core/constants/app_exception_messages.dart';

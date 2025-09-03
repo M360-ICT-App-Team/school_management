@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 import 'package:school_management/core/utilities/app_convert_date_time.dart';
 
 import '../../../../../core/constants/app_colors.dart';
-import '../../../../../core/constants/app_enum.dart';
 import '../../../../../core/constants/app_sizes.dart';
 import '../../../../../core/constants/app_text_styles.dart';
 import '../../../../../core/model/send_file_model.dart';
@@ -647,7 +646,7 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
                                     .text
                                     .trim(),
                                 localGuardianRelation:
-                                localGuardianRelationController.text??'',
+                                localGuardianRelationController.text,
                                 localGuardianPhone:
                                     localGuardianPhoneController.text.trim() ==
                                         (studentProfile?.localGuardianPhone ?? "")
