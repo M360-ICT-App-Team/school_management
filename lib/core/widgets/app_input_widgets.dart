@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:polytech/core/constants/app_icons.dart';
 
 import '../constants/app_colors.dart';
 import '../constants/app_sizes.dart';
@@ -18,7 +19,7 @@ Future<void> appBottomSheet(BuildContext context,
             right: AppSizes.bodyPadding,
           ),
           decoration: BoxDecoration(
-              color: AppColors.backgroundColor,
+              color: AppColors.white,
               borderRadius: BorderRadius.circular(AppSizes.radiusMedium)),
           child: child));
 }
@@ -236,7 +237,7 @@ class AppBottomSheet {
                                 ),
                               ),
                               leading: isSelected
-                                  ? Icon(Icons.check,
+                                  ? Icon(AppIcons.arrowCheck,
                                       color: AppColors.primary)
                                   : const SizedBox(width: 24),
                               onTap: () {

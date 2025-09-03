@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:polytech/core/constants/app_icons.dart';
 
 void openFullScreen(BuildContext context, String imageUrl, {bool onlineImage = true}) {
   showDialog(
@@ -42,7 +43,7 @@ void openFullScreen(BuildContext context, String imageUrl, {bool onlineImage = t
             top: 20,
             left: 20,
             child: IconButton(
-              icon: const Icon(Icons.close, color: Colors.white, size: 30),
+              icon: const Icon(AppIcons.cancel, color: Colors.white, size: 30),
               onPressed: () => Navigator.of(context).pop(),
             ),
           ),

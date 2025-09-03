@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:polytech/core/constants/app_icons.dart';
 
 import '../constants/app_colors.dart';
-import '../constants/app_images.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
   final int currentIndex;
@@ -34,27 +34,22 @@ class CustomBottomNavBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _navItem(AppImages.homeIcon, 0),
-          _navItem(AppImages.notificationButton, 1),
-          _navItem(AppImages.setting, 2),
+          _navItem(AppIcons.homeIcon, 0),
+          _navItem(AppIcons.notification, 1),
+          _navItem(AppIcons.settings, 2),
         ],
       ),
     );
   }
 
-  Widget _navItem(String icon, int index) {
+  Widget _navItem(IconData icon, int index) {
     final isSelected = index == currentIndex;
     return GestureDetector(
       onTap: () => onTap(index),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
-            icon,
-            color: isSelected ? Colors.white : Colors.white54,
-            height: 30,
-            width: 30,
-          ),
+          Icon(icon, size: 30, color: isSelected ? Colors.white : Colors.white54),
           const SizedBox(height: 4),
         ],
       ),

@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/constants/app_icons.dart';
 import '../../../../../core/constants/app_sizes.dart';
 import '../../../../../core/constants/app_text_styles.dart';
 import '../../../../../core/model/send_file_model.dart';
@@ -734,7 +735,7 @@ class _StudentProfileUpdatePageState extends State<StudentProfileUpdatePage> {
         children: [
           child,
           const SizedBox(width: 4),
-          const Icon(Icons.arrow_drop_down, size: 20, color: Colors.black),
+          const Icon(AppIcons.arrowDown, size: 20, color: Colors.black),
         ],
       ),
     );

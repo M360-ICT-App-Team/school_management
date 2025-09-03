@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/constants/app_icons.dart';
 import '../../../../../core/constants/app_text_styles.dart';
 import '../../../../../core/utilities/app_convert_date_time.dart';
 import '../../../../../core/widgets/app_adaptive_date.dart';
@@ -148,7 +149,7 @@ class _FilteringAttendanceWidgetState extends State<FilteringAttendanceWidget> {
       ),
       child: Row(
         children: [
-          const Icon(Icons.arrow_drop_down, size: 20, color: Colors.black),
+          const Icon(AppIcons.arrowDown, size: 20, color: Colors.black),
           const SizedBox(width: 4),
           child,
         ],

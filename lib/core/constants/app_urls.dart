@@ -3,7 +3,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 final bool isLive = true;
 
 class AppUrls {
-  static String currentVersion = dotenv.env['IOS_VERSION']!; //ex: "1.0.19"
   static String imageUrl = dotenv.env['IMAGE_URL']!;
   static String appVersionUrl = dotenv.env['APP_VERSION_URL']!;
 

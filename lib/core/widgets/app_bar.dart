@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:polytech/core/constants/app_icons.dart';
 
 import '../../app/route/app_routes.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_images.dart';
 import '../local_database/auth_db.dart';
-
+import 'app_adaptive_alert_dialog.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double height;
-   final bool showBack;
-   final String value;
+  final bool showBack;
+  final String value;
 
-  const CustomAppBar({super.key, this.height = 70, this.showBack = true, this.value=''});
+  const CustomAppBar({
+    super.key,
+    this.height = 70,
+    this.showBack = true,
+    this.value = '',
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +33,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       leading: showBack
           ? IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              icon: const Icon(AppIcons.arrowBack, color: Colors.white),
               onPressed: () => Navigator.of(context).pop(),
             )
           : null,
@@ -49,22 +55,39 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         // Add invisible widget with same width as leading to balance
         if (showBack) const SizedBox(width: kToolbarHeight),
-        value==''?SizedBox():
-
-        GestureDetector(
-          onTap: (){
-            AuthLocalDB.removeToken();
-            Navigator.of(
-              context,
-            ).pushNamedAndRemoveUntil(AppRoutes.roleSelectionPage, (p) => false);
-          },
-          child: Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: Icon(Icons.logout,color: Colors.white,),
-          ),
-        )
-
-
+        value == ''
+            ? SizedBox.shrink()
+            : IconButton(
+                onPressed: () {
+                  appAdaptiveDialog(
+                    context: context,
+                    message: "Are you sure to logout?",
+                    title: "Logout",
+                    actions: [
+                      AdaptiveDialogAction(
+                        text: "Cancel",
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      AdaptiveDialogAction(
+                        text: "Logout",
+                        isDestructive: true,
+                        onPressed: () {
+                          AuthLocalDB.removeToken();
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                            AppRoutes.roleSelectionPage,
+                            (p) => false,
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                },
+                icon: Icon(AppIcons.logout,
+                  color: Colors.white,
+                ),
+              ),
       ],
     );
   }

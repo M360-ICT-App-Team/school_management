@@ -50,7 +50,7 @@ class _SelectBatchTeacherCardWidgetState
           vertical: AppSizes.bodyPadding / 2,
         ),
         decoration: BoxDecoration(
-          color: AppColors.backgroundColor,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(AppSizes.cardRadius),
           boxShadow: [AppColors.appShadow],
         ),

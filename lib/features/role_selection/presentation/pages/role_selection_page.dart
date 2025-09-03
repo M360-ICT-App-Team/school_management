@@ -22,7 +22,7 @@ class _RoleSelectionPageState extends State<RoleSelectionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
+      backgroundColor: AppColors.white,
       appBar: const CustomAppBar(showBack: false),
       body: Padding(
         padding: EdgeInsets.symmetric(

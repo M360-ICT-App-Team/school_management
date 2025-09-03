@@ -5,7 +5,6 @@ import '../../teacher/notification/presentation/pages/notification_teacher_page.
 import '../../teacher/setting/presentation/page/setting_teacher_page.dart';
 import '../dashboard/presentation/pages/student_dashboard_page.dart';
 
-
 class StudentRootPage extends StatefulWidget {
   const StudentRootPage({super.key});
 
@@ -18,9 +17,9 @@ class _StudentRootPageState extends State<StudentRootPage> {
   final ValueNotifier<int> pageIndex = ValueNotifier<int>(0);
 
   final List<Widget> pages = [
-   // TeacherDashboardPage(),
+    // TeacherDashboardPage(),
     StudentDashboardPage(),
-       NotificationTeacherPage(),
+    NotificationTeacherPage(),
     SettingTeacherPage(),
   ];
   @override

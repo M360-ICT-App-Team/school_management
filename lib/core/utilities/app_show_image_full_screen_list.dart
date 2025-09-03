@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:polytech/core/constants/app_icons.dart';
 
 void openFullScreenList({
   required BuildContext context,
@@ -92,7 +93,7 @@ void openFullScreenList({
                   right: 20,
                   child: GestureDetector(
                     onTap: () => Navigator.of(context).pop(),
-                    child: const Icon(Icons.close, color: Colors.white, size: 30),
+                    child: const Icon(AppIcons.cancel, color: Colors.white, size: 30),
                   ),
                 ),
               ],
