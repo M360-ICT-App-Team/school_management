@@ -11,6 +11,7 @@ import '../../../../../core/constants/app_sizes.dart';
 import '../../../../../core/constants/app_text_styles.dart';
 import '../../../../../core/model/send_file_model.dart';
 import '../../../../../core/widgets/app_bar.dart';
+import '../../../../../core/widgets/app_bottom_list.dart';
 import '../../../../../core/widgets/app_image_view.dart';
 import '../../../../../core/widgets/app_input_widgets.dart';
 import '../../../../../core/widgets/app_snackbar.dart';
@@ -34,7 +35,23 @@ class _TeacherProfileUpdatePageState extends State<TeacherProfileUpdatePage> {
   TextEditingController motherNameController = TextEditingController();
   TextEditingController presentAddressController = TextEditingController();
   TextEditingController permanentAddressController = TextEditingController();
-  TextEditingController bloodGroupController = TextEditingController();
+  // TextEditingController bloodGroupController = TextEditingController();
+  ValueNotifier<String> gender = ValueNotifier('লিঙ্গ নির্বাচন করুন');
+  ValueNotifier<String> bloodGroup = ValueNotifier(
+    'রক্তের গ্রুপ নির্বাচন করুন',
+  );
+  final List<String> genderList = ["পুরুষ", "মহিলা", "অন্যান্য"];
+  final List<String> bloodGroupList = [
+    "A+",
+    "A-",
+    "B+",
+    "B-",
+    "AB+",
+    "AB-",
+    "O+",
+    "O-",
+  ];
+
   XFile? photo;
   String networkImage = '';
 
@@ -46,7 +63,7 @@ class _TeacherProfileUpdatePageState extends State<TeacherProfileUpdatePage> {
     motherNameController.dispose();
     presentAddressController.dispose();
     permanentAddressController.dispose();
-    bloodGroupController.dispose();
+    // bloodGroupController.dispose();
     super.dispose();
   }
 
@@ -76,18 +93,20 @@ class _TeacherProfileUpdatePageState extends State<TeacherProfileUpdatePage> {
           }
         },
         builder: (context, state) {
-          TeacherProfileResponseModel  ? teacherProfile;
+          TeacherProfileResponseModel? teacherProfile;
 
           if (state is TeacherProfileSuccess) {
             teacherProfile = state.teacherProfileResponseModel;
             phoneController.text = teacherProfile.phone ?? "";
-            emailController.text = teacherProfile.email??"";
-            fatherNameController.text = teacherProfile.fatherName??"";
-            motherNameController.text = teacherProfile.motherName??"";
-            presentAddressController.text = teacherProfile.presentAddress ??"";
-            permanentAddressController.text = teacherProfile.permanentAddress ??"";
+            emailController.text = teacherProfile.email ?? "";
+            fatherNameController.text = teacherProfile.fatherName ?? "";
+            motherNameController.text = teacherProfile.motherName ?? "";
+            presentAddressController.text = teacherProfile.presentAddress ?? "";
+            permanentAddressController.text =
+                teacherProfile.permanentAddress ?? "";
+            gender.value = teacherProfile.gender ?? 'লিঙ্গ নির্বাচন করুন';
 
-            bloodGroupController.text = teacherProfile.bloodGroup??"";
+            bloodGroup.value = teacherProfile.bloodGroup ?? "";
             final serverPhoto = teacherProfile.photo;
             networkImage =
                 (serverPhoto == null ||
@@ -170,7 +189,8 @@ class _TeacherProfileUpdatePageState extends State<TeacherProfileUpdatePage> {
                                     AppSizes.insidePadding / 2,
                                   ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         teacherProfile?.name ?? "Unknown",
@@ -192,7 +212,7 @@ class _TeacherProfileUpdatePageState extends State<TeacherProfileUpdatePage> {
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 2,
                                       ),
-                    
+
                                       Text(
                                         teacherProfile?.phone ?? "Unknown",
                                         style: AppTextStyles.normalLight(
@@ -223,10 +243,13 @@ class _TeacherProfileUpdatePageState extends State<TeacherProfileUpdatePage> {
                           ),
                           //!end for basic information
 
-
                           //!for update information
                           SizedBox(height: AppSizes.insidePadding),
-                          profileInfoList(context, "ফোন নম্বর", phoneController),
+                          profileInfoList(
+                            context,
+                            "ফোন নম্বর",
+                            phoneController,
+                          ),
                           profileInfoList(context, "ইমেইল", emailController),
                           profileInfoList(
                             context,
@@ -237,6 +260,76 @@ class _TeacherProfileUpdatePageState extends State<TeacherProfileUpdatePage> {
                             context,
                             "মাতার নাম",
                             motherNameController,
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: 100,
+                                child: Text(
+                                  'লিঙ্গ',
+                                  style: AppTextStyles.normalLight(
+                                    context,
+                                  ).copyWith(fontSize: 16),
+                                ),
+                              ),
+                              const Text(" : "),
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () async {
+                                    final selected =
+                                        await showSelectionBottomSheetList<
+                                          String
+                                        >(
+                                          context: context,
+                                          items: genderList,
+                                          itemLabel: (item) => item,
+                                        );
+                                    if (selected != null) {
+                                      gender.value = selected;
+                                    }
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: AppSizes.insidePadding * 3,
+                                      vertical: 10,
+                                    ),
+                                    //margin: const EdgeInsets.symmetric(horizontal: AppSizes.insidePadding*2,),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.white,
+                                      borderRadius: BorderRadius.circular(8),
+                                      border: Border.all(
+                                        color: Colors.black,
+                                        width: 1.5,
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.arrow_drop_down,
+                                          size: 20,
+                                          color: Colors.black,
+                                        ),
+                                        const SizedBox(
+                                          width: AppSizes.insidePadding,
+                                        ),
+                                        ValueListenableBuilder(
+                                          valueListenable: gender,
+                                          builder: (context, value, child) {
+                                            return Text(
+                                              value,
+                                              style: AppTextStyles.normalLight(
+                                                context,
+                                              ).copyWith(fontSize: 14),
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           profileInfoList(
                             context,
@@ -250,10 +343,80 @@ class _TeacherProfileUpdatePageState extends State<TeacherProfileUpdatePage> {
                             permanentAddressController,
                             isMultiLine: true,
                           ),
-                          profileInfoList(
-                            context,
-                            "রক্তের গ্রুপ",
-                            bloodGroupController,
+                          // profileInfoList(
+                          //   context,
+                          //   "রক্তের গ্রুপ",
+                          //   bloodGroupController,
+                          // ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: 100,
+                                child: Text(
+                                  'রক্তের গ্রুপ',
+                                  style: AppTextStyles.normalLight(
+                                    context,
+                                  ).copyWith(fontSize: 16),
+                                ),
+                              ),
+                              const Text(" : "),
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () async {
+                                    final selected =
+                                        await showSelectionBottomSheetList<
+                                          String
+                                        >(
+                                          context: context,
+                                          items: bloodGroupList,
+                                          itemLabel: (item) => item,
+                                        );
+                                    if (selected != null) {
+                                      bloodGroup.value = selected;
+                                    }
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: AppSizes.insidePadding * 3,
+                                      vertical: 10,
+                                    ),
+                                    //margin: const EdgeInsets.symmetric(horizontal: AppSizes.insidePadding*2,),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.white,
+                                      borderRadius: BorderRadius.circular(8),
+                                      border: Border.all(
+                                        color: Colors.black,
+                                        width: 1.5,
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.arrow_drop_down,
+                                          size: 20,
+                                          color: Colors.black,
+                                        ),
+                                        const SizedBox(
+                                          width: AppSizes.insidePadding,
+                                        ),
+                                        ValueListenableBuilder(
+                                          valueListenable: bloodGroup,
+                                          builder: (context, value, child) {
+                                            return Text(
+                                              value,
+                                              style: AppTextStyles.normalLight(
+                                                context,
+                                              ).copyWith(fontSize: 14),
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           //!end for update information
                         ],
@@ -261,7 +424,6 @@ class _TeacherProfileUpdatePageState extends State<TeacherProfileUpdatePage> {
                     ),
                   ),
 
-                  
                   //!for call profile update event button
                   SizedBox(
                     width: 190,
@@ -287,7 +449,8 @@ class _TeacherProfileUpdatePageState extends State<TeacherProfileUpdatePage> {
                               motherName: motherNameController.text,
                               presentAddress: presentAddressController.text,
                               permanentAddress: permanentAddressController.text,
-                              bloodGroup: bloodGroupController.text,
+                              gender: gender.value,
+                              bloodGroup: bloodGroup.value,
                             );
                         context.read<TeacherProfileBloc>().add(
                           UpdateTeacherProfileEvent(

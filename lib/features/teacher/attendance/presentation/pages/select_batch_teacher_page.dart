@@ -221,7 +221,13 @@ class _SelectBatchTeacherPageState extends State<SelectBatchTeacherPage> {
                       child: CircularProgressIndicator.adaptive(),
                     );
                   } else if (state is GetBranchListSuccess) {
-                    branchId ??= state.branchResponseModel[0].id;
+                    if (state.branchResponseModel.isEmpty) {
+                      return const Center(
+                        child: AppEmpty(msg: "No branches found"),
+                      );
+                    }
+
+                    branchId ??= state.branchResponseModel.first.id;
 
                     return BlocBuilder<
                       TeacherAttendanceBloc,
@@ -237,7 +243,7 @@ class _SelectBatchTeacherPageState extends State<SelectBatchTeacherPage> {
                           return buildBatchList(teacherState, branchId!);
                         }
                         return const Center(
-                          child: AppEmpty(msg: "Branch not found"),
+                          child: AppEmpty(msg: "Batch not found"),
                         );
                       },
                     );

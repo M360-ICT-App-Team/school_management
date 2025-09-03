@@ -16,6 +16,7 @@ class TeacherProfileUpdateRequestModel {
   String? presentAddress;
   String? permanentAddress;
   String? bloodGroup;
+  String ? gender;
 
   TeacherProfileUpdateRequestModel({
     this.email,
@@ -25,6 +26,7 @@ class TeacherProfileUpdateRequestModel {
     this.presentAddress,
     this.permanentAddress,
     this.bloodGroup,
+    this.gender,
   });
 
   TeacherProfileUpdateRequestModel.fromJson(Map<String, dynamic> json) {
@@ -35,6 +37,7 @@ class TeacherProfileUpdateRequestModel {
     presentAddress = json['present_address'];
     permanentAddress = json['permanent_address'];
     bloodGroup = json['blood_group'];
+    gender = json['gender'];
   }
   Map<String, dynamic> toJson() => {
     "email": email,
@@ -44,5 +47,6 @@ class TeacherProfileUpdateRequestModel {
     "present_address": presentAddress ?? "",
     "permanent_address": permanentAddress ?? "",
     "blood_group": bloodGroup ?? "",
+    "gender": gender ?? "",
   };
 }
