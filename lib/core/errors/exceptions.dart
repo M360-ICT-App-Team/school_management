@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:school_management/core/errors/failures.dart';
 
 import '../constants/app_exception_messages.dart';
+import 'failures.dart';
 
 
 class ServerException implements Exception {

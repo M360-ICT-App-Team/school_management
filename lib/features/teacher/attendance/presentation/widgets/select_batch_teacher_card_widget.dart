@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:school_management/core/constants/app_icons.dart';
-import 'package:school_management/core/constants/app_sizes.dart';
-import 'package:school_management/features/teacher/attendance/data/model/attendance_model.dart';
 
 import '../../../../../app/route/app_routes.dart';
 import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/constants/app_icons.dart';
+import '../../../../../core/constants/app_sizes.dart';
 import '../../../../../core/constants/app_text_styles.dart';
+import '../../data/model/attendance_model.dart';
 import '../../data/model/batch_over_view_teacher_response_model.dart';
 
 class SelectBatchTeacherCardWidget extends StatefulWidget {

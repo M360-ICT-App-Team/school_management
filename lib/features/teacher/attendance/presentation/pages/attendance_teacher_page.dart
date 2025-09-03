@@ -3,18 +3,18 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:school_management/core/constants/app_colors.dart';
-import 'package:school_management/core/constants/app_enum.dart';
-import 'package:school_management/core/constants/app_sizes.dart';
-import 'package:school_management/core/constants/app_text_styles.dart';
-import 'package:school_management/core/widgets/app_bar.dart';
-import 'package:school_management/features/teacher/attendance/data/model/attendance_model.dart';
-import 'package:school_management/features/teacher/attendance/presentation/bloc/teacher_attendance_bloc.dart';
-import 'package:school_management/features/teacher/attendance/presentation/widgets/create_and_update_attendance_button_widget.dart';
 
+import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/constants/app_enum.dart';
+import '../../../../../core/constants/app_sizes.dart';
+import '../../../../../core/constants/app_text_styles.dart';
+import '../../../../../core/widgets/app_bar.dart';
 import '../../../../../core/widgets/app_empty.dart';
 import '../../../../../core/widgets/app_snackbar.dart';
 import '../../../branch/data/model/branch_response_model.dart';
+import '../../data/model/attendance_model.dart';
+import '../bloc/teacher_attendance_bloc.dart';
+import '../widgets/create_and_update_attendance_button_widget.dart';
 import '../widgets/filtering_attendance_widget.dart';
 
 class AttendanceTeacherPage extends StatefulWidget {

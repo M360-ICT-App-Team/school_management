@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:school_management/features/teacher/attendance/data/model/attendance_model.dart';
 
 import '../../features/role_selection/presentation/pages/role_selection_page.dart';
 import '../../features/splash/presentation/page/splash_page.dart';
 import '../../features/student/attendance/presentation/page/student_current_semister.dart';
 import '../../features/student/auth/presentation/pages/student_login_page.dart';
 import '../../features/student/root_page_student/student_root_page.dart';
+import '../../features/teacher/attendance/data/model/attendance_model.dart';
 import '../../features/teacher/attendance/presentation/pages/attendance_teacher_page.dart';
 import '../../features/teacher/attendance/presentation/pages/new_attendance_create_page.dart';
 import '../../features/teacher/auth/presentation/pages/teacher_login_page.dart';

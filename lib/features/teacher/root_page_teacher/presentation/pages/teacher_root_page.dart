@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:school_management/features/teacher/dashboard/presentation/pages/teacher_dashboard_page.dart';
 
 import '../../../../../core/widgets/app_bottom_nav_bar.dart';
+import '../../../dashboard/presentation/pages/teacher_dashboard_page.dart';
 import '../../../notification/presentation/pages/notification_teacher_page.dart';
 import '../../../setting/presentation/page/setting_teacher_page.dart';
 

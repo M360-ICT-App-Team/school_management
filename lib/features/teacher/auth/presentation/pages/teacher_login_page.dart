@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:school_management/core/constants/app_colors.dart';
-import 'package:school_management/core/constants/app_sizes.dart';
-import 'package:school_management/core/widgets/app_bar.dart';
-import 'package:school_management/core/widgets/app_input_widgets.dart';
-import 'package:school_management/features/teacher/profile/presentation/bloc/teacher_profile_bloc.dart';
 
 import '../../../../../app/route/app_routes.dart';
+import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_icons.dart';
+import '../../../../../core/constants/app_sizes.dart';
 import '../../../../../core/constants/app_text_styles.dart';
 import '../../../../../core/widgets/app_adaptive_alert_dialog.dart';
+import '../../../../../core/widgets/app_bar.dart';
 import '../../../../../core/widgets/app_footer.dart';
+import '../../../../../core/widgets/app_input_widgets.dart';
 import '../../../../../core/widgets/app_snackbar.dart';
+import '../../../profile/presentation/bloc/teacher_profile_bloc.dart';
 import '../../data/model/teacher_login_request_model.dart';
 import '../bloc/teacher_auth_bloc.dart';
 
@@ -37,135 +37,134 @@ class _TeacherLoginPageState extends State<TeacherLoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: CustomAppBar(),
-        body: BlocListener<TeacherAuthBloc, TeacherAuthState>(
-          listener: (context, state) {
-            if (state is TeacherLoginLoading) {
-              AppBottomSheets.showLoading(context, message: "Logging in...");
-            } else if (state is TeacherLoginSuccess) {
-              AppBottomSheets.hide(context);
-              context.read<TeacherProfileBloc>().add(GetTeacherProfileEvent());
-
-              Navigator.pushNamedAndRemoveUntil(
-                context,
-                AppRoutes.teacherRootPage,
-                (route) => false,
-              );
-            } else if (state is TeacherLoginError) {
-              AppBottomSheets.hide(context);
-              appAdaptiveDialog(context: context, message: state.message);
-            }
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: AppSizes.bodyPadding * 8,
-            ),
-            child: Form(
-              key: formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Center(
-                    child: Text(
-                      "শিক্ষক",
-                      style: AppTextStyles.normalLight(
-                        context,
-                      ).copyWith(fontSize: 24),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 300,
-                    child: AppTextField(
-                      hintText: "আইডি",
-                      controller: idController,
-                      prefixIcon: Icon(
-                        HugeIcons.strokeRoundedId,
-                        color: AppColors.primary.withAlpha(70),
-                      ),
-                      validator: (p0) => p0!.isEmpty ? "আইডি লিখুন" : null,
-                    ),
-                  ),
-
-                  ValueListenableBuilder(
-                    valueListenable: isObscure,
-                    builder: (context, value, child) {
-                      return SizedBox(
-                        width: 300,
-                        child: AppTextField(
-                          hintText: "পিন",
-                          controller: pinController,
-                          obscureText: value,
-                          prefixIcon: Icon(
-                            HugeIcons.strokeRoundedKey01,
-                            color: AppColors.primary.withAlpha(70),
-                          ),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              value ? AppIcons.view : AppIcons.viewOff,
-                            ),
-                            onPressed: () {
-                              isObscure.value = !value;
-                            },
-                          ),
-                          validator: (p0) => p0!.isEmpty ? "পিন লিখুন" : null,
-                        ),
-                      );
-                    },
-                  ),
-
-                  SizedBox(height: 20),
-
-                  BlocBuilder<TeacherAuthBloc, TeacherAuthState>(
-                    builder: (context, state) {
-                      final isLoading = state is TeacherLoginLoading;
-                      return SizedBox(
-                        width: 140,
-                        height: 40,
-                        child: FilledButton(
-                          style: FilledButton.styleFrom(
-                            backgroundColor: AppColors.blue,
-                          ),
-                          onPressed: isLoading
-                              ? null
-                              : () {
-                                  if (formKey.currentState!.validate()) {
-                                    context.read<TeacherAuthBloc>().add(
-                                      TeacherLoginEvent(
-                                        teacherLoginRequestModel:
-                                            TeacherLoginRequestModel(
-                                              loginId: idController.text.trim(),
-                                              password: pinController.text,
-                                            ),
-                                      ),
-                                    );
-                                  }
-                                  // Navigator.pushNamed(
-                                  //   context,
-                                  //   AppRoutes.teacherRootPage,
-                                  // );
-                                },
-                          child: Text("লগইন"),
-                        ),
-                      );
-                    },
-                  ),
-                  Text(
-                    "Forget pin?/New Pin",
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: CustomAppBar(),
+      body: BlocListener<TeacherAuthBloc, TeacherAuthState>(
+        listener: (context, state) {
+          if (state is TeacherLoginLoading) {
+            AppBottomSheets.showLoading(context, message: "Logging in...");
+          } else if (state is TeacherLoginSuccess) {
+            AppBottomSheets.hide(context);
+            context.read<TeacherProfileBloc>().add(GetTeacherProfileEvent());
+    
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              AppRoutes.teacherRootPage,
+              (route) => false,
+            );
+          } else if (state is TeacherLoginError) {
+            AppBottomSheets.hide(context);
+            appAdaptiveDialog(context: context, message: state.message);
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: AppSizes.bodyPadding * 8,
+          ),
+          child: Form(
+            key: formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Center(
+                  child: Text(
+                    "শিক্ষক",
                     style: AppTextStyles.normalLight(
                       context,
-                    ).copyWith(color: Color(0xFF012ea1), fontSize: 14),
+                    ).copyWith(fontSize: 24),
                   ),
-                ],
-              ),
+                ),
+                SizedBox(
+                  width: 300,
+                  child: AppTextField(
+                    hintText: "আইডি",
+                    controller: idController,
+                    prefixIcon: Icon(
+                      HugeIcons.strokeRoundedId,
+                      color: AppColors.primary.withAlpha(70),
+                    ),
+                    validator: (p0) => p0!.isEmpty ? "আইডি লিখুন" : null,
+                  ),
+                ),
+    
+                ValueListenableBuilder(
+                  valueListenable: isObscure,
+                  builder: (context, value, child) {
+                    return SizedBox(
+                      width: 300,
+                      child: AppTextField(
+                        hintText: "পিন",
+                        controller: pinController,
+                        obscureText: value,
+                        prefixIcon: Icon(
+                          HugeIcons.strokeRoundedKey01,
+                          color: AppColors.primary.withAlpha(70),
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            value ? AppIcons.view : AppIcons.viewOff,
+                          ),
+                          onPressed: () {
+                            isObscure.value = !value;
+                          },
+                        ),
+                        validator: (p0) => p0!.isEmpty ? "পিন লিখুন" : null,
+                      ),
+                    );
+                  },
+                ),
+    
+                SizedBox(height: 20),
+    
+                BlocBuilder<TeacherAuthBloc, TeacherAuthState>(
+                  builder: (context, state) {
+                    final isLoading = state is TeacherLoginLoading;
+                    return SizedBox(
+                      width: 140,
+                      height: 40,
+                      child: FilledButton(
+                        style: FilledButton.styleFrom(
+                          backgroundColor: AppColors.blue,
+                        ),
+                        onPressed: isLoading
+                            ? null
+                            : () {
+                                if (formKey.currentState!.validate()) {
+                                  context.read<TeacherAuthBloc>().add(
+                                    TeacherLoginEvent(
+                                      teacherLoginRequestModel:
+                                          TeacherLoginRequestModel(
+                                            loginId: idController.text.trim(),
+                                            password: pinController.text,
+                                          ),
+                                    ),
+                                  );
+                                }
+                                // Navigator.pushNamed(
+                                //   context,
+                                //   AppRoutes.teacherRootPage,
+                                // );
+                              },
+                        child: Text("লগইন"),
+                      ),
+                    );
+                  },
+                ),
+                SizedBox(height: 20),
+                Text(
+                  "Forget pin?/New Pin",
+                  style: AppTextStyles.normalLight(
+                    context,
+                  ).copyWith(color: Color(0xFF012ea1), fontSize: 14),
+                ),
+              ],
             ),
           ),
         ),
-
-        bottomNavigationBar: CustomFooter(),
       ),
+    
+      bottomNavigationBar: CustomFooter(),
     );
   }
 }

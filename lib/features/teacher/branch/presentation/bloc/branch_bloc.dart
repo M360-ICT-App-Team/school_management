@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
-import 'package:school_management/features/teacher/branch/data/data_sources/branch_remote_data_source.dart';
-import 'package:school_management/features/teacher/branch/data/model/branch_response_model.dart';
 
 import '../../../../../core/constants/app_exception_messages.dart';
+import '../../data/data_sources/branch_remote_data_source.dart';
+import '../../data/model/branch_response_model.dart';
 
 part 'branch_event.dart';
 part 'branch_state.dart';

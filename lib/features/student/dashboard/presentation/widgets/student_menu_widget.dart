@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:school_management/app/route/app_routes.dart';
-import 'package:school_management/core/constants/app_images.dart';
 
+import '../../../../../app/route/app_routes.dart';
+import '../../../../../core/constants/app_images.dart';
 import '../../../../../core/constants/app_text_styles.dart';
 import '../../../attendance/presentation/page/student_current_semister.dart';
 
@@ -19,14 +19,6 @@ class _StudentMenuWidgetState extends State<StudentMenuWidget> {
       "title": "হাজিরা",
       "page": AppRoutes.studentCurrentSemester,
     },
-    // {"icon": AppImages.payment, "title": "বেতন", "page": null},
-    // {"icon": AppImages.notice, "title": "বিজ্ঞপ্তি", "page": null},
-    // {"icon": AppImages.schedule, "title": "কেলেন্ডার", "page": null},
-    // {"icon": AppImages.diary, "title": "ডাইরি", "page": null},
-    // {"icon": AppImages.program, "title": "ক্লাস রুটিন", "page": null},
-    // {"icon": AppImages.summerHolidays, "title": "মাসিক ছুটি", "page": null},
-    // {"icon": AppImages.reportCard, "title": "রেজাল্ট", "page": null},
-    // {"icon": AppImages.exStudent, "title": "শিক্ষার্থী", "page": null},
   ];
   @override
   Widget build(BuildContext context) {

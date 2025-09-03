@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:school_management/core/constants/app_images.dart';
 
+import '../../../../../core/constants/app_images.dart';
 import '../../../../../core/constants/app_text_styles.dart';
 import '../../../attendance/presentation/pages/select_batch_teacher_page.dart';
 

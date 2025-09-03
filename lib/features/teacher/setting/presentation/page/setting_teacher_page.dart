@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:school_management/core/widgets/app_bar.dart';
+
+import '../../../../../core/widgets/app_bar.dart';
 
 class SettingTeacherPage extends StatelessWidget {
   const SettingTeacherPage({super.key});

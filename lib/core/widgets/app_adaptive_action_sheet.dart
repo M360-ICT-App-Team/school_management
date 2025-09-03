@@ -4,7 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 
-import 'package:school_management/core/constants/app_sizes.dart';
+import '../constants/app_sizes.dart';
+
 Future<void> appAdaptiveActionSheet({
   required BuildContext context,
   required Widget child,

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:school_management/app/route/app_routes.dart';
-import 'package:school_management/core/constants/app_colors.dart';
-import 'package:school_management/core/constants/app_sizes.dart';
-import 'package:school_management/core/constants/app_text_styles.dart';
-import 'package:school_management/core/local_database/auth_db.dart';
 
+import '../../../../app/route/app_routes.dart';
+import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_images.dart';
+import '../../../../core/constants/app_sizes.dart';
+import '../../../../core/constants/app_text_styles.dart';
+import '../../../../core/local_database/auth_db.dart';
 import '../../../../core/widgets/app_bar.dart';
 import '../../../../core/widgets/app_footer.dart';
 
@@ -21,42 +21,41 @@ class _RoleSelectionPageState extends State<RoleSelectionPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: AppColors.backgroundColor,
-        appBar: const CustomAppBar(showBack: false),
-        body: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: AppSizes.bodyPadding * 2,
-            vertical: AppSizes.bodyPadding * 4,
-          ),
-          child: GridView.count(
-            crossAxisCount: 2,
-            mainAxisSpacing: 20,
-            crossAxisSpacing: 20,
-            childAspectRatio: 0.9,
-            children: [
-              _buildRoleCard(context, AppImages.principal, "বিভাগীয় প্রধান"),
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.teacherLoginPage);
-                  AuthLocalDB.setRole(AuthLocalDB.teacher);
-                },
-                child: _buildRoleCard(context, AppImages.teacher, "শিক্ষক"),
-              ),
-              _buildRoleCard(context, AppImages.parent, "অভিভাবক"),
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.studentLoginPage);
-                  AuthLocalDB.setRole(AuthLocalDB.student);
-                },
-                child: _buildRoleCard(context, AppImages.student, "শিক্ষার্থী"),
-              ),
-            ],
-          ),
+    return Scaffold(
+      backgroundColor: AppColors.backgroundColor,
+      appBar: const CustomAppBar(showBack: false),
+      body: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: AppSizes.bodyPadding * 2,
+          vertical: AppSizes.bodyPadding * 6,
         ),
-        bottomNavigationBar: const CustomFooter(),
+        child: GridView.count(
+          physics: NeverScrollableScrollPhysics(),
+          crossAxisCount: 2,
+          mainAxisSpacing: 20,
+          crossAxisSpacing: 20,
+          childAspectRatio: 0.9,
+          children: [
+            _buildRoleCard(context, AppImages.principal, "বিভাগীয় প্রধান"),
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, AppRoutes.teacherLoginPage);
+                AuthLocalDB.setRole(AuthLocalDB.teacher);
+              },
+              child: _buildRoleCard(context, AppImages.teacher, "শিক্ষক"),
+            ),
+            _buildRoleCard(context, AppImages.parent, "অভিভাবক"),
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, AppRoutes.studentLoginPage);
+                AuthLocalDB.setRole(AuthLocalDB.student);
+              },
+              child: _buildRoleCard(context, AppImages.student, "শিক্ষার্থী"),
+            ),
+          ],
+        ),
       ),
+      bottomNavigationBar: const CustomFooter(),
     );
   }
 

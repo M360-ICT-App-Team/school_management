@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:school_management/core/constants/app_sizes.dart';
-import 'package:school_management/core/widgets/app_bar.dart';
 
 import '../../../../../app/route/app_routes.dart';
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_images.dart';
+import '../../../../../core/constants/app_sizes.dart';
 import '../../../../../core/constants/app_text_styles.dart';
+import '../../../../../core/widgets/app_bar.dart';
 import '../../data/model/teacher_profile_response_model.dart';
 import '../bloc/teacher_profile_bloc.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:school_management/core/constants/app_colors.dart';
 
+import '../constants/app_colors.dart';
 import '../constants/app_images.dart';
 
 class CustomFooter extends StatelessWidget {

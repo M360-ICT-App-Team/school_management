@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:school_management/core/constants/app_colors.dart';
-import 'package:school_management/core/constants/app_sizes.dart';
+
+import '../constants/app_colors.dart';
+import '../constants/app_sizes.dart';
 
 class AppFilledButton extends StatelessWidget {
   final String title;

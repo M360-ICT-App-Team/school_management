@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:school_management/features/teacher/branch/presentation/bloc/branch_bloc.dart';
-import 'package:school_management/features/teacher/profile/presentation/bloc/teacher_profile_bloc.dart';
 
 import '../features/common/subject/presentation/bloc/subject_bloc.dart';
 import '../features/splash/presentation/bloc/splash_bloc.dart';
@@ -10,6 +8,8 @@ import '../features/student/auth/presentation/bloc/student_auth_bloc.dart';
 import '../features/student/profile/presentation/bloc/student_profile_bloc.dart';
 import '../features/teacher/attendance/presentation/bloc/teacher_attendance_bloc.dart';
 import '../features/teacher/auth/presentation/bloc/teacher_auth_bloc.dart';
+import '../features/teacher/branch/presentation/bloc/branch_bloc.dart';
+import '../features/teacher/profile/presentation/bloc/teacher_profile_bloc.dart';
 import 'route/app_router.dart';
 import 'route/app_routes.dart';
 import 'theme/light_theme.dart';

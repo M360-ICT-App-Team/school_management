@@ -5,9 +5,9 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:meta/meta.dart';
-import 'package:school_management/core/local_database/auth_db.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../core/local_database/auth_db.dart';
 import '../../../app_version_check/data/data_source/app_version_data_source.dart';
 
 part 'splash_event.dart';

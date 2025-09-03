@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:school_management/core/constants/app_urls.dart';
 
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_sizes.dart';
@@ -114,7 +113,6 @@ class _TeacherProfileUpdatePageState extends State<TeacherProfileUpdatePage> {
                     serverPhoto.contains("https://shorturl.at"))
                 ? 'https://shorturl.at/RfnsS'
                 : serverPhoto;
-            debugPrint("======== photo url ======  ${AppUrls.imageUrl}");
             log("======== photo ======  $serverPhoto");
           }
 

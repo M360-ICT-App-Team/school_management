@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:school_management/core/constants/app_colors.dart';
-import 'package:school_management/core/constants/app_images.dart';
 
 import '../../app/route/app_routes.dart';
+import '../constants/app_colors.dart';
+import '../constants/app_images.dart';
 import '../local_database/auth_db.dart';
 
 
